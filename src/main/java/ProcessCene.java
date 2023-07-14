@@ -4,6 +4,8 @@ import processing.core.PShape;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,18 +42,16 @@ public class ProcessCene extends PApplet {
     frameRate(5);
     fill(0);
 
-    // TODO: Make project relative: /Users/erik.hatcher/dev/analysis_to_inverted_index/data/CourierNewPSMT-24.vlw
-    textFont(loadFont("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/CourierNewPSMT-24.vlw"));
+    textFont(loadFont(getFilePathFromResources("CourierNewPSMT-24.vlw")));
 
-    // TODO: Pull these files into local resources
-    PImage lucene_logo = loadImage("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/lucene_green_300.png");
-    PImage bullet_image = loadImage("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/mongodb-assets/search_check.png");
+    PImage lucene_logo = loadImage(getFilePathFromResources("lucene_green_300.png"));
+    PImage bullet_image = loadImage(getFilePathFromResources("mongodb-assets/search_check.png"));
     bullet_image.resize(50, 0);
-    PShape processing_logo = loadShape("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/Processing_2021_logo.svg");
-    footer_logo = loadImage("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/uberconf_brain.jpeg");
+    PShape processing_logo = loadShape(getFilePathFromResources("Processing_2021_logo.svg"));
+    footer_logo = loadImage(getFilePathFromResources("uberconf_brain.jpeg"));
     footer_logo.resize(50, 0);
 
-    PImage qr_code = loadImage("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/uberconf_qr_code.png");
+    PImage qr_code = loadImage(getFilePathFromResources("uberconf_qr_code.png"));
 
 
     // TODO: Make this a keyboard toggle to Solr, AS, ES, Lucene...
@@ -112,7 +112,9 @@ public class ProcessCene extends PApplet {
     }
 
 //    println("Slide: " + current_slide_index + " " + step + "/" + number_of_steps);
+    push();
     current_slide.draw(step);
+    pop();
 
     // Draw the Footer
     String slide_counter = (current_slide_index + 1) + "/" + slides.size();
@@ -123,7 +125,7 @@ public class ProcessCene extends PApplet {
       image(footer_logo, 0, height - footer_logo.height);
     }
 
-//    PShape lucene_logo = loadShape("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/lucene_logo_retro.svg");
+//    PShape lucene_logo = loadShape(getFilePathFromResources("lucene_logo_retro.svg"));
 //    if (footer_logo != null) {
 //      shape(lucene_logo, 0, height - lucene_logo.height);
 //    }
@@ -207,6 +209,10 @@ public class ProcessCene extends PApplet {
 
   public void setSlide(int i) {
     current_slide_index = i;
+  }
+
+  public String getFilePathFromResources(String resource) {
+    return getClass().getResource(resource).getPath();
   }
 }
 

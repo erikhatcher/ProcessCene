@@ -1,6 +1,9 @@
 import processing.core.PImage;
 import processing.core.PShape;
 
+import java.io.File;
+import java.net.URL;
+
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.pow;
@@ -14,9 +17,7 @@ public class UberconfTitleSlide extends BaseSlide {
   public UberconfTitleSlide(String title, ProcessCene presentation) {
     super(title, presentation);
 
-    // TODO: fix absolute path
-    // lucene_logo = presentation.loadImage("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/lucene_green_300.png");
-    lucene_logo = presentation.loadShape("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/lucene_logo_retro.svg");
+    lucene_logo = presentation.loadShape(presentation.getFilePathFromResources("lucene_logo_retro.svg"));
   }
 
   @Override
