@@ -51,17 +51,29 @@ public class ProcessCene extends PApplet {
     footer_logo = loadImage("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/uberconf_brain.jpeg");
     footer_logo.resize(50, 0);
 
-    // TODO: Make this a keyboard toggle to Solr, AS, ES, Lucene...
-    TextAnalyzer text_analyzer = new LuceneAnalyzer();
+    PImage qr_code = loadImage("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/uberconf_qr_code.png");
 
-    slides.add(new SplashSlide("Lucene", 255, lucene_logo, this));
+
+    // TODO: Make this a keyboard toggle to Solr, AS, ES, Lucene...
+    TextAnalyzer text_analyzer = new SolrAnalyzer();// new LuceneAnalyzer();
+
+    slides.add(new UberconfTitleSlide("Uberconf '23: Love of Lucene",this));
+//    slides.add(new SplashSlide("Love of Lucene", 255, lucene_logo, this));
+    slides.add(new LuceneIndexingSlide("Lucene Indexing", this));
     slides.add(new AnalysisSlide(text_analyzer, text, this));
     slides.add(new AllyzersSlide(text_analyzer, text, this));
     slides.add(new SplashSlide(null, 0, processing_logo, this));
-    slides.add(new LuceneIndexingSlide("Lucene Indexing", this));
     slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this));
+    slides.add(new SplashSlide("QR Code", 255, qr_code, this));
 
-    // TODO: Future slides
+    // TODO: Add slides for the following topics:
+    //   - Lucene lower-level - segments
+    //   - Geo search (map, circle radius, pins for documents)
+    //   - Suggest
+    //   - FST / Tagger (use Solr Tagger)
+    //   - Facets (Lucene and Solr both?)
+    //   - Highlighting (show text passage and graphically highlighting)
+    //   - Vector HNSW/KNN
     // * Demonstrate solutions to https://www.mongodb.com/blog/post/three-ways-retailers-use-search-beyond-ecommerce-store
     // * Resources:
     //   - https://www.atlassearchworkshop.com/
@@ -75,7 +87,7 @@ public class ProcessCene extends PApplet {
   public void draw() {
     Slide current_slide = slides.get(current_slide_index);
     int number_of_steps = current_slide.getNumberOfSteps();
-    String title = (current_slide.getTitle() != null) ? (": " + current_slide.getTitle()) : "";
+    String title = (current_slide.getTitle() != null) ? current_slide.getTitle() : "";
 
     if (animate) {
       if (animate_intra_slide) {
@@ -105,16 +117,16 @@ public class ProcessCene extends PApplet {
     // Draw the Footer
     String slide_counter = (current_slide_index + 1) + "/" + slides.size();
     text(slide_counter, width - textWidth(slide_counter) - 10, height - textDescent());
-    String slide_title = this.getClass().getName() + title;
+    String slide_title = title; //this.getClass().getName() + title;
     text(slide_title, (width - textWidth(slide_title)) / 2, height - textDescent());
-//    if (footer_logo != null) {
-//      image(footer_logo, 0, height - footer_logo.height);
-//    }
-
-    PShape lucene_logo = loadShape("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/lucene_logo_retro.svg");
     if (footer_logo != null) {
-      shape(lucene_logo, 0, height - lucene_logo.height);
+      image(footer_logo, 0, height - footer_logo.height);
     }
+
+//    PShape lucene_logo = loadShape("/Users/erik.hatcher/dev/ProcessCene/src/main/resources/lucene_logo_retro.svg");
+//    if (footer_logo != null) {
+//      shape(lucene_logo, 0, height - lucene_logo.height);
+//    }
 
   }
 

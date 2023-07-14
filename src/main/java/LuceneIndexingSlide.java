@@ -60,7 +60,7 @@ public class LuceneIndexingSlide extends BaseSlide {
     float x = 20;
     float y = presentation.textAscent() + presentation.textDescent() + 10;
 
-    presentation.text("Field: " + field_name, x,7);
+    presentation.text("Field: " + field_name, x,y);
     y += 20;
 
     for (Document doc : docs) {

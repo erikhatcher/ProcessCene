@@ -28,8 +28,7 @@ public class AtlasSearchQueryingSlide extends BaseSlide {
     super(title, presentation);
 
     // Replace the placeholder with your MongoDB deployment's connection string
-    String uri = "<<insert your MongoDB Atlas connection string here>>";
-    uri = "mongodb+srv://demo_user:your_password@cluster0.homyovq.mongodb.net/?retryWrites=true&w=majority";
+    String uri = System.getenv("ATLAS_URI");
 
     try (MongoClient mongoClient = MongoClients.create(uri)) {
       // set namespace
