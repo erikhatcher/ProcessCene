@@ -23,6 +23,7 @@ import static com.mongodb.client.model.Projections.metaSearchScore;
 import static com.mongodb.client.model.search.SearchPath.fieldPath;
 
 public class AtlasSearchQueryingSlide extends BaseSlide {
+  private StringBuffer output = new StringBuffer();
   public AtlasSearchQueryingSlide(String title, ProcessCene presentation) {
     super(title, presentation);
 
@@ -66,12 +67,12 @@ public class AtlasSearchQueryingSlide extends BaseSlide {
       // Print out each returned result
       //aggregation_spec.forEach(doc -> System.out.println(formatJSON(doc)));
       aggregationSpec.forEach(doc -> {
-        System.out.println(doc.get("title"));
-        System.out.println("  Cast: " + doc.get("cast"));
-        System.out.println("  Genres: " + doc.get("genres"));
-        System.out.println("  Score:" + doc.get("score"));
+        output.append(doc.get("title") + "\n");
+        output.append("  Cast: " + doc.get("cast") + "\n");
+        output.append("  Genres: " + doc.get("genres") + "\n");
+        output.append("  Score:" + doc.get("score") + "\n");
 //        printScoreDetails(2, doc.toBsonDocument().getDocument("scoreDetails"));
-        System.out.println();
+        output.append("\n");
       });
 
       // Print the explain output, which shows query interpretation details
@@ -86,13 +87,9 @@ public class AtlasSearchQueryingSlide extends BaseSlide {
   @Override
   public void draw(int step) {
     presentation.background(255,255,255);
-    presentation.fill(0,0,0);
-    presentation.textSize(14);
-    float x = 20;
-    float y = presentation.textAscent() + presentation.textDescent() + 10;
+//    presentation.fill(0,0,0);
 
-    presentation.text("Atlas Search!!!", x,7);
-    y += 20;
+    presentation.text(output.toString(), 0, presentation.textAscent() + presentation.textDescent());
 
     super.draw(step);
   }
