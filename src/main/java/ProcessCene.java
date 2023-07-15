@@ -15,15 +15,18 @@ public class ProcessCene extends PApplet {
 
   // TODO: Extract these colors to a "theme" abstraction with MongoDB-specific one
   // Primary Colors
-  public Color slate = Color.decode("#001E2B");
-  public Color white = Color.decode("#FFFFFF");
-  public Color spring_green = Color.decode("#00ED64");
-  public Color forest_green = Color.decode("#00684A");
-  public Color evergreen = Color.decode("#023430");
+  public int slate = Color.decode("#001E2B").getRGB();
+  public int white = Color.decode("#FFFFFF").getRGB();
+  public int spring_green = Color.decode("#00ED64").getRGB();
+  public int forest_green = Color.decode("#00684A").getRGB();
+  public int evergreen = Color.decode("#023430").getRGB();
 
   // Secondary Colors
-  public Color mist = Color.decode("#E3FCF7");
-  public Color lavender = Color.decode("#F9EBFF");
+  public int mist = Color.decode("#E3FCF7").getRGB();
+  public int lavender = Color.decode("#F9EBFF").getRGB();
+
+  // Other colors
+  public int black = Color.decode("#000000").getRGB();
 
 
   public static void main(String[] args) {
@@ -49,7 +52,7 @@ public class ProcessCene extends PApplet {
   @Override
   public void setup() {
     frameRate(10);
-    fill(0);
+    fill(black);
 
     textFont(loadFont(getFilePathFromResources("LexendDeca-Light-24.vlw")));
 
@@ -63,29 +66,37 @@ public class ProcessCene extends PApplet {
     // TODO: Make this a keyboard toggle to Solr, AS, ES, Lucene...
     TextAnalyzer text_analyzer = new LuceneAnalyzer(); // new SolrAnalyzer();
 
+
+    // Outline:
+    //   * Inverted Index
+    //   * Analysis
+    //   * Querying
+    //   * Relevancy
+    //   * Highlighting
+    //   * Suggest
+    //   * Spatial (map, circle radius, pins for documents)
+    //   * Faceting
+    //   * Vectors (HNSW / KNN)
+    //   * Advanced: Lucene index segments
+    //   * Engines using Lucene:
+    //        - Open source: Solr, elasticsearch, OpenSearch
+    //        - Commercial: Lucidworks, Atlas Search
+    //   * Solr Tagger
+    //      - FST mention
+    //   * Atlas Search
     slides.add(new UberconfTitleSlide("Love of Lucene",this));
-    slides.add(new LuceneIndexingSlide("Lucene Indexing", this));
+    slides.add(new InvertedIndexSlide("Lucene Indexing", this));
     slides.add(new AnalysisSlide(text_analyzer, text, this));
     slides.add(new AllyzersSlide(text_analyzer, text, this));
 
+    slides.add(new QueryParsingSlide("Query Parsing", this));
 
     // TODO: handle Atlas Search not being accessible
     slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this));
 
     slides.add(new SplashSlide("Resources", 255, qr_code, "https://mdb.link/uberconf", false, this));
 
-    // TODO: Add slides for the following topics:
-    //   - Lucene lower-level - segments
-    //   - Geo search (map, circle radius, pins for documents)
-    //   - Suggest
-    //   - FST / Tagger (use Solr Tagger)
-    //   - Facets (Lucene and Solr both?)
-    //   - Highlighting (show text passage and graphically highlighting)
-    //   - Vector HNSW/KNN
     // * Demonstrate solutions to https://www.mongodb.com/blog/post/three-ways-retailers-use-search-beyond-ecommerce-store
-    // * Resources:
-    //   - https://www.atlassearchworkshop.com/
-    //   - lucene.apache.org....
 
     TableOfContentsSlide toc_slide = new TableOfContentsSlide(slides, bullet_image, this);
     slides.add(1, toc_slide);
@@ -93,6 +104,7 @@ public class ProcessCene extends PApplet {
 
   @Override
   public void draw() {
+    background(white);
     // TODO: how to make some slides animate fast, and others slower?
 //    if (current_slide_index > 1) {
 //      frameRate(0.3f);

@@ -18,12 +18,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LuceneIndexingSlide extends BaseSlide {
+public class InvertedIndexSlide extends BaseSlide {
   final List<Document> docs = new ArrayList<>();
 
   final LuceneAnalyzer text_analyzer = new LuceneAnalyzer();
 
-  public LuceneIndexingSlide(String title, ProcessCene presentation) {
+  public InvertedIndexSlide(String title, ProcessCene presentation) {
     super(title, presentation);
 
     // TODO: Add images for documents and such
@@ -60,10 +60,6 @@ public class LuceneIndexingSlide extends BaseSlide {
     } catch (Exception e) {
       System.err.println(e.getLocalizedMessage());
     }
-
-    presentation.background(255,255,255);
-    presentation.fill(0,0,0);
-//    presentation.textSize(14);
 
     // TODO: make field_name be controllable, perhaps? (need more fields on the docs here)
     String field_name = "title";
