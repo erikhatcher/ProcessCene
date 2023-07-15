@@ -52,7 +52,7 @@ public class ProcessCene extends PApplet {
     frameRate(5);
     fill(0);
 
-    textFont(loadFont(getFilePathFromResources("CourierNewPSMT-24.vlw")));
+    textFont(loadFont(getFilePathFromResources("LexendDeca-Light-24.vlw")));
 
     PImage lucene_logo = loadImage(getFilePathFromResources("lucene_green_300.png"));
 //    PImage bullet_image = loadImage(getFilePathFromResources("mongodb-assets/search_check.png"));
@@ -75,7 +75,7 @@ public class ProcessCene extends PApplet {
     slides.add(new AllyzersSlide(text_analyzer, text, this));
     // slides.add(new SplashSlide(null, 0, processing_logo, this));
     // slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this));
-    slides.add(new SplashSlide("QR Code", 255, qr_code, false, this));
+    slides.add(new SplashSlide("Resources", 255, qr_code, "https://mdb.link/uberconf", false, this));
 
     // TODO: Add slides for the following topics:
     //   - Lucene lower-level - segments

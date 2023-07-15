@@ -7,6 +7,8 @@ public class SplashSlide extends BaseSlide {
 
   private final PShape shape;
 
+  private String caption;
+
   private boolean show_on_toc = false;
 
   public SplashSlide(String title, int background_color, PShape shape, ProcessCene presentation) {
@@ -28,23 +30,31 @@ public class SplashSlide extends BaseSlide {
     this.shape = null;
   }
 
-  public SplashSlide(String title, int background_color, PImage image, boolean show_on_toc, ProcessCene presentation) {
+  public SplashSlide(String title, int background_color, PImage image, String caption, boolean show_on_toc, ProcessCene presentation) {
     this(title, background_color, image, presentation);
     this.show_on_toc = show_on_toc;
+    this.caption = caption;
   }
 
     @Override
   public void draw(int step) {
     presentation.background(background_color);
 
+    float caption_y = presentation.textAscent() + presentation.textDescent() + presentation.height/2;
     if (image != null) {
       presentation.image(image, (presentation.width - image.width) / 2, (presentation.height - image.height) / 2);
+      caption_y += image.height / 2;
     }
 
     // TODO: Fix shape drawing
     if (shape != null) {
       //applet.fill(125);
       presentation.shape(shape, (presentation.width - shape.width) / 2, (presentation.height - shape.height) / 2);
+      caption_y += shape.height / 2;
+    }
+
+    if (caption != null) {
+      presentation.text(caption, (presentation.width - presentation.textWidth(caption))/2, caption_y);
     }
 
 // heart

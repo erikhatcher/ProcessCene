@@ -45,6 +45,8 @@ public class LuceneIndexingSlide extends BaseSlide {
 
   @Override
   public void draw(int step) {
+    presentation.textFont(presentation.loadFont(presentation.getFilePathFromResources("SourceCodeProRoman-Medium-24.vlw")));
+
     ByteBuffersDirectory index = new ByteBuffersDirectory();
     // TODO: Make analyzer name cycle
     Analyzer analyzer = text_analyzer.getAnalyzer("Standard");
@@ -61,7 +63,7 @@ public class LuceneIndexingSlide extends BaseSlide {
 
     presentation.background(255,255,255);
     presentation.fill(0,0,0);
-    presentation.textSize(14);
+//    presentation.textSize(14);
 
     // TODO: make field_name be controllable, perhaps? (need more fields on the docs here)
     String field_name = "title";
