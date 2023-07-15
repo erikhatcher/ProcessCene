@@ -24,7 +24,7 @@ public class TableOfContentsSlide extends BaseSlide {
   public void mouseClicked(MouseEvent event) {
     // TODO: create array of rectangles/objects and test whether mouse coordinates are in one and then go there
 
-    presentation.setSlide(3);
+    // presentation.setSlide(3);
   }
 
   @Override
