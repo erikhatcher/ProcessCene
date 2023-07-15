@@ -8,16 +8,15 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.MultiTerms;
+import org.apache.lucene.index.PostingsEnum;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
+import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.store.ByteBuffersDirectory;
-import processing.core.PApplet;
-import processing.data.StringDict;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class LuceneIndexingSlide extends BaseSlide {
   ByteBuffersDirectory index;
@@ -27,31 +26,37 @@ public class LuceneIndexingSlide extends BaseSlide {
   public LuceneIndexingSlide(String title, ProcessCene presentation) {
     super(title, presentation);
 
+    // TODO: Add images for documents and such
+    // Assets/normal/Technical_MDB_DocumentModel10x.png
+    // Technical_MDB_SearchCollection_10x.png
+    // General_ACTION_Favorite_Inverted10x.png
+    // Technical_MDB_DocumentModel10x.png
+
     Document doc1 = new Document();
-    doc1.add(new StringField("id", "1", Field.Store.YES));
-    doc1.add(new TextField("title", "The quick brown fox jumped over the lazy dogs.", Field.Store.YES));
+    doc1.add(new StringField("id", "0", Field.Store.YES));
+    doc1.add(new TextField("title", "Stella and Erik sitting in a tree!", Field.Store.YES));
     docs.add(doc1);
 
     Document doc2 = new Document();
-    doc2.add(new StringField("id", "2", Field.Store.YES));
-    doc2.add(new TextField("title", "The lazy dogs... slept.", Field.Store.YES));
+    doc2.add(new StringField("id", "1", Field.Store.YES));
+    doc2.add(new TextField("title", "Erik loves Stella!!!!!", Field.Store.YES));
     docs.add(doc2);
-
-    index = new ByteBuffersDirectory();
-    try {
-      IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(new StandardAnalyzer()));
-
-      for (Document doc : docs) {
-        writer.addDocument(doc);
-      }
-      writer.close();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
   }
 
   @Override
   public void draw(int step) {
+    index = new ByteBuffersDirectory();
+    try {
+      IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(new StandardAnalyzer()));
+
+      for (int i=0; i < step; i++) {
+        writer.addDocument(docs.get(i));
+      }
+      writer.close();
+    } catch (Exception e) {
+      System.err.println(e.getLocalizedMessage());
+    }
+
     presentation.background(255,255,255);
     presentation.fill(0,0,0);
     presentation.textSize(14);
@@ -63,12 +68,15 @@ public class LuceneIndexingSlide extends BaseSlide {
     presentation.text("Field: " + field_name, x,y);
     y += 20;
 
-    for (Document doc : docs) {
+    for (int i = 0; i < step; i++) {
+      Document doc = docs.get(i);
       String doc_string = doc.get("id") + ": " + doc.get(field_name);
       presentation.text(doc_string,x,y);
       y += 40;
     }
 
+    x = 600;
+    y = 20;
     try {
       IndexReader reader = DirectoryReader.open(index);
       Terms terms = MultiTerms.getTerms(reader,"title");
@@ -77,7 +85,13 @@ public class LuceneIndexingSlide extends BaseSlide {
         while (terms_enum.next() != null) {
           int df = terms_enum.docFreq();
           String txt = terms_enum.term().utf8ToString();
-          presentation.text("Term: " + txt + " (" + df + ")", x, y);
+
+          String postings_list = "Postings: ";
+          PostingsEnum postings = terms_enum.postings(null);
+          while (postings.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {
+            postings_list += postings.docID() + " - ";
+          }
+          presentation.text("Term: " + txt + " (" + df + ") :: " + postings_list, x, y);
 
           y += presentation.textAscent() + presentation.textDescent() + 10;
         }
@@ -87,5 +101,10 @@ public class LuceneIndexingSlide extends BaseSlide {
     }
 
     super.draw(step);
+  }
+
+  @Override
+  public int getNumberOfSteps() {
+    return docs.size();
   }
 }
