@@ -17,7 +17,7 @@ public class UberconfTitleSlide extends BaseSlide {
   private int current_heart_size = 26;
   private boolean heart_growing = true;
 
-  private Map<Integer,PShape> hearts = new HashMap<Integer,PShape>();
+  private final Map<Integer,PShape> hearts = new HashMap<Integer,PShape>();
 
   public UberconfTitleSlide(String title, ProcessCene presentation) {
     super(title, presentation);
@@ -64,5 +64,10 @@ public class UberconfTitleSlide extends BaseSlide {
     }
 
     super.draw(step);
+  }
+
+  @Override
+  public boolean getShowOnTOC() {
+    return false;
   }
 }

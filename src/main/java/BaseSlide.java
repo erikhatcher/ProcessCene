@@ -1,4 +1,3 @@
-import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
@@ -32,5 +31,10 @@ abstract public class BaseSlide implements Slide {
   @Override
   public int getNumberOfSteps() {
     return 1;
+  }
+
+  @Override
+  public boolean getShowOnTOC() {
+    return true;
   }
 }

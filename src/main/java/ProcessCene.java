@@ -4,8 +4,6 @@ import processing.core.PShape;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +53,8 @@ public class ProcessCene extends PApplet {
     textFont(loadFont(getFilePathFromResources("CourierNewPSMT-24.vlw")));
 
     PImage lucene_logo = loadImage(getFilePathFromResources("lucene_green_300.png"));
-    PImage bullet_image = loadImage(getFilePathFromResources("mongodb-assets/search_check.png"));
+//    PImage bullet_image = loadImage(getFilePathFromResources("mongodb-assets/search_check.png"));
+    PImage bullet_image = loadImage(getFilePathFromResources("Assets/normal/General_ACTION_Favorite_Inverted10x.png"));
     bullet_image.resize(50, 0);
     PShape processing_logo = loadShape(getFilePathFromResources("Processing_2021_logo.svg"));
     footer_logo = loadImage(getFilePathFromResources("uberconf_brain.jpeg"));
@@ -65,16 +64,16 @@ public class ProcessCene extends PApplet {
 
 
     // TODO: Make this a keyboard toggle to Solr, AS, ES, Lucene...
-    TextAnalyzer text_analyzer = new SolrAnalyzer();// new LuceneAnalyzer();
+    TextAnalyzer text_analyzer = new LuceneAnalyzer(); // new SolrAnalyzer();
 
     slides.add(new UberconfTitleSlide("Uberconf '23: Love of Lucene",this));
-//    slides.add(new SplashSlide("Love of Lucene", 255, lucene_logo, this));
+    // slides.add(new SplashSlide("Love of Lucene", 255, lucene_logo, false,this));
     slides.add(new LuceneIndexingSlide("Lucene Indexing", this));
     slides.add(new AnalysisSlide(text_analyzer, text, this));
     slides.add(new AllyzersSlide(text_analyzer, text, this));
-    slides.add(new SplashSlide(null, 0, processing_logo, this));
-    slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this));
-    slides.add(new SplashSlide("QR Code", 255, qr_code, this));
+    // slides.add(new SplashSlide(null, 0, processing_logo, this));
+    // slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this));
+    slides.add(new SplashSlide("QR Code", 255, qr_code, false, this));
 
     // TODO: Add slides for the following topics:
     //   - Lucene lower-level - segments

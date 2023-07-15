@@ -1,4 +1,3 @@
-import processing.core.PApplet;
 import processing.core.PImage;
 import processing.event.MouseEvent;
 
@@ -8,8 +7,14 @@ public class TableOfContentsSlide extends BaseSlide {
   private final List<Slide> slides;
 
   PImage bullet_image;
+
+  @Override
+  public boolean getShowOnTOC() {
+    return false;
+  }
+
   public TableOfContentsSlide(List<Slide> slides, PImage bullet_image, ProcessCene presentation) {
-    super("TOC", presentation);
+    super("Table Of Contents", presentation);
 
     this.slides = slides;
     this.bullet_image = bullet_image;
@@ -25,22 +30,25 @@ public class TableOfContentsSlide extends BaseSlide {
   @Override
   public void draw(int step) {
     int x = 50;
-    int y = 0;
+    int y = 50;
 
     presentation.background(255, 255, 255);
     presentation.fill(0x000000);
 
     for (int i = 0; i < slides.size(); i++) {
       Slide slide = slides.get(i);
-      String title = slide.getTitle();
-      boolean me = false;
-      if (title != null) {
-        presentation.image(bullet_image, x, y);
-        presentation.text(title, x + bullet_image.width, y + bullet_image.height/2);
 
-        // TODO: highlight slide title text that is being hovered on
+      if (slide.getShowOnTOC()) {
+        String title = slide.getTitle();
+        boolean me = false;
+        if (title != null) {
+          presentation.image(bullet_image, x, y);
+          presentation.text(title, x + bullet_image.width, y + bullet_image.height - presentation.textAscent());
 
-        y = y + bullet_image.height + 10;
+          // TODO: highlight slide title text that is being hovered on
+
+          y = y + bullet_image.height + 10;
+        }
       }
     }
 

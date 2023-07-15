@@ -1,4 +1,3 @@
-import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PShape;
 
@@ -8,6 +7,8 @@ public class SplashSlide extends BaseSlide {
 
   private final PShape shape;
 
+  private boolean show_on_toc = false;
+
   public SplashSlide(String title, int background_color, PShape shape, ProcessCene presentation) {
     super(title, presentation);
     this.background_color = background_color;
@@ -15,6 +16,10 @@ public class SplashSlide extends BaseSlide {
     this.shape = shape;
   }
 
+  @Override
+  public boolean getShowOnTOC() {
+    return show_on_toc;
+  }
 
   public SplashSlide(String title, int background_color, PImage image, ProcessCene presentation) {
     super(title, presentation);
@@ -23,7 +28,12 @@ public class SplashSlide extends BaseSlide {
     this.shape = null;
   }
 
-  @Override
+  public SplashSlide(String title, int background_color, PImage image, boolean show_on_toc, ProcessCene presentation) {
+    this(title, background_color, image, presentation);
+    this.show_on_toc = show_on_toc;
+  }
+
+    @Override
   public void draw(int step) {
     presentation.background(background_color);
 
