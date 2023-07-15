@@ -26,8 +26,8 @@ import java.util.List;
 public class LuceneAnalyzer extends TextAnalyzer {
 
   // lol, this calls for a NamedList instead :)
-  List<String> analyzer_names = new ArrayList<String>();
-  List<Analyzer> analyzers = new ArrayList<Analyzer>();
+  private List<String> analyzer_names = new ArrayList<String>();
+  private List<Analyzer> analyzers = new ArrayList<Analyzer>();
 
   public LuceneAnalyzer() {
     analyzer_names.add("Keyword");
@@ -124,8 +124,14 @@ public class LuceneAnalyzer extends TextAnalyzer {
     return token_list;
   }
 
+  public Analyzer getAnalyzer(String name) {
+    // TODO: make analyzers a HashMap<name,Analyzer> instead of parallel Lists
+    return analyzers.get(analyzer_names.indexOf(name));
+  }
   @Override
   List<String> getAnalyzerNames() {
     return analyzer_names;
   }
+
+
 }
