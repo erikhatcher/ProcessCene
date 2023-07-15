@@ -76,14 +76,22 @@ public class ProcessCene extends PApplet {
     //   * Suggest
     //   * Spatial (map, circle radius, pins for documents)
     //   * Faceting
+    //   * Lucene Monitor
+    //   * i18n/ICU/language
     //   * Vectors (HNSW / KNN)
-    //   * Advanced: Lucene index segments
+    //   * Advanced:
+    //       - Lucene index segments
+    //       - expressions
+    //       - grouping
+    //       - join
+    //       - Luke
     //   * Engines using Lucene:
     //        - Open source: Solr, elasticsearch, OpenSearch
     //        - Commercial: Lucidworks, Atlas Search
     //   * Solr Tagger
     //      - FST mention
     //   * Atlas Search
+    // TODO: see https://lucene.apache.org/core/9_7_0/ for other features to cover
     slides.add(new UberconfTitleSlide("Love of Lucene",this));
     slides.add(new InvertedIndexSlide("Lucene Indexing", this));
     slides.add(new AnalysisSlide(text_analyzer, text, this));
