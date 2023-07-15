@@ -7,6 +7,5 @@ public interface Slide {
   void mouseClicked(MouseEvent event);
   String getTitle();
   int getNumberOfSteps();
-
   boolean getShowOnTOC();
 }

@@ -1,6 +1,5 @@
 import processing.core.PApplet;
 import processing.core.PImage;
-import processing.core.PShape;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
