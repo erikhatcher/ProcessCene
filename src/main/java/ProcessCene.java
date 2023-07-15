@@ -4,16 +4,28 @@ import processing.core.PShape;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Processing with Lucene
- *
- * Inspired a bit by https://storyofsearch.com/
  */
 public class ProcessCene extends PApplet {
   private boolean animate_intra_slide = false;
+
+  // TODO: Extract these colors to a "theme" abstraction with MongoDB-specific one
+  // Primary Colors
+  public Color slate = Color.decode("#001E2B");
+  public Color white = Color.decode("#FFFFFF");
+  public Color spring_green = Color.decode("#00ED64");
+  public Color forest_green = Color.decode("#00684A");
+  public Color evergreen = Color.decode("#023430");
+
+  // Secondary Colors
+  public Color mist = Color.decode("#E3FCF7");
+  public Color lavender = Color.decode("#F9EBFF");
+
 
   public static void main(String[] args) {
     PApplet.main(new String[]{ProcessCene.class.getName()});
@@ -21,7 +33,7 @@ public class ProcessCene extends PApplet {
 
   List<Slide> slides = new ArrayList<Slide>();
   int current_slide_index = 0;
-  private int step = 0;
+  public int step = 0;  // TODO: revisit: shouldn't be public, but slides need to control it
   private boolean animate = false;
 
   private PImage footer_logo;
@@ -29,16 +41,6 @@ public class ProcessCene extends PApplet {
   private final String DEFAULT_TEXT = "The quick brown fox jumped over the lazy dogs.";
   private final String text = "Q-36 SpaceModulator"; //DEFAULT_TEXT;
   // "Text with an emoiji 😀 and Chinese 你好"; // this one has display issues (though window title renders accurately)
-
-//  color springGreen = #00ED64;
-//  color forestGreen  =  #00684A;
-//  color everGreen  =  #023430;
-//  color slateBlue = #001E2B;
-//  color mist = #E3FCF7;
-//  color lavender = #F9EBFF;
-//  color black = color(0);
-//  color white = color(255);
-
 
   @Override
   public void settings() {
@@ -66,7 +68,7 @@ public class ProcessCene extends PApplet {
     // TODO: Make this a keyboard toggle to Solr, AS, ES, Lucene...
     TextAnalyzer text_analyzer = new LuceneAnalyzer(); // new SolrAnalyzer();
 
-    slides.add(new UberconfTitleSlide("Uberconf '23: Love of Lucene",this));
+    slides.add(new UberconfTitleSlide("Love of Lucene",this));
     // slides.add(new SplashSlide("Love of Lucene", 255, lucene_logo, false,this));
     slides.add(new LuceneIndexingSlide("Lucene Indexing", this));
     slides.add(new AnalysisSlide(text_analyzer, text, this));
@@ -127,7 +129,7 @@ public class ProcessCene extends PApplet {
 
     // Draw the Footer
     String slide_counter = (current_slide_index + 1) + "/" + slides.size() +
-        ((number_of_steps > 1) ? " [Step: " + step + "/" + number_of_steps + "]" : "");
+        ((number_of_steps > 0) ? " [Step: " + step + "/" + number_of_steps + "]" : "");
     text(slide_counter, width - textWidth(slide_counter) - 10, height - textDescent());
     String slide_title = title; //this.getClass().getName() + title;
     text(slide_title, (width - textWidth(slide_title)) / 2, height - textDescent());

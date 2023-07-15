@@ -25,12 +25,12 @@ abstract public class BaseSlide implements Slide {
 
   @Override
   public void draw(int step) {
-    presentation.windowTitle((title != null) ? title : presentation.getClass().getName() + " " + step + "/" + getNumberOfSteps());
+    presentation.windowTitle("Uberconf '23: " + ((title != null) ? title : presentation.getClass().getName() + " " + step + "/" + getNumberOfSteps()));
   }
 
   @Override
   public int getNumberOfSteps() {
-    return 1;
+    return 0;
   }
 
   @Override

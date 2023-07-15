@@ -27,8 +27,8 @@ public class UberconfTitleSlide extends BaseSlide {
     for (int size = MIN_HEART_SIZE; size <= MAX_HEART_SIZE; size++) {
       PShape heart = presentation.createShape();
       heart.beginShape();
-      heart.fill(242, 197, 238); // lilac
-      heart.stroke(0, 237, 100); // spring green
+      heart.fill(presentation.lavender.getRGB());
+      heart.stroke(presentation.spring_green.getRGB());
       heart.strokeWeight(5);
       for (float t = 0; t <= 2 * PI; t += .10) {
         float x = (float) (-16 * size * pow(sin(t), 3));
@@ -39,8 +39,6 @@ public class UberconfTitleSlide extends BaseSlide {
 
       hearts.put(size,heart);
     }
-
-
   }
 
   @Override

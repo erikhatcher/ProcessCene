@@ -25,6 +25,8 @@ public class AnalysisSlide extends BaseSlide {
     // reset the tokens state
     String analyzer_name = text_analyzer.getAnalyzerNames().get(analyzer_index);
     tokens = text_analyzer.analyzeString(analyzer_name, text);
+
+    presentation.step = 0;
   }
 
   @Override
