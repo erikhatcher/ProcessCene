@@ -8,7 +8,6 @@ import com.mongodb.client.model.search.SearchOptions;
 import org.bson.BsonBoolean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import processing.core.PApplet;
 
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +71,7 @@ public class AtlasSearchQueryingSlide extends BaseSlide {
         System.out.println("  Genres: " + doc.get("genres"));
         System.out.println("  Score:" + doc.get("score"));
 //        printScoreDetails(2, doc.toBsonDocument().getDocument("scoreDetails"));
-        System.out.println("");
+        System.out.println();
       });
 
       // Print the explain output, which shows query interpretation details

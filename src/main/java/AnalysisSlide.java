@@ -1,4 +1,3 @@
-import processing.core.PApplet;
 import processing.event.KeyEvent;
 
 import java.util.HashMap;
