@@ -14,10 +14,10 @@ public class UberconfTitleSlide extends BaseSlide {
 
   private final int MIN_HEART_SIZE = 1;
   private final int MAX_HEART_SIZE = 27;
-  private int current_heart_size = 26;
+  private int current_heart_size = MIN_HEART_SIZE;
   private boolean heart_growing = true;
 
-  private final Map<Integer,PShape> hearts = new HashMap<Integer,PShape>();
+  private final Map<Integer,PShape> hearts = new HashMap<>();
 
   public UberconfTitleSlide(String title, ProcessCene presentation) {
     super(title, presentation);
