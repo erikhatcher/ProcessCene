@@ -39,7 +39,7 @@ public class ProcessCene extends PApplet {
 
   private final String DEFAULT_TEXT = "The quick brown fox jumped over the lazy dogs.";
   private final String text = "Q-36 SpaceModulator"; //DEFAULT_TEXT;
-  // "Text with an emoiji 😀 and Chinese 你好"; // this one has display issues (though window title renders accurately)
+  // TODO: fix "Text with an emoiji 😀 and Chinese 你好"; // this one has display issues (though window title renders accurately)
 
   @Override
   public void settings() {
@@ -48,7 +48,7 @@ public class ProcessCene extends PApplet {
 
   @Override
   public void setup() {
-    frameRate(5);
+    frameRate(10);
     fill(0);
 
     textFont(loadFont(getFilePathFromResources("LexendDeca-Light-24.vlw")));
@@ -60,7 +60,6 @@ public class ProcessCene extends PApplet {
 
     PImage qr_code = loadImage(getFilePathFromResources("uberconf_qr_code.png"));
 
-
     // TODO: Make this a keyboard toggle to Solr, AS, ES, Lucene...
     TextAnalyzer text_analyzer = new LuceneAnalyzer(); // new SolrAnalyzer();
 
@@ -68,7 +67,11 @@ public class ProcessCene extends PApplet {
     slides.add(new LuceneIndexingSlide("Lucene Indexing", this));
     slides.add(new AnalysisSlide(text_analyzer, text, this));
     slides.add(new AllyzersSlide(text_analyzer, text, this));
+
+
+    // TODO: handle Atlas Search not being accessible
     slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this));
+
     slides.add(new SplashSlide("Resources", 255, qr_code, "https://mdb.link/uberconf", false, this));
 
     // TODO: Add slides for the following topics:
@@ -90,6 +93,10 @@ public class ProcessCene extends PApplet {
 
   @Override
   public void draw() {
+    // TODO: how to make some slides animate fast, and others slower?
+//    if (current_slide_index > 1) {
+//      frameRate(0.3f);
+//    }
     Slide current_slide = slides.get(current_slide_index);
     int number_of_steps = current_slide.getNumberOfSteps();
     String title = (current_slide.getTitle() != null) ? current_slide.getTitle() : "";
@@ -121,11 +128,16 @@ public class ProcessCene extends PApplet {
     pop();
 
     // Draw the Footer
-    String slide_counter = (current_slide_index + 1) + "/" + slides.size() +
-        ((number_of_steps > 0) ? " [Step: " + step + "/" + number_of_steps + "]" : "");
+    String slide_counter = (current_slide_index + 1) + "/" + slides.size();
     text(slide_counter, width - textWidth(slide_counter) - 10, height - textDescent());
     String slide_title = title;
     text(slide_title, (width - textWidth(slide_title)) / 2, height - textDescent());
+
+    if ((number_of_steps > 0)) {
+      String step_text = "Step: " + step + "/" + number_of_steps;
+      text(step_text, width - textWidth(step_text) - 10, height - 2 * (textAscent()));
+    }
+
     if (footer_logo != null) {
       image(footer_logo, 0, height - footer_logo.height);
     }
