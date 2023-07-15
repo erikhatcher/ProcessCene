@@ -32,6 +32,16 @@ public class ProcessCene extends PApplet {
   private final String text = "Q-36 SpaceModulator"; //DEFAULT_TEXT;
   // "Text with an emoiji 😀 and Chinese 你好"; // this one has display issues (though window title renders accurately)
 
+//  color springGreen = #00ED64;
+//  color forestGreen  =  #00684A;
+//  color everGreen  =  #023430;
+//  color slateBlue = #001E2B;
+//  color mist = #E3FCF7;
+//  color lavender = #F9EBFF;
+//  color black = color(0);
+//  color white = color(255);
+
+
   @Override
   public void settings() {
     size(1024, 768);
@@ -146,6 +156,13 @@ public class ProcessCene extends PApplet {
     System.out.print((alt) ? "Alt-" : "");
     System.out.print((meta) ? "Meta-" : "");
     System.out.println(key);
+
+    if (key == ' ') {
+      if (current_slide_index < slides.size() - 1) {
+        current_slide_index++;
+        step = 0;
+      }
+    }
 
     if (ctrl && !alt) {
       // ctrl+`key`
