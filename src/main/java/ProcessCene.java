@@ -126,7 +126,8 @@ public class ProcessCene extends PApplet {
     pop();
 
     // Draw the Footer
-    String slide_counter = (current_slide_index + 1) + "/" + slides.size();
+    String slide_counter = (current_slide_index + 1) + "/" + slides.size() +
+        ((number_of_steps > 1) ? " [Step: " + step + "/" + number_of_steps + "]" : "");
     text(slide_counter, width - textWidth(slide_counter) - 10, height - textDescent());
     String slide_title = title; //this.getClass().getName() + title;
     text(slide_title, (width - textWidth(slide_title)) / 2, height - textDescent());
@@ -203,9 +204,9 @@ public class ProcessCene extends PApplet {
 //          break;
 
         default:
-          if (key >= '0' && key <= '9') {
-            if ((key - '0') < slides.size())
-              current_slide_index = key - '0';
+          if (key >= '1' && key <= '9') {
+            if ((key - '1') < slides.size())
+              current_slide_index = key - '1';
             step = 0;
           }
           break;
