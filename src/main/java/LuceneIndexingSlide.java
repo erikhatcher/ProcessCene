@@ -1,4 +1,4 @@
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LuceneIndexingSlide extends BaseSlide {
-  ByteBuffersDirectory index;
+  final List<Document> docs = new ArrayList<>();
 
-  List<Document> docs = new ArrayList<Document>();
+  final LuceneAnalyzer text_analyzer = new LuceneAnalyzer();
 
   public LuceneIndexingSlide(String title, ProcessCene presentation) {
     super(title, presentation);
@@ -34,20 +34,22 @@ public class LuceneIndexingSlide extends BaseSlide {
 
     Document doc1 = new Document();
     doc1.add(new StringField("id", "0", Field.Store.YES));
-    doc1.add(new TextField("title", "Stella and Erik sitting in a tree!", Field.Store.YES));
+    doc1.add(new TextField("title", "Uberconf 2023: Java and much more", Field.Store.YES));
     docs.add(doc1);
 
     Document doc2 = new Document();
     doc2.add(new StringField("id", "1", Field.Store.YES));
-    doc2.add(new TextField("title", "Erik loves Stella!!!!!", Field.Store.YES));
+    doc2.add(new TextField("title", "Much Java was needed this morning", Field.Store.YES));
     docs.add(doc2);
   }
 
   @Override
   public void draw(int step) {
-    index = new ByteBuffersDirectory();
+    ByteBuffersDirectory index = new ByteBuffersDirectory();
+    // TODO: Make analyzer name cycle
+    Analyzer analyzer = text_analyzer.getAnalyzer("Standard");
     try {
-      IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(new StandardAnalyzer()));
+      IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(analyzer));
 
       for (int i=0; i < step; i++) {
         writer.addDocument(docs.get(i));
@@ -61,6 +63,7 @@ public class LuceneIndexingSlide extends BaseSlide {
     presentation.fill(0,0,0);
     presentation.textSize(14);
 
+    // TODO: make field_name be controllable, perhaps? (need more fields on the docs here)
     String field_name = "title";
     float x = 20;
     float y = presentation.textAscent() + presentation.textDescent() + 10;
