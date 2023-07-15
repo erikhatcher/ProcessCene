@@ -32,9 +32,6 @@ public class TableOfContentsSlide extends BaseSlide {
     int x = 50;
     int y = 50;
 
-    presentation.background(255, 255, 255);
-    presentation.fill(0x000000);
-
     for (int i = 0; i < slides.size(); i++) {
       Slide slide = slides.get(i);
 

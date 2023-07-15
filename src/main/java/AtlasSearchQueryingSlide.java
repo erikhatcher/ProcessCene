@@ -86,11 +86,7 @@ public class AtlasSearchQueryingSlide extends BaseSlide {
 
   @Override
   public void draw(int step) {
-    presentation.background(255,255,255);
-//    presentation.fill(0,0,0);
-
     presentation.text(output.toString(), 0, presentation.textAscent() + presentation.textDescent());
-
     super.draw(step);
   }
 }

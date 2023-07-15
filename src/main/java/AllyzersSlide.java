@@ -24,8 +24,6 @@ public class AllyzersSlide extends BaseSlide {
 
   @Override
   public void draw(int step) {
-    presentation.background(255, 255, 255);
-
     int x;
     int y = 20;
 
