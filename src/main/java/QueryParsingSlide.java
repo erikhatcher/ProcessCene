@@ -1,5 +1,4 @@
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.surround.query.BasicQueryFactory;
 import org.apache.lucene.queryparser.surround.query.SrndQuery;

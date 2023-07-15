@@ -100,7 +100,7 @@ public class ProcessCene extends PApplet {
     slides.add(new QueryParsingSlide("Query Parsing", this));
 
     // TODO: handle Atlas Search not being accessible
-    slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this));
+    // slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this));
 
     slides.add(new SplashSlide("Resources", 255, qr_code, "https://mdb.link/uberconf", false, this));
 

@@ -1,6 +1,3 @@
-import processing.core.PApplet;
-import processing.data.StringDict;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
