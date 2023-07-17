@@ -44,12 +44,24 @@ public class TableOfContentsSlide extends BaseSlide {
 
       if (slide.getShowOnTOC()) {
         String title = slide.getTitle();
-        boolean me = false;
         if (title != null) {
           presentation.image(bullet_image, x, y);
-          presentation.text(((current_slide_index == i)?"* ":"") + title, x + bullet_image.width, y + bullet_image.height - presentation.textAscent());
 
-          // TODO: highlight slide title text that is being hovered on
+          int fill = presentation.black;
+          if (current_slide_index != -1) {
+            if (i < current_slide_index) {
+              fill = presentation.spring_green;
+            } else {
+              fill = presentation.evergreen;
+            }
+          }
+          presentation.fill(fill);
+          presentation.text(title, x + bullet_image.width, y + bullet_image.height - presentation.textAscent());
+
+          if (current_slide_index == i) {
+            presentation.fill(presentation.spring_green, 100);
+            presentation.rect(x + bullet_image.width - 5, y - 5 + bullet_image.height - 2 * presentation.textAscent(), presentation.textWidth(title) + 10, presentation.textAscent() + presentation.textDescent() + 5, 10);
+          }
 
           y = y + bullet_image.height + 10;
         }
