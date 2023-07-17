@@ -209,8 +209,8 @@ public class ProcessCene extends PApplet {
     System.out.print((meta) ? "Meta-" : "");
     System.out.println(key);
 
-    // forward to next slide: space bar or back-slash \
-    if (key == ' ' || key == '\\') {
+    // forward to next slide: space bar
+    if (key == ' ') {
       if (step < current_slide.getNumberOfSteps()) {
         step++;
       } else {
@@ -218,6 +218,13 @@ public class ProcessCene extends PApplet {
           current_slide_index++;
           step = 0;
         }
+      }
+    }
+
+    if (key == '\\') {
+      if (current_slide_index < slides.size() - 1) {
+        current_slide_index++;
+        step = 0;
       }
     }
 
