@@ -2,8 +2,9 @@ import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 abstract public class BaseSlide implements Slide {
-  protected final String title;
+  protected String title;
   protected final ProcessCene presentation;
+  protected boolean show_on_toc = true;
 
   public BaseSlide(String title, ProcessCene presentation) {
     this.title = title;
@@ -25,7 +26,7 @@ abstract public class BaseSlide implements Slide {
 
   @Override
   public void draw(int step) {
-    presentation.windowTitle("Uberconf '23: " + ((title != null) ? title : presentation.getClass().getName() + " " + step + "/" + getNumberOfSteps()));
+    presentation.windowTitle("Uberconf '23: Love of Lucene: " + ((title != null) ? title : presentation.getClass().getName() + " " + step + "/" + getNumberOfSteps()));
   }
 
   @Override
@@ -35,6 +36,11 @@ abstract public class BaseSlide implements Slide {
 
   @Override
   public boolean getShowOnTOC() {
-    return true;
+    return show_on_toc;
+  }
+
+  public Slide setShowOnTOC(boolean show_on_toc) {
+    this.show_on_toc = show_on_toc;
+    return this;
   }
 }
