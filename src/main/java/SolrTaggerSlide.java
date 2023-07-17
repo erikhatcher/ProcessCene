@@ -65,29 +65,38 @@ public class SolrTaggerSlide extends BaseSlide {
       entities.put(id, doc);
     }
 
-    for (Object item : tags) {
-      JSONObject tag = (JSONObject) item;
-      long start_offset = (long) tag.get("startOffset");
-      long end_offset = (long) tag.get("endOffset");
-      JSONArray ids = (JSONArray) tag.get("ids");
+    for (int i = 0; i < tags.size(); i++) {
+      boolean render_just_this_tag = ((step > 0) && (i == step - 1));
+      if (step == 0 || render_just_this_tag) {
+        JSONObject tag = (JSONObject) tags.get(i);
+        long start_offset = (long) tag.get("startOffset");
+        long end_offset = (long) tag.get("endOffset");
+        JSONArray ids = (JSONArray) tag.get("ids");
 
-      String before_text = text_to_tag.substring(0, (int) start_offset);
-      String tagged_text = text_to_tag.substring((int) start_offset, (int) end_offset);
-      float before_width = presentation.textWidth(before_text);
-      float tag_width = presentation.textWidth(tagged_text);
+        String before_text = text_to_tag.substring(0, (int) start_offset);
+        String tagged_text = text_to_tag.substring((int) start_offset, (int) end_offset);
+        float before_width = presentation.textWidth(before_text);
+        float tag_width = presentation.textWidth(tagged_text);
 
-      for (Object o : ids) {
-        String id = (String) o;
-        JSONObject doc = entities.get(id);
-        String type = (String) doc.get("type");
-        int tag_color = presentation.spring_green;
-        if ("person".equals(type)) tag_color = presentation.mist;
-        if ("vehicle".equals(type)) tag_color = presentation.evergreen;
-        if ("part".equals(type)) tag_color = presentation.lavender;
-        presentation.fill(tag_color, 100);
-        presentation.rect(x + before_width, y - presentation.textAscent(), tag_width, presentation.textAscent() + presentation.textDescent());
-        presentation.fill(presentation.black);
-        presentation.text(id, x + before_width, y + presentation.textAscent() + presentation.textDescent());
+        for (int j = 0; j < ids.size(); j++) {
+          String id = (String) ids.get(j);
+          JSONObject doc = entities.get(id);
+          String type = (String) doc.get("type");
+          int tag_color = presentation.spring_green;
+          if ("person".equals(type)) tag_color = presentation.mist;
+          if ("vehicle".equals(type)) tag_color = presentation.evergreen;
+          if ("part".equals(type)) tag_color = presentation.lavender;
+          presentation.fill(tag_color, 100);
+          presentation.rect(x + before_width, y - presentation.textAscent(), tag_width, presentation.textAscent() + presentation.textDescent());
+          presentation.fill(presentation.black);
+          presentation.text(id, x + before_width, y + (j+1) * (presentation.textAscent() + presentation.textDescent()));
+
+          if (render_just_this_tag) {
+            presentation.text(id, 20 + j * 300, 300 + (presentation.textAscent() + presentation.textDescent()));
+            presentation.text((String)doc.get("type"), 20 + j * 300, 300 + 2 * (presentation.textAscent() + presentation.textDescent()));
+            presentation.text(((JSONArray)doc.get("name")).toString(), 20 + j * 300, 300 + 3 * (presentation.textAscent() + presentation.textDescent()));
+          }
+        }
       }
     }
     super.draw(step);
