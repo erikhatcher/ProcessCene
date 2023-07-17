@@ -61,23 +61,18 @@ public class InvertedIndexSlide extends BaseSlide {
       System.err.println(e.getLocalizedMessage());
     }
 
-    // TODO: make field_name be controllable, perhaps? (need more fields on the docs here)
-    String field_name = "title";
     float x = 20;
     float y = presentation.textAscent() + presentation.textDescent() + 10;
 
-    presentation.text("Field: " + field_name, x,y);
-    y += 20;
-
     for (int i = 0; i < step; i++) {
       Document doc = docs.get(i);
-      String doc_string = doc.get("id") + ": " + doc.get(field_name);
+      String doc_string = doc.get("id") + ": " + doc.get("title");
       presentation.text(doc_string,x,y);
       y += 40;
     }
 
-    x = 600;
-    y = 20;
+    x = 0;
+    y = 200;
     try {
       IndexReader reader = DirectoryReader.open(index);
       Terms terms = MultiTerms.getTerms(reader,"title");
