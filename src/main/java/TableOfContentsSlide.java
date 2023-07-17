@@ -24,7 +24,7 @@ public class TableOfContentsSlide extends BaseSlide {
   public TableOfContentsSlide(List<Slide> slides, PImage bullet_image, int current_slide_index, ProcessCene presentation) {
     this(slides, bullet_image, presentation);
     this.current_slide_index = current_slide_index;
-    title = "Table Of Contents" + ((current_slide_index > -1) ? ": " + slides.get(current_slide_index).getTitle(): "");
+    title =  ((current_slide_index > -1) ? slides.get(current_slide_index).getTitle(): "Table Of Contents: ");
   }
 
   @Override
