@@ -9,18 +9,11 @@ public class SplashSlide extends BaseSlide {
 
   private String caption;
 
-  private boolean show_on_toc = false;
-
   public SplashSlide(String title, int background_color, PShape shape, ProcessCene presentation) {
     super(title, presentation);
     this.background_color = background_color;
     this.image = null;
     this.shape = shape;
-  }
-
-  @Override
-  public boolean getShowOnTOC() {
-    return show_on_toc;
   }
 
   public SplashSlide(String title, int background_color, PImage image, ProcessCene presentation) {
@@ -30,11 +23,15 @@ public class SplashSlide extends BaseSlide {
     this.shape = null;
   }
 
-  public SplashSlide(String title, int background_color, PImage image, String caption, boolean show_on_toc, ProcessCene presentation) {
+  public SplashSlide(String title, int background_color, PImage image, String caption, ProcessCene presentation) {
     this(title, background_color, image, presentation);
-    this.show_on_toc = show_on_toc;
     this.caption = caption;
   }
+
+  public SplashSlide(String title, int background_color, ProcessCene presentation) {
+    this(title,background_color, (PShape) null, presentation);
+  }
+
 
     @Override
   public void draw(int step) {
