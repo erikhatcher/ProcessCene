@@ -46,7 +46,7 @@ public class ProcessCene extends PApplet {
 
   @Override
   public void settings() {
-    size(1024, 768);
+    size(1500, 820);
   }
 
   @Override
@@ -92,22 +92,51 @@ public class ProcessCene extends PApplet {
     //      - FST mention
     //   * Atlas Search
     // TODO: see https://lucene.apache.org/core/9_7_0/ for other features to cover
-    slides.add(new UberconfTitleSlide("Love of Lucene",this));
-    slides.add(new InvertedIndexSlide("Lucene Indexing", this));
+    slides.add(new UberconfTitleSlide("",this));
+    slides.add(new SplashSlide("About Me", this.spring_green, null,"TBD", this).setShowOnTOC(false));
+
+    slides.add(new SplashSlide("\"It's Just Search\": features of Lucene", this.spring_green, null,"TBD", this));
+
+    slides.add(new InvertedIndexSlide("Inverted Index", this));
+
     slides.add(new AnalysisSlide(text_analyzer, text, this));
-    slides.add(new AllyzersSlide(text_analyzer, text, this));
+      slides.add(new AllyzersSlide(text_analyzer, text, this).setShowOnTOC(false));
+      slides.add(new SplashSlide("Language Considerations", this.spring_green, null,"TBD", this).setShowOnTOC(false));
 
     slides.add(new QueryParsingSlide("Query Parsing", this));
 
-    // TODO: handle Atlas Search not being accessible
-    // slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this));
+    slides.add(new SplashSlide("Searching", this.spring_green, null,"TBD", this));
+      slides.add(new SplashSlide("Filtering", this.spring_green, null,"TBD\n\nskipping / eventual DocSet view animating skipping", this).setShowOnTOC(false));
+      slides.add(new SplashSlide("Scoring", this.spring_green, null,"TBD\n\nsimilarity / TF/IDF / BM25", this).setShowOnTOC(false));
 
-    slides.add(new SplashSlide("Resources", 255, qr_code, "https://mdb.link/uberconf", false, this));
+    slides.add(new SolrTaggerSlide("Solr Tagger", this));
+
+    // TODO: handle offline mode or Atlas Search not being accessible, lazy load results so app is faster
+    //slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this));
+
+    slides.add(new SplashSlide("Go forth and search...", 255, qr_code, "https://mdb.link/uberconf", this));
 
     // * Demonstrate solutions to https://www.mongodb.com/blog/post/three-ways-retailers-use-search-beyond-ecommerce-store
 
     TableOfContentsSlide toc_slide = new TableOfContentsSlide(slides, bullet_image, this);
     slides.add(1, toc_slide);
+
+    boolean inject_toc_guide = true;
+    if (inject_toc_guide) {
+      List<Slide> updated_slides = new ArrayList<>();
+      for (int i = 0; i < slides.size(); i++) {
+        Slide this_content_slide = slides.get(i);
+
+        // Inject tracking ToC slide before every slide that appears on the ToC
+        if (this_content_slide.getShowOnTOC() && !(this_content_slide instanceof TableOfContentsSlide)) {
+          updated_slides.add(new TableOfContentsSlide(slides,bullet_image,i,this));
+        }
+
+        updated_slides.add(this_content_slide);
+      }
+
+      slides = updated_slides;
+    }
   }
 
   @Override
@@ -165,6 +194,8 @@ public class ProcessCene extends PApplet {
 
   @Override
   public void keyTyped(KeyEvent event) {
+    Slide current_slide = slides.get(current_slide_index);
+
     char key = event.getKey();
     int modifiers = event.getModifiers();
     int keyCode = event.getKeyCode();
@@ -178,9 +209,21 @@ public class ProcessCene extends PApplet {
     System.out.print((meta) ? "Meta-" : "");
     System.out.println(key);
 
-    if (key == ' ') {
-      if (current_slide_index < slides.size() - 1) {
-        current_slide_index++;
+    // forward to next slide: space bar or back-slash \
+    if (key == ' ' || key == '\\') {
+      if (step < current_slide.getNumberOfSteps()) {
+        step++;
+      } else {
+        if (current_slide_index < slides.size() - 1) {
+          current_slide_index++;
+          step = 0;
+        }
+      }
+    }
+
+    if (key == ']') {
+      if (current_slide_index > 0) {
+        current_slide_index--;
         step = 0;
       }
     }
@@ -211,7 +254,6 @@ public class ProcessCene extends PApplet {
           break;
 
         case '.': // next step
-          Slide current_slide = slides.get(current_slide_index);
           int number_of_steps = current_slide.getNumberOfSteps();
           if (step < number_of_steps) {
             step++;
@@ -228,7 +270,6 @@ public class ProcessCene extends PApplet {
       }
     } else {
       // pass down to current slide to handle or not
-      Slide current_slide = slides.get(current_slide_index);
       current_slide.keyTyped(event);
     }
   }
