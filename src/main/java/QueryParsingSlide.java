@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class QueryParsingSlide extends BaseSlide {
+public class QueryParsingSlide extends ConsoleOutputSlideBase {
   private final List<String> parsers = new ArrayList<>();
   private final Map<String,List<String>> queries_by_parser = new HashMap<>();
   private int current_parser_index = 0;
@@ -34,27 +34,38 @@ public class QueryParsingSlide extends BaseSlide {
     queries_by_parser.put("Surround", surround_queries);
   }
 
-  @Override
-  public void draw(int step) {
+  private String getQueryString(String parser_name, int query_index) {
     String query_string = "";
-    String parser_name = parsers.get(current_parser_index);
     List<String> queries = queries_by_parser.get(parser_name);
-    if (step > 0) {
-      query_string = queries.get(step - 1);
+    if (query_index > 0) {
+      query_string = queries.get(query_index - 1);
     }
+    return query_string;
+  }
 
-    float x = 0;
-    float y = presentation.textAscent() + presentation.textDescent();
-    presentation.text("Query Parser: " + parser_name, x, y);
-    y += presentation.textAscent() + presentation.textDescent();
+  @Override
+  protected String getDescription(int step) {
+    if (step == 0) {
+      return "";
+    }
+    String parser_name = parsers.get(current_parser_index);
+    String query_string = getQueryString(parser_name, step);
 
-    presentation.text("Query: " + query_string, x, y);
-    y += presentation.textAscent() + presentation.textDescent();
+    String description = "Query Parser: " + parser_name + " :: Query: " + query_string;
 
+    return description;
+  }
 
-    y += 50;
+  @Override
+  protected String getOutput(int step) {
+    if (step == 0) {
+      return "";
+    }
+    String parser_name = parsers.get(current_parser_index);
+    String query_string = getQueryString(parser_name, step);
+
+    StringBuilder parsed_query = new StringBuilder();
     if (!query_string.isEmpty()) {
-      StringBuilder parsed_query = new StringBuilder();
       try {
         Query query = null;
         // TODO: `if` statements here need to go.... abstract this to our own "query parser" abstraction like TextAnalyzer
@@ -68,22 +79,14 @@ public class QueryParsingSlide extends BaseSlide {
 
         }
         parsed_query.append(query.toString());
-        if (parsed_query.length() > 30) {
-          parsed_query.insert(30,'\n');
+        if (parsed_query.length() > 50) {
+          parsed_query.insert(50, '\n');
         }
       } catch (Exception e) {
         parsed_query.append(e.getLocalizedMessage());
       }
-
-      presentation.text("Parsed query: " + parsed_query, x, y);
     }
-
-    super.draw(step);
-  }
-
-  @Override
-  public int getNumberOfSteps() {
-    return queries_by_parser.get(parsers.get(current_parser_index)).size();
+    return parsed_query.toString();
   }
 
   @Override
@@ -111,4 +114,10 @@ public class QueryParsingSlide extends BaseSlide {
     presentation.step = 0;
   }
 
+  @Override
+  public int getNumberOfSteps() {
+    return queries_by_parser.get(parsers.get(current_parser_index)).size();
+  }
 }
+
+
