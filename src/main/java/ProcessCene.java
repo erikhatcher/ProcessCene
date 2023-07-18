@@ -29,13 +29,12 @@ public class ProcessCene extends PApplet {
   public int black = Color.decode("#000000").getRGB();
   private boolean show_footer = true;
 
-
   public static void main(String[] args) {
     PApplet.main(new String[]{ProcessCene.class.getName()});
   }
 
-  List<Slide> slides = new ArrayList<Slide>();
-  int current_slide_index = 0;
+  private List<Slide> slides = new ArrayList<Slide>();
+  private int current_slide_index = 0;
   private boolean animate = false;
 
   private PImage footer_logo;
@@ -179,7 +178,7 @@ public class ProcessCene extends PApplet {
 
     // Draw the Footer
     if (show_footer) {
-      String slide_counter = current_slide + "/" + slides.size();
+      String slide_counter = current_slide_index + "/" + slides.size();
       text(slide_counter, width - textWidth(slide_counter) - 10, height - textDescent());
       String slide_title = title;
       text(slide_title, (width - textWidth(slide_title)) / 2, height - textDescent());
