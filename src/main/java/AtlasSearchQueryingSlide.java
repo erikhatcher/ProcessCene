@@ -79,7 +79,7 @@ public class AtlasSearchQueryingSlide extends BaseSlide {
 //      System.out.println("Explain:");
 //      System.out.println(format(aggregationSpec.explain().toBsonDocument()));
     } catch (Exception e) {
-      System.err.println(e.getLocalizedMessage());
+      output.append("Error: " + e.toString());
     }
 
   }
