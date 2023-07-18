@@ -23,31 +23,4 @@ abstract public class ConsoleOutputSlideBase extends BaseSlide {
 
   protected abstract String getDescription(int step);
   protected abstract String getOutput(int step);
-
-  @Override
-  public void keyTyped(KeyEvent event) {
-    int current_step = presentation.step;
-    if (event.isAltDown() && event.isControlDown()) {
-      switch (event.getKey()) {
-        case ',':
-          if (current_step > 0) {
-            current_step--;
-            reset();
-          }
-          break;
-
-        case '.':
-          if (current_step <= getNumberOfSteps()) {
-            current_step++;
-            reset();
-          }
-          break;
-      }
-    }
-  }
-
-  private void reset() {
-    presentation.step = 0;
-  }
-
 }

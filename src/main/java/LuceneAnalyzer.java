@@ -22,6 +22,7 @@ import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LuceneAnalyzer extends TextAnalyzer {
 
@@ -30,8 +31,8 @@ public class LuceneAnalyzer extends TextAnalyzer {
   private List<Analyzer> analyzers = new ArrayList<Analyzer>();
 
   public LuceneAnalyzer() {
-    analyzer_names.add("Keyword");
-    analyzers.add(new KeywordAnalyzer());
+    analyzer_names.add("Standard");
+    analyzers.add(new StandardAnalyzer());
 
     analyzer_names.add("Whitespace");
     analyzers.add(new WhitespaceAnalyzer());
@@ -39,8 +40,8 @@ public class LuceneAnalyzer extends TextAnalyzer {
     analyzer_names.add("Simple");
     analyzers.add(new SimpleAnalyzer());
 
-    analyzer_names.add("Standard");
-    analyzers.add(new StandardAnalyzer());
+    analyzer_names.add("Keyword");
+    analyzers.add(new KeywordAnalyzer());
 
     analyzer_names.add("English");
     analyzers.add(new EnglishAnalyzer());
@@ -71,13 +72,13 @@ public class LuceneAnalyzer extends TextAnalyzer {
   }
 
   @Override
-  List<HashMap<String, Object>> analyzeString(String analyzer_name, String text) {
+  List<Map<String, Object>> analyzeString(String analyzer_name, String text) {
     if (!analyzer_names.contains(analyzer_name)) {
       throw new RuntimeException("Unknown analyzer: " + analyzer_name);
     }
     Analyzer analyzer = analyzers.get(analyzer_names.indexOf(analyzer_name));
 
-    List<HashMap<String, Object>> token_list = new ArrayList<HashMap<String, Object>>();
+    List<Map<String, Object>> token_list = new ArrayList<>();
 
     //System.out.println("Analyzing: " + text);
     try (TokenStream ts = analyzer.tokenStream("myfield", text)) {

@@ -1,5 +1,5 @@
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AtlasSearchAnalyzer extends TextAnalyzer {
   // Assign Atlas Search analyzer name to comparable Solr field type mappings
@@ -13,7 +13,7 @@ public class AtlasSearchAnalyzer extends TextAnalyzer {
 //  println(analyzers);
 
   @Override
-  List<HashMap<String, Object>> analyzeString(String analyzer_name, String text) {
+  List<Map<String, Object>> analyzeString(String analyzer_name, String text) {
     return null;
   }
 

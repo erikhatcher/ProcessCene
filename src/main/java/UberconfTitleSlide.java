@@ -19,8 +19,9 @@ public class UberconfTitleSlide extends BaseSlide {
 
   private final Map<Integer,PShape> hearts = new HashMap<>();
 
-  public UberconfTitleSlide(String title, ProcessCene presentation) {
-    super(title, presentation);
+  public UberconfTitleSlide(ProcessCene presentation) {
+    super(null, presentation);
+    setShowOnTOC(false);
 
     lucene_logo = presentation.loadShape(presentation.getFilePathFromResources("lucene_logo_retro.svg"));
 
@@ -56,14 +57,10 @@ public class UberconfTitleSlide extends BaseSlide {
 
     if (lucene_logo != null) {
       // TODO: scale logo as the heart grows and shrinks
+      //lucene_logo.scale(heart_growing ? 1.1f : 0.9f);
       presentation.shape(lucene_logo,  -1 * lucene_logo.width / 2, 0 - lucene_logo.height);
     }
 
     super.draw(step);
-  }
-
-  @Override
-  public boolean getShowOnTOC() {
-    return false;
   }
 }

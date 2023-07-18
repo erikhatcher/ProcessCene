@@ -7,7 +7,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,44 +18,41 @@ import java.util.Map;
  * TODO: Re-load geonames data, mapping in other fields.
  */
 public class SolrTaggerSlide extends BaseSlide {
-  private final String text_to_tag = "Blake's f150 needs one of dem ph8 from the Canon City store";
-  private JSONObject tagger_response;
+  private List<String> texts = new ArrayList<>();
+  private List<JSONObject> tagger_responses = new ArrayList<>();
 
   public SolrTaggerSlide(String title, ProcessCene presentation) {
     super(title, presentation);
 
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create("http://localhost:8983/solr/tagger/tag" +
-                           "?overlaps=NO_SUB&tagsLimit=5000" +
-                           "&fl=*&wt=json&indent=on&echoParams=all"))
-        .header("Content-Type", "text/plain")
-        .POST(HttpRequest.BodyPublishers.ofString(text_to_tag))
-        .build();
-    try {
-      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-      String response_body = response.body();
-      System.out.println("response_body = " + response_body);
-      tagger_response = (JSONObject) new JSONParser().parse(response_body);
-    } catch (Exception e) {
-      tagger_response = new JSONObject();
-      tagger_response.put("Error", e.getLocalizedMessage());
+    texts.add("Blake's f150 needs one of dem ph8 from the Canon City store");
+    texts.add("tell me more about covid");
+
+    for(int i=0; i < texts.size(); i++) {
+      HttpClient client = HttpClient.newHttpClient();
+      HttpRequest request = HttpRequest.newBuilder()
+          .uri(URI.create("http://localhost:8983/solr/tagger/tag" +
+              "?overlaps=NO_SUB&tagsLimit=5000" +
+              "&fl=*&wt=json&indent=on&echoParams=all"))
+          .header("Content-Type", "text/plain")
+          .POST(HttpRequest.BodyPublishers.ofString(texts.get(i)))
+          .build();
+      try {
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        String response_body = response.body();
+        System.out.println("response_body = " + response_body);
+        tagger_responses.add((JSONObject) new JSONParser().parse(response_body));
+      } catch (Exception e) {
+        JSONObject o = new JSONObject();
+        o.put("Error", e.getLocalizedMessage());
+        tagger_responses.add(o);
+      }
     }
   }
 
   @Override
   public void draw(int step) {
-    presentation.textSize(20);
-
-    float x = 0;
-    float y = presentation.textAscent() + presentation.textDescent();;
-
-    presentation.text("Tagging:",x,y);
-
-    x += 50;
-    y += 50 + presentation.textAscent() + presentation.textDescent();;
-    presentation.text(text_to_tag, x, y);
-
+    String text_to_tag = texts.get(getCurrentVariationIndex());
+    JSONObject tagger_response = tagger_responses.get(getCurrentVariationIndex());
     JSONArray tags = (JSONArray) tagger_response.get("tags");
     JSONArray documents = (JSONArray) ((JSONObject) tagger_response.get("response")).get("docs");
 
@@ -64,6 +63,17 @@ public class SolrTaggerSlide extends BaseSlide {
       String id = (String) doc.get("id");
       entities.put(id, doc);
     }
+
+    presentation.textSize(20);
+
+    float x = 0;
+    float y = presentation.textAscent() + presentation.textDescent();;
+
+    presentation.text("Tagging:",x,y);
+
+    x += 50;
+    y += 50 + presentation.textAscent() + presentation.textDescent();;
+    presentation.text(texts.get(getCurrentVariationIndex()), x, y);
 
     for (int i = 0; i < tags.size(); i++) {
       boolean render_just_this_tag = ((step > 0) && (i == step - 1));
@@ -89,12 +99,23 @@ public class SolrTaggerSlide extends BaseSlide {
           presentation.fill(tag_color, 100);
           presentation.rect(x + before_width, y - presentation.textAscent(), tag_width, presentation.textAscent() + presentation.textDescent());
           presentation.fill(presentation.black);
-          presentation.text(id, x + before_width, y + (j+1) * (presentation.textAscent() + presentation.textDescent()));
+          presentation.text(id, x + before_width, y + (j + 1) * (presentation.textAscent() + presentation.textDescent()));
 
           if (render_just_this_tag) {
-            presentation.text(id, 20 + j * 300, 300 + (presentation.textAscent() + presentation.textDescent()));
-            presentation.text((String)doc.get("type"), 20 + j * 300, 300 + 2 * (presentation.textAscent() + presentation.textDescent()));
-            presentation.text(((JSONArray)doc.get("name")).toString(), 20 + j * 300, 300 + 3 * (presentation.textAscent() + presentation.textDescent()));
+            int tag_x = 20 + j * 300;
+            presentation.text(id, tag_x, 300 + (presentation.textAscent() + presentation.textDescent()));
+            presentation.text((String) doc.get("type"), tag_x, 300 + 2 * (presentation.textAscent() + presentation.textDescent()));
+            presentation.text(((JSONArray) doc.get("name")).toString(), tag_x, 300 + 3 * (presentation.textAscent() + presentation.textDescent()));
+
+            List<String> field_names = doc.keySet().stream().toList();
+            int additional_fn_shown = 0;
+            for (int fi = 0; fi < field_names.size(); fi++) {
+              String fn = field_names.get(fi);
+              if (!(fn.equals("id") || fn.equals("type") || fn.equals("name") || fn.equals("_version_"))) {
+                presentation.text(fn + ": " + doc.get(fn), tag_x, 300 + (additional_fn_shown + 4) * (presentation.textAscent() + presentation.textDescent()));
+                additional_fn_shown++;
+              }
+            }
           }
         }
       }
@@ -104,11 +125,12 @@ public class SolrTaggerSlide extends BaseSlide {
 
   @Override
   public int getNumberOfSteps() {
+    JSONObject tagger_response = tagger_responses.get(getCurrentVariationIndex());
     return ((JSONArray)tagger_response.get("tags")).size();
   }
 
   @Override
-  public void mouseClicked(MouseEvent event) {
-    super.mouseClicked(event);
+  public int getNumberOfVariations() {
+    return texts.size();
   }
 }

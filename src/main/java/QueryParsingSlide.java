@@ -3,7 +3,6 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.surround.query.BasicQueryFactory;
 import org.apache.lucene.queryparser.surround.query.SrndQuery;
 import org.apache.lucene.search.Query;
-import processing.event.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +12,6 @@ import java.util.Map;
 public class QueryParsingSlide extends ConsoleOutputSlideBase {
   private final List<String> parsers = new ArrayList<>();
   private final Map<String,List<String>> queries_by_parser = new HashMap<>();
-  private int current_parser_index = 0;
 
   public QueryParsingSlide(String title, ProcessCene presentation) {
     super(title, presentation);
@@ -45,13 +43,15 @@ public class QueryParsingSlide extends ConsoleOutputSlideBase {
 
   @Override
   protected String getDescription(int step) {
-    if (step == 0) {
-      return "";
-    }
-    String parser_name = parsers.get(current_parser_index);
+    String parser_name = parsers.get(getCurrentVariationIndex());
     String query_string = getQueryString(parser_name, step);
 
-    String description = "Query Parser: " + parser_name + " :: Query: " + query_string;
+    String qs = "";
+    if (step > 0) {
+      qs = " :: Query: " + query_string;
+    }
+
+    String description = "Query Parser: " + parser_name + qs;
 
     return description;
   }
@@ -61,7 +61,7 @@ public class QueryParsingSlide extends ConsoleOutputSlideBase {
     if (step == 0) {
       return "";
     }
-    String parser_name = parsers.get(current_parser_index);
+    String parser_name = parsers.get(getCurrentVariationIndex());
     String query_string = getQueryString(parser_name, step);
 
     StringBuilder parsed_query = new StringBuilder();
@@ -90,33 +90,13 @@ public class QueryParsingSlide extends ConsoleOutputSlideBase {
   }
 
   @Override
-  public void keyTyped(KeyEvent event) {
-    if (event.isAltDown() && event.isControlDown()) {
-      switch (event.getKey()) {
-        case ',':
-          if (current_parser_index > 0) {
-            current_parser_index--;
-            reset();
-          }
-          break;
-
-        case '.':
-          if (current_parser_index <= parsers.size()) {
-            current_parser_index++;
-            reset();
-          }
-          break;
-      }
-    }
-  }
-
-  private void reset() {
-    presentation.step = 0;
+  public int getNumberOfSteps() {
+    return queries_by_parser.get(parsers.get(getCurrentVariationIndex())).size();
   }
 
   @Override
-  public int getNumberOfSteps() {
-    return queries_by_parser.get(parsers.get(current_parser_index)).size();
+  public int getNumberOfVariations() {
+    return parsers.size();
   }
 }
 

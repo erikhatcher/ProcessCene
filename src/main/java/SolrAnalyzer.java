@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SolrAnalyzer extends TextAnalyzer {
 
@@ -15,7 +16,7 @@ public class SolrAnalyzer extends TextAnalyzer {
                                    "text_en_splitting", "text_en_splitting_tight",
                                    "text_cjk", "phonetic_en", "text_general_rev"};
   @Override
-  List<HashMap<String, Object>> analyzeString(String analyzer_name, String text) {
+  List<Map<String, Object>> analyzeString(String analyzer_name, String text) {
     String field_type = analyzer_name;
 
     // NOTE: /analysis/field can take a comma-separated analysis.fieldtype value of multiple field types
@@ -32,7 +33,7 @@ public class SolrAnalyzer extends TextAnalyzer {
     JSONArray index_analysis = analysis_response.getJSONObject("analysis").getJSONObject("field_types").getJSONObject(field_type).getJSONArray("index");
     JSONArray final_tokens = index_analysis.getJSONArray(index_analysis.size()-1).getJSONArray(1);
 
-    List<HashMap<String,Object>> tokens = new ArrayList<HashMap<String,Object>>();
+    List<Map<String,Object>> tokens = new ArrayList<>();
     int last_token_position = 0; // Solr computes and returns position, hiding position_increment
     for (int i=0; i < final_tokens.size(); i++) {
       JSONObject solr_token = final_tokens.getJSONObject(i);

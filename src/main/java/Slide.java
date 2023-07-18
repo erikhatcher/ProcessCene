@@ -6,6 +6,12 @@ public interface Slide {
   void keyTyped(KeyEvent event);
   void mouseClicked(MouseEvent event);
   String getTitle();
+  int getCurrentStep();
+  int getCurrentVariation();
+  int getNumberOfVariations();
   int getNumberOfSteps();
   boolean getShowOnTOC();
+
+  void setVariation(int i);
+  void setStep(int i);
 }

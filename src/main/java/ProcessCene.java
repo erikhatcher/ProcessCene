@@ -27,6 +27,7 @@ public class ProcessCene extends PApplet {
 
   // Other colors
   public int black = Color.decode("#000000").getRGB();
+  private boolean show_footer = true;
 
 
   public static void main(String[] args) {
@@ -35,7 +36,6 @@ public class ProcessCene extends PApplet {
 
   List<Slide> slides = new ArrayList<Slide>();
   int current_slide_index = 0;
-  public int step = 0;  // TODO: revisit: shouldn't be public, but slides need to control it
   private boolean animate = false;
 
   private PImage footer_logo;
@@ -92,7 +92,7 @@ public class ProcessCene extends PApplet {
     //      - FST mention
     //   * Atlas Search
     // TODO: see https://lucene.apache.org/core/9_7_0/ for other features to cover
-    slides.add(new UberconfTitleSlide("",this));
+    slides.add(new UberconfTitleSlide(this));
     slides.add(new SplashSlide("About Me", this.spring_green, null,"TBD", this).setShowOnTOC(false));
 
     slides.add(new SplashSlide("\"It's Just Search\": features of Lucene", this.spring_green, null,"TBD", this));
@@ -147,48 +147,56 @@ public class ProcessCene extends PApplet {
 //      frameRate(0.3f);
 //    }
     Slide current_slide = slides.get(current_slide_index);
+    int step = current_slide.getCurrentStep();
     int number_of_steps = current_slide.getNumberOfSteps();
     String title = (current_slide.getTitle() != null) ? current_slide.getTitle() : "";
 
-    if (animate) {
-      if (animate_intra_slide) {
-        step = frameCount % (number_of_steps + 1);
-      } else {
-        step++;
-      }
-      if (step > number_of_steps) {
-        // advance the slide
-        if (current_slide_index < slides.size() - 1) {
-          current_slide_index++;
-          current_slide = slides.get(current_slide_index);
-          number_of_steps = current_slide.getNumberOfSteps();
-          step = 0;
-        }
-
-        if (current_slide_index == (slides.size() - 1) && step > number_of_steps) {
-          // stay on last step of last slide when we hit it
-          step = number_of_steps;
-        }
-      }
-    }
+//    if (animate) {
+//      if (animate_intra_slide) {
+//        step = frameCount % (number_of_steps + 1);
+//      } else {
+//        step++;
+//      }
+//      if (step > number_of_steps) {
+//        // advance the slide
+//        if (current_slide_index < slides.size() - 1) {
+//          current_slide_index++;
+//          current_slide = slides.get(current_slide_index);
+//          number_of_steps = current_slide.getNumberOfSteps();
+//          step = 0;
+//        }
+//
+//        if (current_slide_index == (slides.size() - 1) && step > number_of_steps) {
+//          // stay on last step of last slide when we hit it
+//          step = number_of_steps;
+//        }
+//      }
+//    }
 
     push();
     current_slide.draw(step);
     pop();
 
     // Draw the Footer
-    String slide_counter = (current_slide_index + 1) + "/" + slides.size();
-    text(slide_counter, width - textWidth(slide_counter) - 10, height - textDescent());
-    String slide_title = title;
-    text(slide_title, (width - textWidth(slide_title)) / 2, height - textDescent());
+    if (show_footer) {
+      String slide_counter = current_slide + "/" + slides.size();
+      text(slide_counter, width - textWidth(slide_counter) - 10, height - textDescent());
+      String slide_title = title;
+      text(slide_title, (width - textWidth(slide_title)) / 2, height - textDescent());
 
-    if ((number_of_steps > 0)) {
-      String step_text = "Step: " + step + "/" + number_of_steps;
-      text(step_text, width - textWidth(step_text) - 10, height - 2 * (textAscent()));
-    }
+      if (number_of_steps > 0) {
+        String step_text = "Step: " + step + "/" + number_of_steps;
+        text(step_text, width - textWidth(step_text) - 10, height - 2 * (textAscent()));
+      }
 
-    if (footer_logo != null) {
-      image(footer_logo, 0, height - footer_logo.height);
+      if (current_slide.getNumberOfVariations() > 0) {
+        String variation_text = "Variation: " + current_slide.getCurrentVariation() + "/" + current_slide.getNumberOfVariations();
+        text(variation_text, width - textWidth(variation_text) - 10, height - 3 * (textAscent()));
+      }
+
+      if (footer_logo != null) {
+        image(footer_logo, 0, height - footer_logo.height);
+      }
     }
   }
 
@@ -209,76 +217,105 @@ public class ProcessCene extends PApplet {
     System.out.print((meta) ? "Meta-" : "");
     System.out.println(key);
 
-    // forward to next slide: space bar
-    if (key == ' ') {
-      if (step < current_slide.getNumberOfSteps()) {
-        step++;
-      } else {
-        if (current_slide_index < slides.size() - 1) {
-          current_slide_index++;
-          step = 0;
+    switch (key) {
+      // Move forward one step at a time, advance slide when at end
+      case ' ':
+        if (current_slide.getCurrentStep() < current_slide.getNumberOfSteps()) {
+          current_slide.setStep(current_slide.getCurrentStep() + 1);
+        } else {
+          if (current_slide_index < slides.size() - 1) {
+            setSlide(current_slide_index + 1);
+          }
         }
-      }
-    }
+        break;
 
-    if (key == '\\') {
-      if (current_slide_index < slides.size() - 1) {
-        current_slide_index++;
-        step = 0;
-      }
-    }
+      // Advance to next slide, skipping any remaining steps of current slide
+      case '\\':
+        if (current_slide_index < slides.size() - 1) {
+          setSlide(current_slide_index + 1);
+        }
+        break;
 
-    if (key == ']') {
-      if (current_slide_index > 0) {
-        current_slide_index--;
-        step = 0;
-      }
-    }
+      // move to initial step of previous slide
+      case ']':
+        if (current_slide_index > 0) {
+          current_slide_index--;
+          current_slide.setStep(0);
+        }
+        break;
 
-    if (ctrl && !alt) {
-      // ctrl+`key`
+      // next step
+      case '[':
+        if (current_slide.getCurrentStep() < current_slide.getNumberOfSteps()) {
+          current_slide.setStep(current_slide.getCurrentStep() + 1);
+        }
+        break;
 
-      switch (key) {
-        case '=':
-          step = 0;
-          current_slide_index = 0;
-          animate = false;
-          break;
+      // previous step
+      case '\'':
+        if (current_slide.getCurrentStep() > 0) {
+          current_slide.setStep(current_slide.getCurrentStep() - 1);
+        }
+        break;
 
-        case '`':
-          animate = !animate;
-          break;
+      // next variation
+      case '=':
+        if (current_slide.getCurrentVariation() < current_slide.getNumberOfVariations()) {
+          current_slide.setVariation(current_slide.getCurrentVariation() + 1);
+        }
+        break;
 
-        case 'A':  // TODO: fix this one
-          animate_intra_slide = !animate_intra_slide;
-          println(animate_intra_slide);
-          break;
+      // previous variation
+      case '-':
+        if (current_slide.getCurrentVariation() > 1) {
+          current_slide.setVariation(current_slide.getCurrentVariation() - 1);
+        }
+        break;
 
-        case ',': // previous step
-          if (step > 0) {
-            step--;
+      case 'h':
+        show_footer = !show_footer;
+        break;
+
+      default:
+        // Move to step 0 of Nth slide that isn't hidden
+        if (key >= '1' && key <= '9') {
+          int n = key - '1' + 1;
+          if (n < slides.size()) {
+            int main_slides_encountered = 0;
+            for (int i = 0; i < slides.size(); i++) {
+              Slide slide = slides.get(i);
+              if (slide.getShowOnTOC()) {
+                main_slides_encountered++;
+                if (n == main_slides_encountered) {
+                  current_slide_index = i;
+                  current_slide.setStep(0);
+                }
+              }
+            }
           }
-          break;
-
-        case '.': // next step
-          int number_of_steps = current_slide.getNumberOfSteps();
-          if (step < number_of_steps) {
-            step++;
-          }
-          break;
-
-        default:
-          if (key >= '1' && key <= '9') {
-            if ((key - '1') < slides.size())
-              current_slide_index = key - '1';
-            step = 0;
-          }
-          break;
-      }
-    } else {
-      // pass down to current slide to handle or not
-      current_slide.keyTyped(event);
+        } else {
+          current_slide.keyTyped(event);
+        }
+        break;
     }
+
+//    if (ctrl && !alt) {
+//      // ctrl+`key`
+//
+//      switch (key) {
+//
+//        case '`':
+//          animate = !animate;
+//          break;
+//
+//        case 'A':  // TODO: fix this one
+//          animate_intra_slide = !animate_intra_slide;
+//          println(animate_intra_slide);
+//          break;
+//      }
+//    } else {
+//      // pass down to current slide to handle or not
+//    }
   }
 
   @Override
@@ -289,6 +326,9 @@ public class ProcessCene extends PApplet {
 
   public void setSlide(int i) {
     current_slide_index = i;
+    Slide current_slide = slides.get(current_slide_index);
+    current_slide.setVariation(1);
+    current_slide.setStep(0);
   }
 
   public String getFilePathFromResources(String resource) {

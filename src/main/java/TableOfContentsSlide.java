@@ -9,16 +9,12 @@ public class TableOfContentsSlide extends BaseSlide {
 
   PImage bullet_image;
 
-  @Override
-  public boolean getShowOnTOC() {
-    return false;
-  }
-
   public TableOfContentsSlide(List<Slide> slides, PImage bullet_image, ProcessCene presentation) {
     super("Table of Contents", presentation);
 
     this.slides = slides;
     this.bullet_image = bullet_image;
+    setShowOnTOC(false);
   }
 
   public TableOfContentsSlide(List<Slide> slides, PImage bullet_image, int current_slide_index, ProcessCene presentation) {

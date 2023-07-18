@@ -1,6 +1,6 @@
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class AllyzersSlide extends BaseSlide {
@@ -32,7 +32,7 @@ public class AllyzersSlide extends BaseSlide {
 
       x = 10;
 
-      List<HashMap<String, Object>> tokens = text_analyzer.analyzeString(analyzer_name, text);
+      List<Map<String, Object>> tokens = text_analyzer.analyzeString(analyzer_name, text);
 
       presentation.fill(0, 0, 0);
       presentation.textSize(14);
@@ -42,7 +42,7 @@ public class AllyzersSlide extends BaseSlide {
       int last_term_position = 0;
 
       Set<String> unique_terms = new HashSet<String>();
-      for (HashMap<String, Object> token : tokens) {
+      for (Map<String, Object> token : tokens) {
         String term = (String) token.get("term");
         if (unique_terms.contains(term)) {
           presentation.println(analyzer_name + " repeated term: " + term);
