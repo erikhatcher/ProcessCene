@@ -275,7 +275,7 @@ public class ProcessCene extends PApplet {
         }
         break;
 
-      case 'h':
+      case 'f':
         show_footer = !show_footer;
         break;
 
