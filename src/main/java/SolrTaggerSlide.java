@@ -43,7 +43,7 @@ public class SolrTaggerSlide extends BaseSlide {
         tagger_responses.add((JSONObject) new JSONParser().parse(response_body));
       } catch (Exception e) {
         JSONObject o = new JSONObject();
-        o.put("Error", e.getLocalizedMessage());
+        o.put("error", e.toString());
         tagger_responses.add(o);
       }
     }
@@ -53,16 +53,7 @@ public class SolrTaggerSlide extends BaseSlide {
   public void draw(int step) {
     String text_to_tag = texts.get(getCurrentVariationIndex());
     JSONObject tagger_response = tagger_responses.get(getCurrentVariationIndex());
-    JSONArray tags = (JSONArray) tagger_response.get("tags");
-    JSONArray documents = (JSONArray) ((JSONObject) tagger_response.get("response")).get("docs");
-
-    // Build an `id` keyed map
-    Map<String,JSONObject> entities = new HashMap<>();
-    for (int i=0; i < documents.size(); i++) {
-      JSONObject doc = (JSONObject) documents.get(i);
-      String id = (String) doc.get("id");
-      entities.put(id, doc);
-    }
+    String error_message = (String)tagger_response.get("error");
 
     presentation.textSize(20);
 
@@ -74,6 +65,22 @@ public class SolrTaggerSlide extends BaseSlide {
     x += 50;
     y += 50 + presentation.textAscent() + presentation.textDescent();;
     presentation.text(texts.get(getCurrentVariationIndex()), x, y);
+
+    if (error_message != null) {
+      presentation.text(error_message, x, y + presentation.textAscent() + presentation.textDescent());
+      return;
+    }
+
+    JSONArray tags = (JSONArray) tagger_response.get("tags");
+    JSONArray documents = (JSONArray) ((JSONObject) tagger_response.get("response")).get("docs");
+
+    // Build an `id` keyed map
+    Map<String,JSONObject> entities = new HashMap<>();
+    for (int i=0; i < documents.size(); i++) {
+      JSONObject doc = (JSONObject) documents.get(i);
+      String id = (String) doc.get("id");
+      entities.put(id, doc);
+    }
 
     for (int i = 0; i < tags.size(); i++) {
       boolean render_just_this_tag = ((step > 0) && (i == step - 1));
@@ -126,7 +133,8 @@ public class SolrTaggerSlide extends BaseSlide {
   @Override
   public int getNumberOfSteps() {
     JSONObject tagger_response = tagger_responses.get(getCurrentVariationIndex());
-    return ((JSONArray)tagger_response.get("tags")).size();
+    JSONArray tags = (JSONArray)tagger_response.get("tags");
+    return (tags == null) ? 0 : tags.size();
   }
 
   @Override
