@@ -16,6 +16,14 @@ Some slides depend on external systems, such as Solr or Atlas Search, being
 accessible.  If they aren't available or errors happen in communication,
 the slides will continue to run with error messages shown instead of actual content.
 
+If you have an Atlas Search collection set up and accessible to the sample movies
+data, setting `ATLAS_URI` to your Atlas cluster will allow the slides that depend 
+on that endpoint to work, rather than showing a connection error.
+
+Set this before `run`ing:
+
+    export ATLAS_URI="mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority"
+
 ## Happy ProcessCene!
 
 Keyboard navigation is key to stepping through the slides. Each slide contains one

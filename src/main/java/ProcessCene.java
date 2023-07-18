@@ -94,24 +94,29 @@ public class ProcessCene extends PApplet {
     slides.add(new UberconfTitleSlide(this));
     slides.add(new SplashSlide("About Me", this.spring_green, null,"TBD", this).setShowOnTOC(false));
 
-    slides.add(new SplashSlide("\"It's Just Search\": features of Lucene", this.spring_green, null,"TBD", this));
+    slides.add(new SplashSlide("\"It's Just Search\": features of Lucene", spring_green, null,"TBD", this));
 
     slides.add(new InvertedIndexSlide("Inverted Index", this));
 
     slides.add(new AnalysisSlide(text_analyzer, text, this));
       slides.add(new AllyzersSlide(text_analyzer, text, this).setShowOnTOC(false));
-      slides.add(new SplashSlide("Language Considerations", this.spring_green, null,"TBD", this).setShowOnTOC(false));
+      slides.add(new SplashSlide("Language Considerations", spring_green, null,"TBD", this).setShowOnTOC(false));
 
-    slides.add(new QueryParsingSlide("Query Parsing", this));
+    slides.add(new SplashSlide("Non-textual Data Types", spring_green, null,"TBD\n\nNumerics, Spatial, Vectors", this));
 
-    slides.add(new SplashSlide("Searching", this.spring_green, null,"TBD", this));
-      slides.add(new SplashSlide("Filtering", this.spring_green, null,"TBD\n\nskipping / eventual DocSet view animating skipping", this).setShowOnTOC(false));
-      slides.add(new SplashSlide("Scoring", this.spring_green, null,"TBD\n\nsimilarity / TF/IDF / BM25", this).setShowOnTOC(false));
+    slides.add(new SplashSlide("Querying", spring_green, null,"TBD\n\nQuery API, query generation, query parsing, .... query intent?", this));
+      slides.add(new QueryParsingSlide("Query Parsing", this).setShowOnTOC(false));
+
+    slides.add(new SplashSlide("Searching", spring_green, null,"TBD", this));
+      slides.add(new SplashSlide("Filtering", spring_green, null,"TBD\n\nskipping / eventual DocSet view animating skipping", this).setShowOnTOC(false));
+      slides.add(new SplashSlide("Scoring", spring_green, null,"TBD\n\nsimilarity / TF/IDF / BM25", this).setShowOnTOC(false));
+
+    slides.add(new SplashSlide("Lucene Inside", spring_green, null, "TBD\n\nSolr, elasticsearch, OpenSearch, Atlas Search\nLucidworks, ...", this));
+      slides.add(new SplashSlide("Solr", spring_green, null,"TBD\n\nSolr logo, highlights: e.g. tagger!", this).setShowOnTOC(false));
+      slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this).setShowOnTOC(false));
 
     slides.add(new SolrTaggerSlide("Solr Tagger", this));
 
-    // TODO: handle offline mode or Atlas Search not being accessible, lazy load results so app is faster
-    //slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this));
 
     slides.add(new SplashSlide("Go forth and search...", 255, qr_code, "https://mdb.link/uberconf", this));
 
