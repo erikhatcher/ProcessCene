@@ -222,8 +222,12 @@ public class ProcessCene extends PApplet {
         if (current_slide.getCurrentStep() < current_slide.getNumberOfSteps()) {
           current_slide.setStep(current_slide.getCurrentStep() + 1);
         } else {
-          if (current_slide_index < slides.size() - 1) {
-            setSlide(current_slide_index + 1);
+          if (current_slide.getCurrentVariation() < current_slide.getNumberOfVariations()) {
+            current_slide.setVariation(current_slide.getCurrentVariation() + 1);
+          } else {
+            if (current_slide_index < slides.size() - 1) {
+              setSlide(current_slide_index + 1);
+            }
           }
         }
         break;
