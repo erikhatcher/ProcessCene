@@ -104,8 +104,7 @@ public class ProcessCene extends PApplet {
     slides.add(new SplashSlide("More Like This: The Lucene Ecosystem", spring_green, null,
         "TBD\n\nHighlighting, Suggest, Spatial, Facets, Lucene Monitor, MLT\n" +
                "expressions, grouping, join, parent/child, Luke", this));
-      slides.add(new SplashSlide("Vectors", spring_green, null,
-          "TBD\n\nVector Search with Lucene API, HNSW/KNN", this).setShowOnTOC(false));
+      slides.add(new VectorSearchSlide("Vector Search", this).setShowOnTOC(false));
 
     slides.add(new SplashSlide("Go forth and search...", 255, qr_code, "https://mdb.link/uberconf", this));
 
