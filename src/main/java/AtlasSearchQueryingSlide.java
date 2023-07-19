@@ -23,13 +23,16 @@ import static com.mongodb.client.model.Projections.metaSearchScore;
 import static com.mongodb.client.model.search.SearchPath.fieldPath;
 
 public class AtlasSearchQueryingSlide extends BaseSlide {
-  private StringBuffer output = new StringBuffer();
   public AtlasSearchQueryingSlide(String title, ProcessCene presentation) {
     super(title, presentation);
+  }
 
+  @Override
+  public void draw(int step) {
     // Replace the placeholder with your MongoDB deployment's connection string
     String uri = System.getenv("ATLAS_URI");
 
+    StringBuffer output = new StringBuffer();
     try (MongoClient mongoClient = MongoClients.create(uri)) {
       // set namespace
       MongoDatabase database = mongoClient.getDatabase("sample_mflix");
@@ -82,10 +85,6 @@ public class AtlasSearchQueryingSlide extends BaseSlide {
       output.append("Error: " + e.toString());
     }
 
-  }
-
-  @Override
-  public void draw(int step) {
     presentation.text(output.toString(), 0, presentation.textAscent() + presentation.textDescent());
     super.draw(step);
   }
