@@ -73,17 +73,21 @@ public class ProcessCene extends PApplet {
     PImage its_just_search_grouping = loadImage(getFilePathFromResources("grouping_find_a_doctor.png"));
     its_just_search_grouping.resize(0,600);
 
+    PImage flowers_growing = loadImage(getFilePathFromResources("Assets/normal/General_MISC_Grow10x.png"));
+    flowers_growing.resize(0,200);
+
     slides.add(new UberconfTitleSlide(this));
-    slides.add(new SplashSlide("About Me", white, lucene_in_action_cover,
+      slides.add(new SplashSlide("About Me", white, lucene_in_action_cover,
         "https://mdb.link/erik", this).setShowOnTOC(false));
+      slides.add(new SplashSlide("About These Slides", lavender, flowers_growing, "ProcessCene", this).setShowOnTOC(false));
 
     slides.add(new SplashSlide("\"It's Just Search\": features of Lucene", white,
         new PImage[] {its_just_search_results, its_just_search_grouping}, "", this));
 
     slides.add(new InvertedIndexSlide("Inverted Index", this));
 
-    slides.add(new AnalysisSlide(text_analyzer, text, this));
-      slides.add(new AllyzersSlide(text_analyzer, text, this).setShowOnTOC(false));
+    slides.add(new AnalysisSlide("Analysis", text_analyzer, text, this));
+      slides.add(new AllyzersSlide("Analyzers", text_analyzer, text, this).setShowOnTOC(false));
       slides.add(new BulletPointsSlide("Language Considerations",
           new String[] { "i18n", "character folding", "ICU", "word decompounding", "phonetic"},this));
 
@@ -178,7 +182,7 @@ public class ProcessCene extends PApplet {
 
     // Draw the Footer
     if (show_footer) {
-      String slide_counter = current_slide_index + "/" + slides.size();
+      String slide_counter = current_slide_index + 1 + "/" + slides.size();
       text(slide_counter, width - textWidth(slide_counter) - 10, height - textDescent());
       String slide_title = title;
       text(slide_title, (width - textWidth(slide_title)) / 2, height - textDescent());
@@ -204,17 +208,18 @@ public class ProcessCene extends PApplet {
     Slide current_slide = slides.get(current_slide_index);
 
     char key = event.getKey();
-    int modifiers = event.getModifiers();
-    int keyCode = event.getKeyCode();
-    boolean ctrl = event.isControlDown();
-    boolean alt = event.isAltDown();
-    boolean meta = event.isMetaDown();
 
-    System.out.print("keyTyped: " + modifiers + " " + keyCode + " ");
-    System.out.print((ctrl) ? "Ctrl-" : "");
-    System.out.print((alt) ? "Alt-" : "");
-    System.out.print((meta) ? "Meta-" : "");
-    System.out.println(key);
+//    int modifiers = event.getModifiers();
+//    int keyCode = event.getKeyCode();
+//    boolean ctrl = event.isControlDown();
+//    boolean alt = event.isAltDown();
+//    boolean meta = event.isMetaDown();
+//
+//    System.out.print("keyTyped: " + modifiers + " " + keyCode + " ");
+//    System.out.print((ctrl) ? "Ctrl-" : "");
+//    System.out.print((alt) ? "Alt-" : "");
+//    System.out.print((meta) ? "Meta-" : "");
+//    System.out.println(key);
 
     switch (key) {
       // Move forward one step at a time, advance slide when at end

@@ -6,8 +6,8 @@ public class AnalysisSlide extends BaseSlide {
   private final String text;
   private final TextAnalyzer text_analyzer;
 
-  public AnalysisSlide(TextAnalyzer text_analyzer, String text, ProcessCene presentation) {
-    super("Analysis", presentation);
+  public AnalysisSlide(String title, TextAnalyzer text_analyzer, String text, ProcessCene presentation) {
+    super(title, presentation);
 
     this.text = text;
     this.text_analyzer = text_analyzer;

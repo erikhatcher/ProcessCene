@@ -12,8 +12,8 @@ public class AllyzersSlide extends BaseSlide {
 
   private final TextAnalyzer text_analyzer;
 
-  public AllyzersSlide(TextAnalyzer text_analyzer, String text, ProcessCene presentation) {
-    super("Allyzers", presentation);
+  public AllyzersSlide(String title, TextAnalyzer text_analyzer, String text, ProcessCene presentation) {
+    super(title, presentation);
 
     this.text_analyzer = text_analyzer;
     this.text = text;
@@ -24,7 +24,11 @@ public class AllyzersSlide extends BaseSlide {
     int x;
     int y = 20;
 
-    for (String analyzer_name : text_analyzer.getAnalyzerNames()) {
+    List<String> analyzer_names = text_analyzer.getAnalyzerNames();
+    for (int i = 0; i < step; i++) {
+
+      String analyzer_name = analyzer_names.get(i);
+
       float last_token_width = 50;
       float x_offset = 0;
       float y_offset = 0;
@@ -34,9 +38,9 @@ public class AllyzersSlide extends BaseSlide {
 
       List<Map<String, Object>> tokens = text_analyzer.analyzeString(analyzer_name, text);
 
-      presentation.fill(0, 0, 0);
+//      presentation.fill(0, 0, 0);
       presentation.textSize(14);
-      String label = analyzer_name + "("+ tokens.size() + "): ";
+      String label = analyzer_name + " (" + tokens.size() + "): ";
       presentation.text(label, x, y);
 
       int last_term_position = 0;
@@ -62,15 +66,15 @@ public class AllyzersSlide extends BaseSlide {
           max_y_offset = 0;
         }
 
-        float tw = presentation.textWidth(term) + 5;
+        float tw = presentation.textWidth(term);
         float th = presentation.textAscent() + presentation.textDescent();
         float tx = x + x_offset; // + applet.random(3);  // The wiggling is cute though - TODO: find a way to toggle wiggle mode, perhaps through the animation flag?
         float ty = y + 20 + y_offset; // + applet.random(3);
 
-        presentation.fill(0x00FF00);
-        presentation.rect(tx, ty - th, tw, th + presentation.textDescent(), 10);
+        presentation.fill(presentation.mist);
+        presentation.rect(tx - 5, ty - th, tw + 10, th + 5, 7);
 
-        presentation.fill(0x000000);
+        presentation.fill(presentation.black);
         presentation.text(term, tx, ty);
 
         last_token_width = presentation.textWidth(term) + 20;
@@ -80,5 +84,10 @@ public class AllyzersSlide extends BaseSlide {
     }
 
     super.draw(step);
+  }
+
+  @Override
+  public int getNumberOfSteps() {
+    return text_analyzer.getAnalyzerNames().size();
   }
 }
