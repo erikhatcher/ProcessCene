@@ -65,43 +65,47 @@ public class ProcessCene extends PApplet {
     // TODO: Make this a keyboard toggle to Solr, AS, ES, Lucene...
     TextAnalyzer text_analyzer = new LuceneAnalyzer(); // new SolrAnalyzer();
 
+    PImage lucene_in_action_cover = loadImage(getFilePathFromResources("lucene_in_action.png"));
+    PImage its_just_search_results = loadImage(getFilePathFromResources("anatomy_of_search_results.png"));
+    its_just_search_results.resize(0,600);
+    PImage its_just_search_grouping = loadImage(getFilePathFromResources("grouping_find_a_doctor.png"));
+    its_just_search_grouping.resize(0,600);
 
     slides.add(new UberconfTitleSlide(this));
-    slides.add(new SplashSlide("About Me", this.spring_green, null,
-        "mdb.link/erik", this).setShowOnTOC(false));
+    slides.add(new SplashSlide("About Me", white, lucene_in_action_cover,
+        "https://mdb.link/erik", this).setShowOnTOC(false));
 
-    slides.add(new SplashSlide("\"It's Just Search\": features of Lucene", spring_green, null,
-        "fill in with a image of it's just search presentation slide?", this));
+    slides.add(new SplashSlide("\"It's Just Search\": features of Lucene", white, new PImage[] {its_just_search_results, its_just_search_grouping}, "", this));
 
     slides.add(new InvertedIndexSlide("Inverted Index", this));
 
     slides.add(new AnalysisSlide(text_analyzer, text, this));
       slides.add(new AllyzersSlide(text_analyzer, text, this).setShowOnTOC(false));
-      slides.add(new SplashSlide("Language Considerations", spring_green, null,
+      slides.add(new SplashSlide("Language Considerations", spring_green, (PImage) null,
           "i18n, character folding, ICU, word decompounding, phonetic", this).setShowOnTOC(false));
 
-    slides.add(new SplashSlide("Index Types", spring_green, null,
+    slides.add(new SplashSlide("Index Types", spring_green, (PImage) null,
         "TBD\n\nNumerics, Spatial, Vectors, FST", this));
 
-    slides.add(new SplashSlide("Querying", spring_green, null,
+    slides.add(new SplashSlide("Querying", spring_green, (PImage) null,
         "TBD\n\nQuery API, query generation, query parsing, .... query intent?", this));
       slides.add(new QueryParsingSlide("Query Parsing", this).setShowOnTOC(false));
 
-    slides.add(new SplashSlide("Searching", spring_green, null,
+    slides.add(new SplashSlide("Searching", spring_green, (PImage) null,
         "TBD", this));
-      slides.add(new SplashSlide("Filtering", spring_green, null,
+      slides.add(new SplashSlide("Filtering", spring_green, (PImage) null,
           "TBD\n\nskipping / eventual DocSet view animating skipping", this).setShowOnTOC(false));
-      slides.add(new SplashSlide("Relevancy Scoring", spring_green, null,
+      slides.add(new SplashSlide("Relevancy Scoring", spring_green, (PImage) null,
           "TBD\n\nsimilarity / TF/IDF / BM25", this).setShowOnTOC(false));
 
-    slides.add(new SplashSlide("Lucene Inside", spring_green, null,
+    slides.add(new SplashSlide("Lucene Inside", spring_green, (PImage) null,
         "TBD\n\nSolr, elasticsearch, OpenSearch, Atlas Search\nLucidworks, ...", this));
-      slides.add(new SplashSlide("Solr", spring_green, null,
+      slides.add(new SplashSlide("Solr", spring_green, (PImage) null,
           "TBD\n\nSolr logo, highlights: e.g. tagger!", this).setShowOnTOC(false));
       slides.add(new SolrTaggerSlide("Solr Tagger", this).setShowOnTOC(false));
       slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this).setShowOnTOC(false));
 
-    slides.add(new SplashSlide("More Like This: The Lucene Ecosystem", spring_green, null,
+    slides.add(new SplashSlide("More Like This: The Lucene Ecosystem", spring_green, (PImage) null,
         "TBD\n\nHighlighting, Suggest, Spatial, Facets, Lucene Monitor, MLT\n" +
                "expressions, grouping, join, parent/child, Luke", this));
       slides.add(new VectorSearchSlide("Vector Search", this).setShowOnTOC(false));
