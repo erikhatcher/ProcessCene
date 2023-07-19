@@ -1,12 +1,11 @@
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.analysis.cjk.CJKAnalyzer;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
-import org.apache.lucene.analysis.email.UAX29URLEmailAnalyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilter;
 import org.apache.lucene.analysis.ngram.EdgeNGramTokenFilter;
 import org.apache.lucene.analysis.ngram.NGramTokenFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -23,6 +22,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilter.GENERATE_NUMBER_PARTS;
+import static org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilter.GENERATE_WORD_PARTS;
+import static org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilter.SPLIT_ON_CASE_CHANGE;
+import static org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilter.SPLIT_ON_NUMERICS;
 
 public class LuceneAnalyzer extends TextAnalyzer {
 
@@ -46,11 +50,22 @@ public class LuceneAnalyzer extends TextAnalyzer {
     analyzer_names.add("English");
     analyzers.add(new EnglishAnalyzer());
 
-    analyzer_names.add("CJK");
-    analyzers.add(new CJKAnalyzer());
+//    analyzer_names.add("CJK");
+//    analyzers.add(new CJKAnalyzer());
+//
+//    analyzer_names.add("UAX29URLEmail");
+//    analyzers.add(new UAX29URLEmailAnalyzer());
 
-    analyzer_names.add("UAX29URLEmail");
-    analyzers.add(new UAX29URLEmailAnalyzer());
+    analyzer_names.add("WordDelimiter");
+    analyzers.add(new Analyzer() {
+      @Override
+      protected TokenStreamComponents createComponents(String s) {
+        Tokenizer tokenizer = new StandardTokenizer();
+        int flags =
+            GENERATE_WORD_PARTS | GENERATE_NUMBER_PARTS | SPLIT_ON_CASE_CHANGE | SPLIT_ON_NUMERICS;
+        return new Analyzer.TokenStreamComponents(tokenizer, new WordDelimiterGraphFilter(tokenizer, flags, null));
+      }
+    });
 
     analyzer_names.add("StandardEdgeNGram");
     analyzers.add(new Analyzer() {

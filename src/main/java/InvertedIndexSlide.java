@@ -20,11 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InvertedIndexSlide extends BaseSlide {
-  final List<Document> docs = new ArrayList<>();
+  final List<String> docs = new ArrayList<>();
 
   final LuceneAnalyzer text_analyzer = new LuceneAnalyzer();
-  private final int MAX_DOCS = 10;
-  private final PImage[] doc_images = new PImage[MAX_DOCS];
+  private final PImage[] doc_images = new PImage[10];
 
   public InvertedIndexSlide(String title, ProcessCene presentation) {
     super(title, presentation);
@@ -35,21 +34,11 @@ public class InvertedIndexSlide extends BaseSlide {
     // General_ACTION_Favorite_Inverted10x.png
     // Technical_MDB_DocumentModel10x.png
 
-    Document doc = new Document();
-    doc.add(new StringField("id", "1", Field.Store.YES));
-    doc.add(new TextField("title", "Uberconf 2023: Java and much more", Field.Store.YES));
-    docs.add(doc);
+    docs.add("What is Lucene?");
+    docs.add("'Love of Lucene' @ Uberconf");
+    docs.add("We *love* Lucene!");
 
-    doc = new Document();
-    doc.add(new StringField("id", "2", Field.Store.YES));
-    doc.add(new TextField("title", "Much Java was needed this morning", Field.Store.YES));
-    docs.add(doc);
-
-    doc = new Document();
-    doc.add(new StringField("id", "3", Field.Store.YES));
-    doc.add(new TextField("title", "Blake Loves Java!!!", Field.Store.YES));
-    docs.add(doc);
-
+    // TODO: centralize this - reused on VectorSearchSlide
     for (int i=0; i < 10; i++) {
       doc_images[i] = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
       doc_images[i].resize(30,30);
@@ -58,6 +47,11 @@ public class InvertedIndexSlide extends BaseSlide {
 
   @Override
   public void draw(int step) {
+    if (step == 0) {
+      presentation.textSize(50);
+      presentation.text(getTitle(), presentation.width / 2, presentation.height / 2);
+    }
+
     //presentation.textFont(presentation.loadFont(presentation.getFilePathFromResources("SourceCodeProRoman-Medium-24.vlw")));
 
     ByteBuffersDirectory index = new ByteBuffersDirectory();
@@ -67,7 +61,10 @@ public class InvertedIndexSlide extends BaseSlide {
       IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(analyzer));
 
       for (int i=0; i < step; i++) {
-        writer.addDocument(docs.get(i));
+        Document doc = new Document();
+        doc.add(new StringField("id", "" + (i + 1), Field.Store.YES));
+        doc.add(new TextField("title", docs.get(i), Field.Store.YES));
+        writer.addDocument(doc);
       }
       writer.close();
     } catch (Exception e) {
@@ -78,15 +75,14 @@ public class InvertedIndexSlide extends BaseSlide {
     float y = presentation.textAscent() + presentation.textDescent() + 10;
 
     for (int i = 0; i < step; i++) {
-      Document doc = docs.get(i);
-      PImage doc_image = doc_images[Integer.parseInt(doc.get("id"))];
+      PImage doc_image = doc_images[i+1];
       presentation.image(doc_image, x, y - presentation.textAscent() - presentation.textDescent());
-      presentation.text(doc.get("title"),x + doc_image.width,y);
+      presentation.text(docs.get(i),x + doc_image.width,y);
       y += 40;
     }
 
-    x = 0;
-    y = 200;
+    x = 200;
+    y = 180;
     float top_of_postings_y = y - presentation.textAscent();
     /*
           Other index stats: avg field length?
