@@ -39,7 +39,7 @@ public class SolrTaggerSlide extends BaseSlide {
       try {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         String response_body = response.body();
-        System.out.println("response_body = " + response_body);
+        // System.out.println("response_body = " + response_body);
         tagger_responses.add((JSONObject) new JSONParser().parse(response_body));
       } catch (Exception e) {
         JSONObject o = new JSONObject();
