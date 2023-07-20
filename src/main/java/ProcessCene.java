@@ -82,9 +82,6 @@ public class ProcessCene extends PApplet {
     PImage its_just_search_grouping = loadImage(getFilePathFromResources("grouping_find_a_doctor.png"));
     its_just_search_grouping.resize(0,600);
 
-    PImage flowers_growing = loadImage(getFilePathFromResources("Assets/normal/General_MISC_Grow10x.png"));
-    flowers_growing.resize(0,200);
-
     PImage lucene_logo = loadImage(getFilePathFromResources("lucene_green_300.png"));
     lucene_logo.resize(300,0);
 
@@ -121,7 +118,7 @@ public class ProcessCene extends PApplet {
       slides.add(new SplashSlide("About Me", white,
           new PImage[] {apache_feather, lucene_in_action_cover, blacklight_logo, lucidworks_logo, mdb_logo},
         "https://mdb.link/erik", this).setShowOnTOC(false));
-      slides.add(new SplashSlide("About These Slides", lavender, flowers_growing, "ProcessCene", this).setShowOnTOC(false));
+      slides.add(new AboutProcessCene("About ProcessCene", this).setShowOnTOC(false));
 
     slides.add(new SplashSlide("\"It's Just Search\": features of Lucene", white,
         new PImage[] {its_just_search_results, its_just_search_grouping}, "", this));
@@ -136,7 +133,7 @@ public class ProcessCene extends PApplet {
     slides.add(new BulletPointsSlide("Other Index Types",
         new String[] { "Numeric", "Spatial", "FST: Finite State Transducer", "Vector" }, bullet_image, null,this));
 
-    slides.add(new BulletPointsSlide("Querying",
+    slides.add(new BulletPointsSlide("Query building",
         new String[] { "Query API", "query parsing", "query intent" }, bullet_image, null, this));
       slides.add(new QueryParsingSlide("Query Parsing", this).setShowOnTOC(false));
 
