@@ -36,15 +36,15 @@ public class VectorSearchSlide extends BaseSlide {
   public VectorSearchSlide(String title, ProcessCene presentation) {
     super(title, presentation);
 
-    sample_vectors.add(new float[]{0.50f, 0.50f});
-    sample_vectors.add(new float[]{0.27f, 0.32f});
-    sample_vectors.add(new float[]{0.13f, -0.69f});
-    sample_vectors.add(new float[]{0.42f, 0.72f});
-    sample_vectors.add(new float[]{-0.25f, -0.65f});
-    sample_vectors.add(new float[]{0.19f, 0.32f});
-    sample_vectors.add(new float[]{-0.63f, -0.92f});
-    sample_vectors.add(new float[]{0.53f, 0.12f});
-    sample_vectors.add(new float[]{-0.23f, 0.74f});
+    sample_vectors.add(new float[]{0.50f, 0.50f});     // 1
+    sample_vectors.add(new float[]{0.27f, 0.32f});     // 2
+    sample_vectors.add(new float[]{0.13f, -0.69f});    // 3
+    sample_vectors.add(new float[]{0.42f, 0.72f});     // 4
+    sample_vectors.add(new float[]{-0.25f, -0.65f});   // 5
+    sample_vectors.add(new float[]{0.19f, 0.32f});     // 6
+    sample_vectors.add(new float[]{-0.63f, -0.92f});   // 7
+    sample_vectors.add(new float[]{0.53f, 0.12f});     // 8
+    sample_vectors.add(new float[]{-0.23f, 0.74f});    // 9
 
     for (int i=0; i < 10; i++) {
       doc_images[i] = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/" + i + "_10x.png"));
