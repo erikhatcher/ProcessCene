@@ -12,8 +12,8 @@ import static processing.core.PConstants.CLOSE;
 public class UberconfTitleSlide extends BaseSlide {
   private final PShape lucene_logo;
 
-  private final int MIN_HEART_SIZE = 1;
-  private final int MAX_HEART_SIZE = 27;
+  private final int MIN_HEART_SIZE = 3;
+  private final int MAX_HEART_SIZE = 20;
   private int current_heart_size = MIN_HEART_SIZE;
   private boolean heart_growing = true;
 
