@@ -1,6 +1,7 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import processing.core.PImage;
 import processing.event.MouseEvent;
 
 import java.net.URI;
@@ -14,18 +15,17 @@ import java.util.Map;
 
 /**
  * See https://solr.apache.org/guide/8_7/the-tagger-handler.html
- *
- * TODO: Re-load geonames data, mapping in other fields.
  */
 public class SolrTaggerSlide extends BaseSlide {
+  private final PImage solr_logo;
   private List<String> texts = new ArrayList<>();
   private List<JSONObject> tagger_responses = new ArrayList<>();
 
   public SolrTaggerSlide(String title, ProcessCene presentation) {
     super(title, presentation);
 
-    texts.add("Blake's f150 needs one of dem ph8 from the Canon City store");
-    texts.add("tell me more about covid");
+    texts.add("hey, check out that lucene presentation at üb3rc0nf in westMINISTER");
+    texts.add("where can I get tested for covid?");
 
     for(int i=0; i < texts.size(); i++) {
       HttpClient client = HttpClient.newHttpClient();
@@ -47,23 +47,25 @@ public class SolrTaggerSlide extends BaseSlide {
         tagger_responses.add(o);
       }
     }
+
+    solr_logo = presentation.loadImage(presentation.getFilePathFromResources("Solr_Logo_on_white.png"));
+    solr_logo.resize(0, 150);
   }
 
   @Override
   public void draw(int step) {
+    presentation.image(solr_logo, 10, 10);
+
     String text_to_tag = texts.get(getCurrentVariationIndex());
     JSONObject tagger_response = tagger_responses.get(getCurrentVariationIndex());
     String error_message = (String)tagger_response.get("error");
 
     presentation.textSize(20);
 
-    float x = 0;
-    float y = presentation.textAscent() + presentation.textDescent();;
+    float x = 200;
+    float y = 250 + presentation.textAscent() + presentation.textDescent();;
 
-    presentation.text("Tagging:",x,y);
-
-    x += 50;
-    y += 50 + presentation.textAscent() + presentation.textDescent();;
+    presentation.textSize(30);
     presentation.text(texts.get(getCurrentVariationIndex()), x, y);
 
     if (error_message != null) {
@@ -101,25 +103,26 @@ public class SolrTaggerSlide extends BaseSlide {
           String type = (String) doc.get("type");
           int tag_color = presentation.spring_green;
           if ("person".equals(type)) tag_color = presentation.mist;
-          if ("vehicle".equals(type)) tag_color = presentation.evergreen;
-          if ("part".equals(type)) tag_color = presentation.lavender;
+          if ("event".equals(type)) tag_color = presentation.evergreen;
+          if ("city".equals(type)) tag_color = presentation.lavender;
           presentation.fill(tag_color, 100);
           presentation.rect(x + before_width, y - presentation.textAscent(), tag_width, presentation.textAscent() + presentation.textDescent());
           presentation.fill(presentation.black);
           presentation.text(id, x + before_width, y + (j + 1) * (presentation.textAscent() + presentation.textDescent()));
 
           if (render_just_this_tag) {
-            int tag_x = 20 + j * 300;
-            presentation.text(id, tag_x, 300 + (presentation.textAscent() + presentation.textDescent()));
-            presentation.text((String) doc.get("type"), tag_x, 300 + 2 * (presentation.textAscent() + presentation.textDescent()));
-            presentation.text(((JSONArray) doc.get("name")).toString(), tag_x, 300 + 3 * (presentation.textAscent() + presentation.textDescent()));
+            int tag_x = 30 + j * 300;
+            int tag_y = 350;
+            presentation.text(id, tag_x, tag_y + (presentation.textAscent() + presentation.textDescent()));
+            presentation.text((String) doc.get("type"), tag_x, tag_y + 2 * (presentation.textAscent() + presentation.textDescent()));
+            presentation.text(((JSONArray) doc.get("name")).toString(), tag_x, tag_y + 3 * (presentation.textAscent() + presentation.textDescent()));
 
             List<String> field_names = doc.keySet().stream().toList();
             int additional_fn_shown = 0;
             for (int fi = 0; fi < field_names.size(); fi++) {
               String fn = field_names.get(fi);
               if (!(fn.equals("id") || fn.equals("type") || fn.equals("name") || fn.equals("_version_"))) {
-                presentation.text(fn + ": " + doc.get(fn), tag_x, 300 + (additional_fn_shown + 4) * (presentation.textAscent() + presentation.textDescent()));
+                presentation.text(fn + ": " + doc.get(fn), tag_x, tag_y + (additional_fn_shown + 4) * (presentation.textAscent() + presentation.textDescent()));
                 additional_fn_shown++;
               }
             }
