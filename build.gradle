@@ -16,6 +16,7 @@ dependencies {
     implementation 'org.mongodb:mongodb-driver-sync:4.9.0'
     implementation group: 'org.apache.lucene', name: 'lucene-core', version: '9.7.0'
     implementation group: 'org.apache.lucene', name: 'lucene-analysis-common', version: '9.7.0'
+    implementation group: 'org.apache.lucene', name: 'lucene-analysis-phonetic', version: '9.7.0'
     implementation group: 'org.apache.lucene', name: 'lucene-queryparser', version: '9.7.0'
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.20.0'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
