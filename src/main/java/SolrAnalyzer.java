@@ -13,8 +13,8 @@ import java.util.Map;
 public class SolrAnalyzer extends TextAnalyzer {
 
   private final String[] field_types = { "string", "text_ws", "text_general", "text_en",
-                                   "text_en_splitting", "text_en_splitting_tight",
-                                   "text_cjk", "phonetic_en", "text_general_rev"};
+                                         "text_en_splitting", "text_en_splitting_tight",
+                                         "phonetic_en", "text_general_rev"};
   @Override
   List<Map<String, Object>> analyzeString(String analyzer_name, String text) {
     String field_type = analyzer_name;
