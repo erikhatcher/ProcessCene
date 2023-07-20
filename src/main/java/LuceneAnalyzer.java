@@ -1,3 +1,4 @@
+import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
@@ -8,6 +9,7 @@ import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilter;
 import org.apache.lucene.analysis.ngram.EdgeNGramTokenFilter;
 import org.apache.lucene.analysis.ngram.NGramTokenFilter;
+import org.apache.lucene.analysis.phonetic.PhoneticFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
@@ -64,6 +66,15 @@ public class LuceneAnalyzer extends TextAnalyzer {
         int flags =
             GENERATE_WORD_PARTS | GENERATE_NUMBER_PARTS | SPLIT_ON_CASE_CHANGE | SPLIT_ON_NUMERICS;
         return new Analyzer.TokenStreamComponents(tokenizer, new WordDelimiterGraphFilter(tokenizer, flags, null));
+      }
+    });
+
+    analyzer_names.add("Phonetic");
+    analyzers.add(new Analyzer() {
+      @Override
+      protected TokenStreamComponents createComponents(String fieldName) {
+        Tokenizer tokenizer = new StandardTokenizer();
+        return new Analyzer.TokenStreamComponents(tokenizer, new PhoneticFilter(tokenizer, new DoubleMetaphone(), false));
       }
     });
 
