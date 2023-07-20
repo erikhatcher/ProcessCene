@@ -31,7 +31,7 @@ public class AboutProcessCene extends BaseSlide {
     float caption_y = presentation.textAscent() + presentation.textDescent() + presentation.height/2;
     presentation.text(caption, (presentation.width - presentation.textWidth(caption))/2, caption_y);
 
-    float flower_scale = presentation.frameCount % 200;
+    float flower_scale = presentation.frameCount % 400 + 2;
     presentation.image(flower_image, (presentation.width - flower_image.width) / 2 - flower_scale, caption_y - flower_image.height - 50 - flower_scale, flower_image.width + flower_scale, flower_image.height + flower_scale);
 
     presentation.image(lucene_logo, (presentation.width/2) - lucene_logo.width - 50,caption_y + 20);
