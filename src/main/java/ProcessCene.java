@@ -35,11 +35,9 @@ public class ProcessCene extends PApplet {
 
   private List<Slide> slides = new ArrayList<Slide>();
   private int current_slide_index = 0;
-  private boolean animate = false;
 
   private PImage footer_logo;
 
-  private final String DEFAULT_TEXT = "The quick brown fox jumped over the lazy dogs.";
   private final String text = "Q-36 SpaceModulator"; //DEFAULT_TEXT;
   // TODO: fix "Text with an emoiji 😀 and Chinese 你好"; // this one has display issues (though window title renders accurately)
 
@@ -55,8 +53,17 @@ public class ProcessCene extends PApplet {
 
     textFont(loadFont(getFilePathFromResources("LexendDeca-Light-24.vlw")));
 
-    PImage bullet_image = loadImage(getFilePathFromResources("Assets/normal/General_ACTION_Favorite_Inverted10x.png"));
-    bullet_image.resize(50, 0);
+    PImage toc_bullet_image = loadImage(getFilePathFromResources("Assets/normal/General_ACTION_Favorite_Inverted10x.png"));
+    toc_bullet_image.resize(50, 0);
+
+    PImage bullet_image = loadImage(getFilePathFromResources("Assets/normal/Technical_MDB_WildcardIndex10x.png"));
+    bullet_image.resize(30, 0);
+
+    PImage solr_logo = loadImage(getFilePathFromResources("Solr_Logo_on_white.png"));
+    solr_logo.resize(0, 150);
+
+    PImage atlas_search_logo = loadImage(getFilePathFromResources("atlas_search_icon.png"));
+    atlas_search_logo.resize(0, 150);
 
     // footer_logo = loadImage(getFilePathFromResources("uberconf_brain.jpeg"));
     footer_logo = loadImage(getFilePathFromResources("mongodb-assets/MongoDB_Spring-Green/MongoDB_SpringGreen.png"));
@@ -76,6 +83,9 @@ public class ProcessCene extends PApplet {
     PImage flowers_growing = loadImage(getFilePathFromResources("Assets/normal/General_MISC_Grow10x.png"));
     flowers_growing.resize(0,200);
 
+    PImage atlas_search = loadImage(getFilePathFromResources("mongodb-assets/SearchBar/Technical_SOFTWARE_SearchBar_Spot_BS_SpringGreen.png"));
+    atlas_search.resize(0, 400);
+
     slides.add(new UberconfTitleSlide(this));
       slides.add(new SplashSlide("About Me", white, lucene_in_action_cover,
         "https://mdb.link/erik", this).setShowOnTOC(false));
@@ -86,42 +96,45 @@ public class ProcessCene extends PApplet {
 
     slides.add(new InvertedIndexSlide("Inverted Index", this));
 
-    slides.add(new AnalysisSlide("Analysis", text_analyzer, text, this));
+    slides.add(new AnalysisSlide("Text Analysis", text_analyzer, text, this));
       slides.add(new AllyzersSlide("Analyzers", text_analyzer, text, this).setShowOnTOC(false));
       slides.add(new BulletPointsSlide("Language Considerations",
-          new String[] { "i18n", "character folding", "ICU", "word decompounding", "phonetic"},this));
+          new String[] { "i18n", "character folding", "ICU", "word decompounding", "phonetic"}, bullet_image, null, this).setShowOnTOC(false));
 
     slides.add(new BulletPointsSlide("Other Index Types",
-        new String[] { "Numeric", "Spatial", "FST: Finite State Transducer", "Vector" },this));
+        new String[] { "Numeric", "Spatial", "FST: Finite State Transducer", "Vector" }, bullet_image, null,this));
 
-      slides.add(new BulletPointsSlide("Querying",
-          new String[] { "Query API", "query parsing", "query intent" },this));
+    slides.add(new BulletPointsSlide("Querying",
+        new String[] { "Query API", "query parsing", "query intent" }, bullet_image, null, this));
       slides.add(new QueryParsingSlide("Query Parsing", this).setShowOnTOC(false));
 
     slides.add(new BulletPointsSlide("Searching",
-        new String[] {"Filtering", "Relevancy Scoring"}, this));
+        new String[] {"Filtering", "Relevancy Scoring"}, bullet_image, null, this));
       slides.add(new BulletPointsSlide("Filtering",
-          new String[] { "non-scoring", "efficient skipping over", "caching"}, this).setShowOnTOC(false));
+          new String[] { "non-scoring", "efficient skipping over", "caching"}, bullet_image, null, this).setShowOnTOC(false));
       slides.add(new BulletPointsSlide("Relevancy Scoring",
-          new String[] {"similarity", "TF/IDF", "BM25"}, this).setShowOnTOC(false));
-
-    slides.add(new SplashSlide("Lucene Inside", spring_green, (PImage) null,
-        "TBD\n\nSolr, elasticsearch, OpenSearch, Atlas Search\nLucidworks, ...", this));
-      slides.add(new SplashSlide("Solr", spring_green, (PImage) null,
-          "TBD\n\nSolr logo, highlights: e.g. tagger!", this).setShowOnTOC(false));
-      slides.add(new SolrTaggerSlide("Solr Tagger", this).setShowOnTOC(false));
-      //slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this).setShowOnTOC(false));
+          new String[] {"similarity", "TF/IDF", "BM25"}, bullet_image, null, this).setShowOnTOC(false));
 
     slides.add(new BulletPointsSlide("More Like This: The Lucene Ecosystem",
         new String[] { "Highlighting", "Suggest", "Spatial", "Facets", "Lucene Monitor", "MLT",
-               "expressions", "grouping", "join", "parent/child", "Luke"}, this));
+            "expressions", "grouping", "join", "parent/child", "Luke", "Vector Search"}, bullet_image, null, this));
       slides.add(new VectorSearchSlide("Vector Search", this).setShowOnTOC(false));
 
-    slides.add(new SplashSlide("Go forth and search...", 255, qr_code, "https://mdb.link/uberconf", this));
+    slides.add(new BulletPointsSlide("Lucene Inside",
+        new String[] {"Solr", "elasticsearch", "OpenSearch", "Lucidworks", "Atlas Search", "..."}, bullet_image, null,this));
+      slides.add(new BulletPointsSlide("Solr",
+          new String[] {"Tagger", "streaming expressions", "joins", "edismax", "security", "plugins: rich documents"},
+          bullet_image, solr_logo, this).setShowOnTOC(false));
+      slides.add(new SolrTaggerSlide("Solr Tagger", this).setShowOnTOC(false));
+      slides.add(new BulletPointsSlide("Atlas Search", new String[] {"It's Easy", "and Awesome!"}, bullet_image, atlas_search_logo ,this).setShowOnTOC(false));
+      slides.add(new SplashSlide("Atlas Search", mist, atlas_search,this).setShowOnTOC(false));
+      slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this).setShowOnTOC(false));
+
+    slides.add(new SplashSlide("Go forth and search...", white, qr_code, "https://mdb.link/uberconf", this));
 
     // * Demonstrate solutions to https://www.mongodb.com/blog/post/three-ways-retailers-use-search-beyond-ecommerce-store
 
-    TableOfContentsSlide toc_slide = new TableOfContentsSlide(slides, bullet_image, this);
+    TableOfContentsSlide toc_slide = new TableOfContentsSlide(slides, toc_bullet_image, this);
     slides.add(1, toc_slide);
 
     boolean inject_toc_guide = true;
@@ -132,7 +145,7 @@ public class ProcessCene extends PApplet {
 
         // Inject tracking ToC slide before every slide that appears on the ToC
         if (this_content_slide.getShowOnTOC() && !(this_content_slide instanceof TableOfContentsSlide)) {
-          updated_slides.add(new TableOfContentsSlide(slides,bullet_image,i,this));
+          updated_slides.add(new TableOfContentsSlide(slides,toc_bullet_image,i,this));
         }
 
         updated_slides.add(this_content_slide);
@@ -145,43 +158,18 @@ public class ProcessCene extends PApplet {
   @Override
   public void draw() {
     background(white);
-    // TODO: how to make some slides animate fast, and others slower?
-//    if (current_slide_index > 1) {
-//      frameRate(0.3f);
-//    }
+
     Slide current_slide = slides.get(current_slide_index);
     int step = current_slide.getCurrentStep();
     int number_of_steps = current_slide.getNumberOfSteps();
     String title = (current_slide.getTitle() != null) ? current_slide.getTitle() : "";
-
-//    if (animate) {
-//      if (animate_intra_slide) {
-//        step = frameCount % (number_of_steps + 1);
-//      } else {
-//        step++;
-//      }
-//      if (step > number_of_steps) {
-//        // advance the slide
-//        if (current_slide_index < slides.size() - 1) {
-//          current_slide_index++;
-//          current_slide = slides.get(current_slide_index);
-//          number_of_steps = current_slide.getNumberOfSteps();
-//          step = 0;
-//        }
-//
-//        if (current_slide_index == (slides.size() - 1) && step > number_of_steps) {
-//          // stay on last step of last slide when we hit it
-//          step = number_of_steps;
-//        }
-//      }
-//    }
 
     push();
     current_slide.draw(step);
     pop();
 
     // Draw the Footer
-    if (show_footer) {
+    if ((current_slide_index > 0) && show_footer) {
       String slide_counter = current_slide_index + 1 + "/" + slides.size();
       text(slide_counter, width - textWidth(slide_counter) - 10, height - textDescent());
       String slide_title = title;
@@ -281,6 +269,14 @@ public class ProcessCene extends PApplet {
 
       case 'f':
         show_footer = !show_footer;
+        break;
+
+      case '0':
+        setSlide(0);
+        break;
+
+      case 't':
+        setSlide(1);
         break;
 
       default:
