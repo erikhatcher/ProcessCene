@@ -32,7 +32,7 @@ public class SplashSlide extends BaseSlide {
     float caption_y = presentation.textAscent() + presentation.textDescent() + presentation.height/2;
     if (images != null) {
       PImage image = images[getCurrentStep()];
-      presentation.image(image, (presentation.width - image.width) / 2, (presentation.height - image.height) / 2);
+      presentation.image(image, (presentation.width - image.width) / 2, (presentation.height - image.height) / 2 - 50);
       caption_y += image.height / 2;
     }
 

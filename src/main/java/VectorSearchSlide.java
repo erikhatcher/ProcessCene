@@ -31,6 +31,7 @@ public class VectorSearchSlide extends BaseSlide {
   private final PImage[] doc_images = new PImage[10];  // icons for numbers 0 - 9
   private final PImage[] doc_images_inverted = new PImage[10];  // icons for numbers 0 - 9
   private final PImage search_icon;
+  private final PImage lucene_logo;
 
   public VectorSearchSlide(String title, ProcessCene presentation) {
     super(title, presentation);
@@ -52,12 +53,20 @@ public class VectorSearchSlide extends BaseSlide {
       doc_images_inverted[i].resize(30,30);
     }
 
+    lucene_logo = presentation.loadImage(presentation.getFilePathFromResources("lucene_green_300.png"));
+    lucene_logo.resize(300,0);
+
     search_icon = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/Technical_ATLAS_Search10x.png"));
     search_icon.resize(30,30);
   }
 
   @Override
   public void draw(int step) {
+    if (lucene_logo != null) {
+      presentation.image(lucene_logo, 10, 10);
+    }
+
+
     try {
       ByteBuffersDirectory index = new ByteBuffersDirectory();
       IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(new SimpleAnalyzer()));

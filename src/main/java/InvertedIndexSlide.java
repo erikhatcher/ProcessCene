@@ -24,15 +24,10 @@ public class InvertedIndexSlide extends BaseSlide {
 
   final LuceneAnalyzer text_analyzer = new LuceneAnalyzer();
   private final PImage[] doc_images = new PImage[10];
+  private final PImage step_0_image;
 
   public InvertedIndexSlide(String title, ProcessCene presentation) {
     super(title, presentation);
-
-    // TODO: Add images for documents and such
-    // Assets/normal/Technical_MDB_DocumentModel10x.png
-    // Technical_MDB_SearchCollection_10x.png
-    // General_ACTION_Favorite_Inverted10x.png
-    // Technical_MDB_DocumentModel10x.png
 
     docs.add("What is Lucene?");
     docs.add("'Love of Lucene' @ Uberconf");
@@ -43,13 +38,15 @@ public class InvertedIndexSlide extends BaseSlide {
       doc_images[i] = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
       doc_images[i].resize(30,30);
     }
+
+    step_0_image = presentation.loadImage(presentation.getFilePathFromResources("mongodb-assets/SearchTerminal/Technical_SOFTWARE_SearchTerminal_Spot_BS_ForestGreen.png"));
+    step_0_image.resize(0,700);
   }
 
   @Override
   public void draw(int step) {
     if (step == 0) {
-      presentation.textSize(50);
-      presentation.text(getTitle(), presentation.width / 2, presentation.height / 2);
+      presentation.image(step_0_image, (presentation.width - step_0_image.width) / 2, (presentation.height - step_0_image.height) / 2);
     }
 
     //presentation.textFont(presentation.loadFont(presentation.getFilePathFromResources("SourceCodeProRoman-Medium-24.vlw")));

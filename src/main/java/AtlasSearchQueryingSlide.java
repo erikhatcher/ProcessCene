@@ -29,6 +29,8 @@ public class AtlasSearchQueryingSlide extends BaseSlide {
 
   @Override
   public void draw(int step) {
+    presentation.background(presentation.mist);
+
     // Replace the placeholder with your MongoDB deployment's connection string
     String uri = System.getenv("ATLAS_URI");
 

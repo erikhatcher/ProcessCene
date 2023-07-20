@@ -16,6 +16,7 @@ public class AnalysisSlide extends BaseSlide {
   // TODO: have this report back total number of steps across ALL analyzers, so that animation can cycle through them all
   @Override
   public void draw(int step) {
+    presentation.textSize(40);
     String analyzer_name = text_analyzer.getAnalyzerNames().get(getCurrentVariationIndex());
     List<Map<String,Object>> tokens = text_analyzer.analyzeString(analyzer_name, text);
 

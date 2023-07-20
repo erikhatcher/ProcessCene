@@ -1,7 +1,10 @@
+import processing.core.PImage;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class AllyzersSlide extends BaseSlide {
   private final String text;
@@ -11,16 +14,25 @@ public class AllyzersSlide extends BaseSlide {
 //  private int text_analyzer_index = 0;
 
   private final TextAnalyzer text_analyzer;
+  private final PImage step_0_image;
 
   public AllyzersSlide(String title, TextAnalyzer text_analyzer, String text, ProcessCene presentation) {
     super(title, presentation);
 
     this.text_analyzer = text_analyzer;
     this.text = text;
+
+    step_0_image = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/Technical_ENTERPRISEADVANCED_EnterpriseServer10x.png"));
+    step_0_image.resize(0,300);
   }
 
   @Override
   public void draw(int step) {
+    if (step == 0) {
+      presentation.image(step_0_image, (presentation.width - step_0_image.width) / 2, (presentation.height - step_0_image.height) / 2);
+    }
+
+
     int x;
     int y = 20;
 
@@ -68,8 +80,8 @@ public class AllyzersSlide extends BaseSlide {
 
         float tw = presentation.textWidth(term);
         float th = presentation.textAscent() + presentation.textDescent();
-        float tx = x + x_offset; // + applet.random(3);  // The wiggling is cute though - TODO: find a way to toggle wiggle mode, perhaps through the animation flag?
-        float ty = y + 20 + y_offset; // + applet.random(3);
+        float tx = x + x_offset; // + ((step == getNumberOfSteps()) ? ThreadLocalRandom.current().nextInt(1, 3 + 1) : 0);
+        float ty = y + 20 + y_offset; // + ((step == getNumberOfSteps()) ? ThreadLocalRandom.current().nextInt(1, 3 + 1) : 0);
 
         presentation.fill(presentation.mist);
         presentation.rect(tx - 5, ty - th, tw + 10, th + 5, 7);

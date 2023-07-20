@@ -48,6 +48,9 @@ public class ProcessCene extends PApplet {
 
   @Override
   public void setup() {
+    // TODO: Make this a keyboard toggle to Solr, AS, ES, Lucene...
+    TextAnalyzer text_analyzer = new LuceneAnalyzer(); // new SolrAnalyzer();
+
     frameRate(10);
     fill(black);
 
@@ -59,22 +62,21 @@ public class ProcessCene extends PApplet {
     PImage bullet_image = loadImage(getFilePathFromResources("Assets/normal/Technical_MDB_WildcardIndex10x.png"));
     bullet_image.resize(30, 0);
 
-    PImage solr_logo = loadImage(getFilePathFromResources("Solr_Logo_on_white.png"));
-    solr_logo.resize(0, 150);
-
-    PImage atlas_search_logo = loadImage(getFilePathFromResources("atlas_search_icon.png"));
-    atlas_search_logo.resize(0, 150);
-
-    // footer_logo = loadImage(getFilePathFromResources("uberconf_brain.jpeg"));
-    footer_logo = loadImage(getFilePathFromResources("mongodb-assets/MongoDB_Spring-Green/MongoDB_SpringGreen.png"));
+    footer_logo = loadImage(getFilePathFromResources("mongodb-assets/MongoDB_Logomark-SpringGreen/MongoDB_Logo.png"));
     footer_logo.resize(0, 30);
 
     PImage qr_code = loadImage(getFilePathFromResources("uberconf_qr_code.png"));
 
-    // TODO: Make this a keyboard toggle to Solr, AS, ES, Lucene...
-    TextAnalyzer text_analyzer = new LuceneAnalyzer(); // new SolrAnalyzer();
-
     PImage lucene_in_action_cover = loadImage(getFilePathFromResources("lucene_in_action.png"));
+    lucene_in_action_cover.resize(0, 600);
+    PImage apache_feather = loadImage(getFilePathFromResources("apache_feather.png"));
+    apache_feather.resize(250,0);
+    PImage blacklight_logo = loadImage(getFilePathFromResources("blacklight_logo.png"));
+    PImage lucidworks_logo = loadImage(getFilePathFromResources("lucidworks_logo.png"));
+    lucidworks_logo.resize(500,0);
+    PImage mdb_logo = loadImage(getFilePathFromResources("mongodb-assets/MongoDB_Spring-Green/MongoDB_SpringGreen.png"));
+    mdb_logo.resize(0,300);
+
     PImage its_just_search_results = loadImage(getFilePathFromResources("anatomy_of_search_results.png"));
     its_just_search_results.resize(0,600);
     PImage its_just_search_grouping = loadImage(getFilePathFromResources("grouping_find_a_doctor.png"));
@@ -83,11 +85,41 @@ public class ProcessCene extends PApplet {
     PImage flowers_growing = loadImage(getFilePathFromResources("Assets/normal/General_MISC_Grow10x.png"));
     flowers_growing.resize(0,200);
 
-    PImage atlas_search = loadImage(getFilePathFromResources("mongodb-assets/SearchBar/Technical_SOFTWARE_SearchBar_Spot_BS_SpringGreen.png"));
-    atlas_search.resize(0, 400);
+    PImage lucene_logo = loadImage(getFilePathFromResources("lucene_green_300.png"));
+    lucene_logo.resize(300,0);
+
+    PImage solr_logo = loadImage(getFilePathFromResources("Solr_Logo_on_white.png"));
+    solr_logo.resize(0, 150);
+
+    PImage atlas_search_logo = loadImage(getFilePathFromResources("mongodb-assets/SearchDocument/Technical_ACTION_SearchDocument_Spot_BS_ForestGreen.png"));
+    atlas_search_logo.resize(300, 0);
+
+    PImage atlas_search_ui_1 = loadImage(getFilePathFromResources("atlas_search_ui_1.png"));
+    atlas_search_ui_1.resize(0, 600);
+    PImage atlas_search_ui_2 = loadImage(getFilePathFromResources("atlas_search_ui_2.png"));
+    atlas_search_ui_2.resize(0, 700);
+    PImage atlas_search_ui_3 = loadImage(getFilePathFromResources("atlas_search_ui_3.png"));
+    atlas_search_ui_3.resize(0, 650);
+    PImage atlas_search_ui_4 = loadImage(getFilePathFromResources("atlas_search_ui_4.png"));
+    atlas_search_ui_4.resize(0, 650);
+    PImage atlas_search_ui_5 = loadImage(getFilePathFromResources("atlas_search_ui_5.png"));
+    atlas_search_ui_5.resize(0, 650);
+    PImage atlas_search_ui_6 = loadImage(getFilePathFromResources("atlas_search_ui_6.png"));
+    atlas_search_ui_6.resize(0, 600);
+    PImage atlas_search_ui_7 = loadImage(getFilePathFromResources("atlas_search_ui_7.png"));
+    atlas_search_ui_7.resize(0, 600);
+    PImage atlas_search_ui_8 = loadImage(getFilePathFromResources("atlas_search_ui_8.png"));
+    atlas_search_ui_8.resize(0, 650);
+    PImage atlas_search_ui_9 = loadImage(getFilePathFromResources("atlas_search_ui_9.png"));
+    atlas_search_ui_9.resize(0, 600);
+    PImage atlas_search_ui_10 = loadImage(getFilePathFromResources("atlas_search_ui_10.png"));
+    atlas_search_ui_10.resize(0, 600);
+    PImage atlas_search_ui_11 = loadImage(getFilePathFromResources("atlas_search_ui_11.png"));
+    atlas_search_ui_11.resize(0, 650);
 
     slides.add(new UberconfTitleSlide(this));
-      slides.add(new SplashSlide("About Me", white, lucene_in_action_cover,
+      slides.add(new SplashSlide("About Me", white,
+          new PImage[] {apache_feather, lucene_in_action_cover, blacklight_logo, lucidworks_logo, mdb_logo},
         "https://mdb.link/erik", this).setShowOnTOC(false));
       slides.add(new SplashSlide("About These Slides", lavender, flowers_growing, "ProcessCene", this).setShowOnTOC(false));
 
@@ -115,9 +147,9 @@ public class ProcessCene extends PApplet {
       slides.add(new BulletPointsSlide("Relevancy Scoring",
           new String[] {"similarity", "TF/IDF", "BM25"}, bullet_image, null, this).setShowOnTOC(false));
 
-    slides.add(new BulletPointsSlide("More Like This: The Lucene Ecosystem",
-        new String[] { "Highlighting", "Suggest", "Spatial", "Facets", "Lucene Monitor", "MLT",
-            "expressions", "grouping", "join", "parent/child", "Luke", "Vector Search"}, bullet_image, null, this));
+    slides.add(new BulletPointsSlide("Core Lucene Ecosystem",
+        new String[] { "highlighting", "Suggest", "Spatial", "Facets", "Lucene Monitor", "MLT",
+            "Expressions", "Grouping", "Block join", "Parent/child", "Luke", "Vector Search"}, bullet_image, lucene_logo, this));
       slides.add(new VectorSearchSlide("Vector Search", this).setShowOnTOC(false));
 
     slides.add(new BulletPointsSlide("Lucene Inside",
@@ -126,8 +158,16 @@ public class ProcessCene extends PApplet {
           new String[] {"Tagger", "streaming expressions", "joins", "edismax", "security", "plugins: rich documents"},
           bullet_image, solr_logo, this).setShowOnTOC(false));
       slides.add(new SolrTaggerSlide("Solr Tagger", this).setShowOnTOC(false));
-      slides.add(new BulletPointsSlide("Atlas Search", new String[] {"It's Easy", "and Awesome!"}, bullet_image, atlas_search_logo ,this).setShowOnTOC(false));
-      slides.add(new SplashSlide("Atlas Search", mist, atlas_search,this).setShowOnTOC(false));
+      slides.add(new BulletPointsSlide("Atlas Search", mist,
+          new String[] {"Click, click, click",
+                        "Hosted",
+                        "Replicated",
+                        "Keep database and search in sync",
+                        "Supports nested/embedded documents",
+                        "https://www.mongodb.com/atlas/search"}, bullet_image, atlas_search_logo ,this).setShowOnTOC(false));
+      slides.add(new SplashSlide("Atlas Search", mist,
+          new PImage[] {atlas_search_ui_1, atlas_search_ui_2, atlas_search_ui_3, atlas_search_ui_4, atlas_search_ui_5, atlas_search_ui_6, atlas_search_ui_7, atlas_search_ui_8, atlas_search_ui_9, atlas_search_ui_10, atlas_search_ui_11},
+          "Atlas Search", this).setShowOnTOC(false));
       slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this).setShowOnTOC(false));
 
     slides.add(new SplashSlide("Go forth and search...", white, qr_code, "https://mdb.link/uberconf", this));
