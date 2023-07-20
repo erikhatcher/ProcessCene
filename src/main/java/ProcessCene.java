@@ -91,6 +91,8 @@ public class ProcessCene extends PApplet {
     PImage atlas_search_logo = loadImage(getFilePathFromResources("mongodb-assets/SearchDocument/Technical_ACTION_SearchDocument_Spot_BS_ForestGreen.png"));
     atlas_search_logo.resize(300, 0);
 
+    PImage atlas_big_picture = loadImage(getFilePathFromResources("atlas_big_picture.png"));
+    atlas_big_picture.resize(0, 600);
     PImage atlas_search_ui_1 = loadImage(getFilePathFromResources("atlas_search_ui_1.png"));
     atlas_search_ui_1.resize(0, 600);
     PImage atlas_search_ui_2 = loadImage(getFilePathFromResources("atlas_search_ui_2.png"));
@@ -127,43 +129,50 @@ public class ProcessCene extends PApplet {
 
     slides.add(new AnalysisSlide("Text Analysis", text_analyzer, text, this));
       slides.add(new AllyzersSlide("Analyzers", text_analyzer, text, this).setShowOnTOC(false));
-      slides.add(new BulletPointsSlide("Language Considerations",
-          new String[] { "i18n", "character folding", "ICU", "word decompounding", "phonetic"}, bullet_image, null, this).setShowOnTOC(false));
+      slides.add(new BulletPointsSlide("Language Capabilities",
+          new String[] { "i18n / ICU / character folding", "word decompounding", "stemming", "phonetic"}, bullet_image, null, this).setShowOnTOC(false));
 
     slides.add(new BulletPointsSlide("Other Index Types",
         new String[] { "Numeric", "Spatial", "FST: Finite State Transducer", "Vector" }, bullet_image, null,this));
 
     slides.add(new BulletPointsSlide("Query building",
-        new String[] { "Query API", "query parsing", "query intent" }, bullet_image, null, this));
+        new String[] { "Query API", "query parsing", "query intent (see Solr Tagger)" }, bullet_image, null, this));
       slides.add(new QueryParsingSlide("Query Parsing", this).setShowOnTOC(false));
 
     slides.add(new BulletPointsSlide("Searching",
         new String[] {"Filtering", "Relevancy Scoring"}, bullet_image, null, this));
       slides.add(new BulletPointsSlide("Filtering",
-          new String[] { "non-scoring", "efficient skipping over", "caching"}, bullet_image, null, this).setShowOnTOC(false));
+          new String[] { "non-scoring", "efficient skipping", "caching"}, bullet_image, null, this).setShowOnTOC(false));
       slides.add(new BulletPointsSlide("Relevancy Scoring",
-          new String[] {"similarity", "TF/IDF", "BM25"}, bullet_image, null, this).setShowOnTOC(false));
+          new String[] {"TF/IDF", "BM25", "Function boosting"}, bullet_image, null, this).setShowOnTOC(false));
 
     slides.add(new BulletPointsSlide("Core Lucene Ecosystem",
-        new String[] { "highlighting", "Suggest", "Spatial", "Facets", "Lucene Monitor", "MLT",
-            "Expressions", "Grouping", "Block join", "Parent/child", "Luke", "Vector Search"}, bullet_image, lucene_logo, this));
+        new String[] { "Highlighting", "Suggest", "Spatial", "Facets", "Lucene Monitor", "MLT",
+            "Expressions", "Grouping", "Block join, parent/child", "Luke", "Vector Search"}, bullet_image, lucene_logo, this));
       slides.add(new VectorSearchSlide("Vector Search", this).setShowOnTOC(false));
 
     slides.add(new BulletPointsSlide("Lucene Inside",
         new String[] {"Solr", "elasticsearch", "OpenSearch", "Lucidworks", "Atlas Search", "..."}, bullet_image, null,this));
       slides.add(new BulletPointsSlide("Solr",
-          new String[] {"Tagger", "streaming expressions", "joins", "edismax", "security", "plugins: rich documents"},
+          new String[] {"Tagger",
+                        "streaming expressions",
+                        "joins",
+                        "robust query parsing flexibility",
+                        "authentication / authorization",
+                        "extensible",
+                        "plugins: rich documents, etc"},
           bullet_image, solr_logo, this).setShowOnTOC(false));
       slides.add(new SolrTaggerSlide("Solr Tagger", this).setShowOnTOC(false));
       slides.add(new BulletPointsSlide("Atlas Search", mist,
-          new String[] {"Click, click, click",
+          new String[] {"Click, click, click, it's real easy!",
                         "Hosted",
                         "Replicated",
-                        "Keep database and search in sync",
+                        "Keeps database and search in sync",
                         "Supports nested/embedded documents",
+                        "Flexible field type handling",
                         "https://www.mongodb.com/atlas/search"}, bullet_image, atlas_search_logo ,this).setShowOnTOC(false));
       slides.add(new SplashSlide("Atlas Search", mist,
-          new PImage[] {atlas_search_ui_1, atlas_search_ui_2, atlas_search_ui_3, atlas_search_ui_4, atlas_search_ui_5, atlas_search_ui_6, atlas_search_ui_7, atlas_search_ui_8, atlas_search_ui_9, atlas_search_ui_10, atlas_search_ui_11},
+          new PImage[] {atlas_big_picture, atlas_search_ui_1, atlas_search_ui_2, atlas_search_ui_3, atlas_search_ui_4, atlas_search_ui_5, atlas_search_ui_6, atlas_search_ui_7, atlas_search_ui_8, atlas_search_ui_9, atlas_search_ui_10, atlas_search_ui_11},
           "Atlas Search", this).setShowOnTOC(false));
       slides.add(new AtlasSearchQueryingSlide("Atlas Search: Querying", this).setShowOnTOC(false));
 
@@ -189,6 +198,7 @@ public class ProcessCene extends PApplet {
       }
 
       slides = updated_slides;
+
     }
   }
 

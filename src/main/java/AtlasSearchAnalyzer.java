@@ -1,6 +1,9 @@
 import java.util.List;
 import java.util.Map;
 
+/**
+ * TODO: To be implemented when Atlas Search exposes a textual analysis API
+ */
 public class AtlasSearchAnalyzer extends TextAnalyzer {
   // Assign Atlas Search analyzer name to comparable Solr field type mappings
 //    analyzers.set("lucene.keyword", "string");
