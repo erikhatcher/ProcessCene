@@ -1,5 +1,9 @@
 import processing.event.KeyEvent;
 
+/**
+ * This is a handy base class to dump text output quickly.
+ * TODO: It's not currently used though.  Remove it?
+ */
 abstract public class ConsoleOutputSlideBase extends BaseSlide {
   public ConsoleOutputSlideBase(String title, ProcessCene presentation) {
     super(title, presentation);
