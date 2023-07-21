@@ -1,0 +1,45 @@
+[
+  {
+    "id": "event-1",
+    "type": "event",
+    "name": ["Uberconf", "überconf", "ub3rc0nf"],
+
+    "url_s": "https://uberconf.com/"
+  },
+  {
+    "id": "software-1",
+    "type": "software",
+    "name": ["Lucene"],
+
+    "url_s": "https://lucene.apache.org"
+  },
+  {
+    "id": "city-1",
+    "type": "city",
+    "name": [
+      "Westminster", "WestMinister"
+    ],
+
+    "alternative_names_t": "Harris Park,Uestminstur,Vestminster,Westminster,uesutominsuta,vestaminstara,wei si min si te,wstmnstr,wstmynstr,wstmynstr  klradw,Вестминстер,Вестмінстер,Уестминстър,וסטמינסטר,وستمنستر,وستمینستر، کلرادو,ویسٹ منسٹر، کولوراڈو,वेस्टमिन्स्टर,ウェストミンスター,威斯敏斯特",
+    "latitude_f": 39.83665,
+    "longitude_f": -105.0372,
+    "country_s": "US",
+    "state_s": "CO",
+    "population_i": 116317,
+    "elevation_i": 1641,
+    "timezone_s": "America/Denver",
+    "lastupdate_s": "2021-12-21"
+  },
+  {
+    "id": "person-1",
+    "type": "person",
+    "name": ["Erik", "Erik Hatcher"],
+  },
+  {
+    "id": "intent-1",
+    "type": "intent",
+    "name": ["COVID", "covid19", "pandemic"],
+
+    "action_s": "render_covid_menu"
+  }
+]
