@@ -50,18 +50,18 @@ public class VectorSearchSlide extends BaseSlide {
     sample_vectors.add(new float[]{0.53f, 0.12f});     // 8
     sample_vectors.add(new float[]{-0.23f, 0.74f});    // 9
 
-    for (int i=0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
       doc_images[i] = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/" + i + "_10x.png"));
-      doc_images[i].resize(30,30);
+      doc_images[i].resize(30, 30);
       doc_images_inverted[i] = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
-      doc_images_inverted[i].resize(30,30);
+      doc_images_inverted[i].resize(30, 30);
     }
 
     lucene_logo = presentation.loadImage(presentation.getFilePathFromResources("lucene_green_300.png"));
-    lucene_logo.resize(300,0);
+    lucene_logo.resize(300, 0);
 
     search_icon = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/Technical_ATLAS_Search10x.png"));
-    search_icon.resize(30,30);
+    search_icon.resize(30, 30);
   }
 
   @Override
@@ -75,9 +75,9 @@ public class VectorSearchSlide extends BaseSlide {
       ByteBuffersDirectory index = new ByteBuffersDirectory();
       IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(new SimpleAnalyzer()));
 
-      for (int i=0; i < sample_vectors.size(); i++) {
+      for (int i = 0; i < sample_vectors.size(); i++) {
         Document doc = new Document();
-        doc.add(new StringField("id","" + (i + 1), Field.Store.YES));
+        doc.add(new StringField("id", "" + (i + 1), Field.Store.YES));
         doc.add(new KnnFloatVectorField("vector", sample_vectors.get(i),
             (getCurrentVariation() == 1) ? VectorSimilarityFunction.EUCLIDEAN : VectorSimilarityFunction.COSINE));
         writer.addDocument(doc);
@@ -85,9 +85,9 @@ public class VectorSearchSlide extends BaseSlide {
 
       writer.close();
 
-      presentation.translate(presentation.width / 2,presentation.height / 2);
-      presentation.line(-MAX_PIXELS,0,MAX_PIXELS,0);
-      presentation.line(0,-MAX_PIXELS,0,MAX_PIXELS);
+      presentation.translate(presentation.width / 2, presentation.height / 2);
+      presentation.line(-MAX_PIXELS, 0, MAX_PIXELS, 0);
+      presentation.line(0, -MAX_PIXELS, 0, MAX_PIXELS);
       presentation.text((getCurrentVariation() == 1) ? "Euclidean" : "Cosine", -MAX_PIXELS, -MAX_PIXELS + presentation.textAscent());
 
       DirectoryReader r = DirectoryReader.open(index);
@@ -105,8 +105,8 @@ public class VectorSearchSlide extends BaseSlide {
             // TODO: this is a hack until I figure out how to retrieve stored vectors by docid
             lucene_docid_to_sample_index[vectorValues.docID()] = id - 1;
 
-            PVector pv = vector_for(v[0],v[1]);
-            presentation.line(0,0,pv.x,pv.y);
+            PVector pv = vector_for(v[0], v[1]);
+            presentation.line(0, 0, pv.x, pv.y);
             presentation.circle(pv.x, pv.y, 2);
             presentation.image(doc_images[id], pv.x, pv.y - presentation.textAscent() - presentation.textDescent());
           }
@@ -118,7 +118,7 @@ public class VectorSearchSlide extends BaseSlide {
         float[] v = new float[]{0.25f, 0.15f};
         PVector query_vector = vector_for(v[0], v[1]);
         presentation.stroke(presentation.spring_green);
-        presentation.line(0,0,query_vector.x,query_vector.y);
+        presentation.line(0, 0, query_vector.x, query_vector.y);
         presentation.circle(query_vector.x, query_vector.y, 2);
         presentation.image(search_icon, query_vector.x, query_vector.y - presentation.textAscent() - presentation.textDescent());
 

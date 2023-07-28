@@ -20,17 +20,17 @@ public class AnalysisSlide extends BaseSlide {
   public void draw(int step) {
     presentation.textSize(40);
     String analyzer_name = text_analyzer.getAnalyzerNames().get(getCurrentVariationIndex());
-    List<Map<String,Object>> tokens = text_analyzer.analyzeString(analyzer_name, text);
+    List<Map<String, Object>> tokens = text_analyzer.analyzeString(analyzer_name, text);
 
     presentation.text("Analyzer: " + analyzer_name + ((step > 0) ? "    Term: " + step + "/" + getNumberOfSteps() : ""),
         10, 10 + presentation.textAscent() + presentation.textDescent());
 
-    float text_x = (presentation.width - presentation.textWidth(text))/2;
+    float text_x = (presentation.width - presentation.textWidth(text)) / 2;
     float text_y = presentation.height / 2;
     presentation.text(text, text_x, text_y);
 
     if (step > 0 && step < tokens.size() + 1) {
-      Map<String,Object> token = tokens.get(step - 1);
+      Map<String, Object> token = tokens.get(step - 1);
       int start_offset = (int) token.get("start_offset");
       int end_offset = (int) token.get("end_offset");
       String term = (String) token.get("term");
@@ -44,17 +44,17 @@ public class AnalysisSlide extends BaseSlide {
       float token_width = presentation.textWidth(text.substring(start_offset, end_offset));
 
       presentation.fill(presentation.spring_green, 150);
-      presentation.rect(text_x+before_width, text_y - presentation.textAscent() - presentation.textDescent(),
-                 token_width, presentation.textAscent() + presentation.textDescent() + 5);
+      presentation.rect(text_x + before_width, text_y - presentation.textAscent() - presentation.textDescent(),
+          token_width, presentation.textAscent() + presentation.textDescent() + 5);
 
       presentation.fill(presentation.forest_green);
       float term_info_x = presentation.width / 2;
       float term_info_y = text_y + 3 * (presentation.textAscent());
       presentation.text(term, term_info_x, term_info_y);
-      presentation.text("Type: " + type, term_info_x,term_info_y + 1 * (presentation.textAscent() + presentation.textDescent()));
-      presentation.text("Position increment: " + position_increment, term_info_x,term_info_y + 2 * (presentation.textAscent() + presentation.textDescent()));
-      presentation.text("Position length: " + position_length, term_info_x,term_info_y + 3 * (presentation.textAscent() + presentation.textDescent()));
-      presentation.text("Term frequency: " + term_frequency, term_info_x,term_info_y + 4 * (presentation.textAscent() + presentation.textDescent()));
+      presentation.text("Type: " + type, term_info_x, term_info_y + 1 * (presentation.textAscent() + presentation.textDescent()));
+      presentation.text("Position increment: " + position_increment, term_info_x, term_info_y + 2 * (presentation.textAscent() + presentation.textDescent()));
+      presentation.text("Position length: " + position_length, term_info_x, term_info_y + 3 * (presentation.textAscent() + presentation.textDescent()));
+      presentation.text("Term frequency: " + term_frequency, term_info_x, term_info_y + 4 * (presentation.textAscent() + presentation.textDescent()));
     }
 
     super.draw(step);

@@ -1,10 +1,8 @@
 package org.processcene;
 
-import org.processcene.BaseSlide;
-import org.processcene.ProcessCene;
 import processing.core.PApplet;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.List;
 import java.util.function.Function;
 
@@ -16,7 +14,7 @@ public class SimilaritySlide extends BaseSlide {
   private static final float START_X = 1.0f;
   private static final float interval = 0.1f;
 
-  private final Point center = new Point(0,0);
+  private final Point center = new Point(0, 0);
   private final Point left_middle = new Point(MIN_X, 0);
   private final Point right_middle = new Point(MAX_X, 0);
   private final Point bottom_middle = new Point(0, MIN_Y);
@@ -30,7 +28,7 @@ public class SimilaritySlide extends BaseSlide {
   public SimilaritySlide(String title, ProcessCene presentation) {
     super(title, presentation);
 
-    presentation.println("Screen size:",presentation.width,presentation.height);
+    presentation.println("Screen size:", presentation.width, presentation.height);
     center.print("Center");
     bottom_middle.print("bm");
     top_middle.print("tm");
@@ -38,7 +36,7 @@ public class SimilaritySlide extends BaseSlide {
 //    Function<Float, Float> line_sloped = v -> Line.factory(0.2f,0.0f).f(v);
 //    Function<Float, Float> line_flat = x -> Line.factory(0.0f,1.2f * 0.75f).f(x);
 
-    Function<Float, Float> classic_tf = tf-> (float) Math.sqrt(tf);
+    Function<Float, Float> classic_tf = tf -> (float) Math.sqrt(tf);
     Function<Float, Float> bm25_tf_default = tf -> BM25.factory(1.2f, 0.75f, 50.0f, 75.0f).f(tf);
     Function<Float, Float> bm25_tf_1 = tf -> BM25.factory(0.0f, 0.75f, 50.0f, 75.0f).f(tf);
     Function<Float, Float> bm25_tf_2 = tf -> BM25.factory(1.2f, 0.0f, 50.0f, 75.0f).f(tf);
@@ -55,7 +53,7 @@ public class SimilaritySlide extends BaseSlide {
     return (float) (Math.log((doc_count + 1) / (double) (doc_freq + 1)) + 1.0);
   }
 
-//  private float function_bm25_idf(long doc_freq, long doc_count) {
+  //  private float function_bm25_idf(long doc_freq, long doc_count) {
 //    return (float) Math.log(1 + (doc_count - doc_freq + 0.5D) / (doc_freq + 0.5D));
 //  }
 //
@@ -76,7 +74,7 @@ public class SimilaritySlide extends BaseSlide {
 
 
   private float function_line(float x, float m, float b) {
-    return m*x+b;
+    return m * x + b;
   }
 
 //  private float function_1(float x) {
@@ -123,7 +121,7 @@ public class SimilaritySlide extends BaseSlide {
 
       for (int i = 0; i < functions.size(); i++) {
         Function<Float, Float> f = functions.get(i);
-        int f_color = presentation.lerpColor(c1, c2, (float) (i+1)/(float)functions.size());
+        int f_color = presentation.lerpColor(c1, c2, (float) (i + 1) / (float) functions.size());
         float y = f.apply(x);
         Point p = new Point(x, y);
         presentation.stroke(f_color);
@@ -163,19 +161,19 @@ public class SimilaritySlide extends BaseSlide {
 
     // hash marks
     int num_ticks = 10;
-    float x_interval = (MAX_X-MIN_X)/num_ticks;
-    float y_interval = (MAX_Y-MIN_Y)/num_ticks;
+    float x_interval = (MAX_X - MIN_X) / num_ticks;
+    float y_interval = (MAX_Y - MIN_Y) / num_ticks;
     float x_tick_size = 0.1f;
     float y_tick_size = 0.1f;
     for (int i = 1; i <= num_ticks; i++) {
       float x = i * x_interval;
-      line(new Point(x, -(x_tick_size/2)), new Point(x, x_tick_size/2));
-      line(new Point(-x, -(x_tick_size/2)), new Point(-x, x_tick_size/2));
+      line(new Point(x, -(x_tick_size / 2)), new Point(x, x_tick_size / 2));
+      line(new Point(-x, -(x_tick_size / 2)), new Point(-x, x_tick_size / 2));
     }
     for (int i = 1; i <= num_ticks; i++) {
       float y = i * y_interval;
-      line(new Point(-(y_tick_size/2), y), new Point(y_tick_size/2, y));
-      line(new Point(-(y_tick_size/2), -y), new Point(y_tick_size/2, -y));
+      line(new Point(-(y_tick_size / 2), y), new Point(y_tick_size / 2, y));
+      line(new Point(-(y_tick_size / 2), -y), new Point(y_tick_size / 2, -y));
     }
 
     presentation.pop();
@@ -199,11 +197,11 @@ public class SimilaritySlide extends BaseSlide {
     }
 
     private float map_y() {
-      return PApplet.map(y,MIN_Y,MAX_Y,presentation.height,0);
+      return PApplet.map(y, MIN_Y, MAX_Y, presentation.height, 0);
     }
 
     private float map_x() {
-      return PApplet.map(x,MIN_X,MAX_X,0,presentation.width);
+      return PApplet.map(x, MIN_X, MAX_X, 0, presentation.width);
     }
 
     public void print() {
@@ -211,7 +209,7 @@ public class SimilaritySlide extends BaseSlide {
     }
 
     private void print(String prefix) {
-      presentation.println(("".equals(prefix) ? "" :  (prefix + ":")),x,y," => ", map_x(), map_y());
+      presentation.println(("".equals(prefix) ? "" : (prefix + ":")), x, y, " => ", map_x(), map_y());
     }
   }
 
@@ -225,7 +223,7 @@ public class SimilaritySlide extends BaseSlide {
     }
 
     public float f(float x) {
-      return m*x+b;
+      return m * x + b;
     }
 
     public static Line factory(float m, float b) {

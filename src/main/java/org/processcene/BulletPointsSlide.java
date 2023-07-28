@@ -1,6 +1,5 @@
 package org.processcene;
 
-import org.processcene.BaseSlide;
 import processing.core.PImage;
 
 public class BulletPointsSlide extends BaseSlide {
@@ -34,13 +33,13 @@ public class BulletPointsSlide extends BaseSlide {
 
     for (String bullet_text : bullets) {
       presentation.image(bullet_image, x, y);
-      presentation.text(bullet_text, x + bullet_image.width + 15, y + (bullet_image.height + presentation.textAscent())/2);
+      presentation.text(bullet_text, x + bullet_image.width + 15, y + (bullet_image.height + presentation.textAscent()) / 2);
 
       y += presentation.textAscent() + presentation.textDescent() + 25;
     }
 
     presentation.textSize(30);
-    presentation.text(getTitle(), (presentation.width - presentation.textWidth(getTitle()))/2,50);
+    presentation.text(getTitle(), (presentation.width - presentation.textWidth(getTitle())) / 2, 50);
 
     super.draw(step);
   }

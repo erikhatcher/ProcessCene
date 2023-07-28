@@ -38,13 +38,13 @@ public class InvertedIndexSlide extends BaseSlide {
     docs.add("We *love* Lucene!");
 
     // TODO: centralize this - reused on org.processcene.lucene.VectorSearchSlide
-    for (int i=0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
       doc_images[i] = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
-      doc_images[i].resize(30,30);
+      doc_images[i].resize(30, 30);
     }
 
     step_0_image = presentation.loadImage(presentation.getFilePathFromResources("mongodb-assets/SearchTerminal/Technical_SOFTWARE_SearchTerminal_Spot_BS_ForestGreen.png"));
-    step_0_image.resize(0,700);
+    step_0_image.resize(0, 700);
   }
 
   @Override
@@ -61,7 +61,7 @@ public class InvertedIndexSlide extends BaseSlide {
     try {
       IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(analyzer));
 
-      for (int i=0; i < step; i++) {
+      for (int i = 0; i < step; i++) {
         Document doc = new Document();
         doc.add(new StringField("id", "" + (i + 1), Field.Store.YES));
         doc.add(new TextField("title", docs.get(i), Field.Store.YES));
@@ -76,9 +76,9 @@ public class InvertedIndexSlide extends BaseSlide {
     float y = presentation.textAscent() + presentation.textDescent() + 10;
 
     for (int i = 0; i < step; i++) {
-      PImage doc_image = doc_images[i+1];
+      PImage doc_image = doc_images[i + 1];
       presentation.image(doc_image, x, y - presentation.textAscent() - presentation.textDescent());
-      presentation.text(docs.get(i),x + doc_image.width,y);
+      presentation.text(docs.get(i), x + doc_image.width, y);
       y += 40;
     }
 
@@ -94,7 +94,7 @@ public class InvertedIndexSlide extends BaseSlide {
      */
     try {
       IndexReader reader = DirectoryReader.open(index);
-      Terms terms = MultiTerms.getTerms(reader,"title");
+      Terms terms = MultiTerms.getTerms(reader, "title");
 
       float df_x = x + presentation.textWidth("XXXXXXXXXXXXX");
       float posting_list_x = df_x + presentation.textWidth("XXX");
@@ -106,7 +106,7 @@ public class InvertedIndexSlide extends BaseSlide {
         presentation.text(postings_list_header, posting_list_x, y);
 
         // draw line under posting list header row
-        presentation.line(x,y + presentation.textDescent(),posting_list_x + presentation.textWidth(postings_list_header),y + presentation.textDescent());
+        presentation.line(x, y + presentation.textDescent(), posting_list_x + presentation.textWidth(postings_list_header), y + presentation.textDescent());
 
         y += presentation.textAscent() + presentation.textDescent() + 15;
 
@@ -125,14 +125,14 @@ public class InvertedIndexSlide extends BaseSlide {
             presentation.image(doc_image, posting_list_x + doc_image.width * (id - 1), y - presentation.textAscent() - presentation.textDescent());
           }
           // horizontal line under posting
-          presentation.line(x,y + presentation.textDescent(),posting_list_x + presentation.textWidth(postings_list_header),y + presentation.textDescent());
+          presentation.line(x, y + presentation.textDescent(), posting_list_x + presentation.textWidth(postings_list_header), y + presentation.textDescent());
 
           y += presentation.textAscent() + presentation.textDescent() + 15;
         }
 
         // draw lines for the columns
-        presentation.line(df_x - 5,top_of_postings_y, df_x - 5, y - presentation.textAscent() - presentation.textDescent());
-        presentation.line(posting_list_x - 5,top_of_postings_y,posting_list_x - 5,y - presentation.textAscent() - presentation.textDescent());
+        presentation.line(df_x - 5, top_of_postings_y, df_x - 5, y - presentation.textAscent() - presentation.textDescent());
+        presentation.line(posting_list_x - 5, top_of_postings_y, posting_list_x - 5, y - presentation.textAscent() - presentation.textDescent());
       }
     } catch (IOException e) {
       throw new RuntimeException(e);

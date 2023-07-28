@@ -1,7 +1,5 @@
 package org.processcene;
 
-import org.processcene.BaseSlide;
-import org.processcene.ProcessCene;
 import processing.core.PShape;
 
 import java.util.HashMap;
@@ -21,7 +19,7 @@ public final class LoveLuceneSlide extends BaseSlide {
   private int current_heart_size = MIN_HEART_SIZE;
   private boolean heart_growing = true;
 
-  private final Map<Integer,PShape> hearts = new HashMap<>();
+  private final Map<Integer, PShape> hearts = new HashMap<>();
 
   public LoveLuceneSlide(ProcessCene presentation) {
     super(null, presentation);
@@ -42,7 +40,7 @@ public final class LoveLuceneSlide extends BaseSlide {
       }
       heart.endShape(CLOSE);
 
-      hearts.put(size,heart);
+      hearts.put(size, heart);
     }
   }
 
@@ -56,13 +54,13 @@ public final class LoveLuceneSlide extends BaseSlide {
       if (current_heart_size <= MIN_HEART_SIZE) heart_growing = true;
     }
 
-    presentation.translate(presentation.width / 2,presentation.height / 2);
-    presentation.shape(hearts.get(current_heart_size), 0,0);
+    presentation.translate(presentation.width / 2, presentation.height / 2);
+    presentation.shape(hearts.get(current_heart_size), 0, 0);
 
     if (lucene_logo != null) {
       // TODO: scale logo as the heart grows and shrinks
       //lucene_logo.scale(heart_growing ? 1.1f : 0.9f);
-      presentation.shape(lucene_logo,  -1 * lucene_logo.width / 2, 0 - lucene_logo.height);
+      presentation.shape(lucene_logo, -1 * lucene_logo.width / 2, 0 - lucene_logo.height);
     }
 
     super.draw(step);

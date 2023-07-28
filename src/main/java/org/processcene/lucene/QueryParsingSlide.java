@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class QueryParsingSlide extends BaseSlide {
   private final List<String> parsers = new ArrayList<>();
-  private final Map<String,List<String>> queries_by_parser = new HashMap<>();
+  private final Map<String, List<String>> queries_by_parser = new HashMap<>();
 
   public QueryParsingSlide(String title, ProcessCene presentation) {
     super(title, presentation);
@@ -119,14 +119,14 @@ public class QueryParsingSlide extends BaseSlide {
           query = srndQuery.makeLuceneQueryField("title", new BasicQueryFactory());
         }
         if (parser_name.equals("Simple")) {
-          Map<String,Float> weights = new HashMap<>();
+          Map<String, Float> weights = new HashMap<>();
           weights.put("title", 5.0f);
           weights.put("category", 2.0f);
           SimpleQueryParser sqp = new SimpleQueryParser(new StandardAnalyzer(), weights);
           sqp.setDefaultOperator(BooleanClause.Occur.MUST);
           query = sqp.parse(query_string);
 
-          System.out.println("\n\n"+query_string+":");
+          System.out.println("\n\n" + query_string + ":");
           System.out.println(query.toString());
         }
         if (parser_name.equals("ComplexPhrase")) {

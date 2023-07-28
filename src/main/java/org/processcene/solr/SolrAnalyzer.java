@@ -15,9 +15,10 @@ import java.util.Map;
 
 public class SolrAnalyzer extends TextAnalyzer {
 
-  private final String[] field_types = { "string", "text_ws", "text_general", "text_en",
-                                         "text_en_splitting", "text_en_splitting_tight",
-                                         "phonetic_en", "text_general_rev"};
+  private final String[] field_types = {"string", "text_ws", "text_general", "text_en",
+      "text_en_splitting", "text_en_splitting_tight",
+      "phonetic_en", "text_general_rev"};
+
   @Override
   public List<Map<String, Object>> analyzeString(String analyzer_name, String text) {
     String field_type = analyzer_name;
@@ -34,14 +35,14 @@ public class SolrAnalyzer extends TextAnalyzer {
     }
 
     JSONArray index_analysis = analysis_response.getJSONObject("analysis").getJSONObject("field_types").getJSONObject(field_type).getJSONArray("index");
-    JSONArray final_tokens = index_analysis.getJSONArray(index_analysis.size()-1).getJSONArray(1);
+    JSONArray final_tokens = index_analysis.getJSONArray(index_analysis.size() - 1).getJSONArray(1);
 
-    List<Map<String,Object>> tokens = new ArrayList<>();
+    List<Map<String, Object>> tokens = new ArrayList<>();
     int last_token_position = 0; // Solr computes and returns position, hiding position_increment
-    for (int i=0; i < final_tokens.size(); i++) {
+    for (int i = 0; i < final_tokens.size(); i++) {
       JSONObject solr_token = final_tokens.getJSONObject(i);
 
-      HashMap<String,Object> token = new HashMap<String,Object>();
+      HashMap<String, Object> token = new HashMap<String, Object>();
       int position = solr_token.getInt("position");
       token.put("term", solr_token.getString("text"));
       token.put("bytes", solr_token.getString("raw_bytes"));
@@ -50,7 +51,7 @@ public class SolrAnalyzer extends TextAnalyzer {
       token.put("position", position);
       token.put("position_length", solr_token.getInt("org.apache.lucene.analysis.tokenattributes.PositionLengthAttribute#positionLength"));
       token.put("type", solr_token.getString("type"));
-      token.put("term_frequency",solr_token.getInt("org.apache.lucene.analysis.tokenattributes.TermFrequencyAttribute#termFrequency"));
+      token.put("term_frequency", solr_token.getInt("org.apache.lucene.analysis.tokenattributes.TermFrequencyAttribute#termFrequency"));
 
       // Hack: compute position_increment since Solr hides that from us, computing position instead
       token.put("position_increment", position - last_token_position);

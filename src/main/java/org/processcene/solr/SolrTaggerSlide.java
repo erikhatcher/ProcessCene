@@ -30,7 +30,7 @@ public class SolrTaggerSlide extends BaseSlide {
     texts.add("hey, check out that lucene presentation at üb3rc0nf in westMINISTER");
     texts.add("where can I get tested for covid?");
 
-    for(int i=0; i < texts.size(); i++) {
+    for (int i = 0; i < texts.size(); i++) {
       HttpClient client = HttpClient.newHttpClient();
       HttpRequest request = HttpRequest.newBuilder()
           .uri(URI.create("http://localhost:8983/solr/tagger/tag" +
@@ -61,12 +61,13 @@ public class SolrTaggerSlide extends BaseSlide {
 
     String text_to_tag = texts.get(getCurrentVariationIndex());
     JSONObject tagger_response = tagger_responses.get(getCurrentVariationIndex());
-    String error_message = (String)tagger_response.get("error");
+    String error_message = (String) tagger_response.get("error");
 
     presentation.textSize(20);
 
     float x = 200;
-    float y = 250 + presentation.textAscent() + presentation.textDescent();;
+    float y = 250 + presentation.textAscent() + presentation.textDescent();
+    ;
 
     presentation.textSize(30);
     presentation.text(texts.get(getCurrentVariationIndex()), x, y);
@@ -80,8 +81,8 @@ public class SolrTaggerSlide extends BaseSlide {
     JSONArray documents = (JSONArray) ((JSONObject) tagger_response.get("response")).get("docs");
 
     // Build an `id` keyed map
-    Map<String,JSONObject> entities = new HashMap<>();
-    for (int i=0; i < documents.size(); i++) {
+    Map<String, JSONObject> entities = new HashMap<>();
+    for (int i = 0; i < documents.size(); i++) {
       JSONObject doc = (JSONObject) documents.get(i);
       String id = (String) doc.get("id");
       entities.put(id, doc);
@@ -139,7 +140,7 @@ public class SolrTaggerSlide extends BaseSlide {
   @Override
   public int getNumberOfSteps() {
     JSONObject tagger_response = tagger_responses.get(getCurrentVariationIndex());
-    JSONArray tags = (JSONArray)tagger_response.get("tags");
+    JSONArray tags = (JSONArray) tagger_response.get("tags");
     return (tags == null) ? 0 : tags.size();
   }
 

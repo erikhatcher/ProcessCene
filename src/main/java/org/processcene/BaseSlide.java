@@ -60,7 +60,6 @@ abstract public class BaseSlide implements Slide {
 
 
   /**
-   *
    * @return 1-based current variation
    */
   @Override
@@ -69,7 +68,6 @@ abstract public class BaseSlide implements Slide {
   }
 
   /**
-   *
    * @return 0-based current variation, useful in .get'ing from 0-based array of variations
    */
   public int getCurrentVariationIndex() {
@@ -88,7 +86,7 @@ abstract public class BaseSlide implements Slide {
   }
 
   /**
-     builder-style, returning this
+   * builder-style, returning this
    */
   final public Slide setShowOnTOC(boolean show_on_toc) {
     this.show_on_toc = show_on_toc;

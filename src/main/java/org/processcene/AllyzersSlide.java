@@ -24,7 +24,7 @@ public class AllyzersSlide extends BaseSlide {
     this.text = text;
 
     step_0_image = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/Technical_ENTERPRISEADVANCED_EnterpriseServer10x.png"));
-    step_0_image.resize(0,300);
+    step_0_image.resize(0, 300);
   }
 
   @Override

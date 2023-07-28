@@ -144,7 +144,7 @@ public class ProcessCene extends PApplet {
 //
 //    slides.add(new org.processcene.BulletPointsSlide("Query building",
 //        new String[] { "Query API", "query parsing", "query intent (see Solr Tagger)" }, bullet_image, null, this));
-      slides.add(new QueryParsingSlide("Query Parsing", this).setShowOnTOC(false));
+    slides.add(new QueryParsingSlide("Query Parsing", this).setShowOnTOC(false));
 //
 //    slides.add(new org.processcene.BulletPointsSlide("Searching",
 //        new String[] {"Filtering", "Relevancy Scoring"}, bullet_image, null, this));

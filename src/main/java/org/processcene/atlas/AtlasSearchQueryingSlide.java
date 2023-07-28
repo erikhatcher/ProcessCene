@@ -46,7 +46,7 @@ public class AtlasSearchQueryingSlide extends BaseSlide {
 
       SearchOperator genresClause = SearchOperator.compound()
           .must(Arrays.asList(
-              SearchOperator.text(fieldPath("genres"),"Drama"),
+              SearchOperator.text(fieldPath("genres"), "Drama"),
               SearchOperator.text(fieldPath("genres"), "Romance")
           ));
 
@@ -55,7 +55,7 @@ public class AtlasSearchQueryingSlide extends BaseSlide {
       Document searchQuery = new Document("phrase",
           new Document("query", "keanu reeves")
               .append("path", fieldPath("cast"))
-              .append("slop",2));
+              .append("slop", 2));
 
       Bson searchStage = search(
           SearchOperator.compound()

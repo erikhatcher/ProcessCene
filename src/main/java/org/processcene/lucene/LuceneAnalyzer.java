@@ -168,6 +168,7 @@ public class LuceneAnalyzer extends TextAnalyzer {
     // TODO: make analyzers a HashMap<name,Analyzer> instead of parallel Lists
     return analyzers.get(analyzer_names.indexOf(name));
   }
+
   @Override
   public List<String> getAnalyzerNames() {
     return analyzer_names;

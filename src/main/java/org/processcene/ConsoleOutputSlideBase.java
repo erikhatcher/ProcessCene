@@ -26,5 +26,6 @@ abstract public class ConsoleOutputSlideBase extends BaseSlide {
   }
 
   protected abstract String getDescription(int step);
+
   protected abstract String getOutput(int step);
 }
