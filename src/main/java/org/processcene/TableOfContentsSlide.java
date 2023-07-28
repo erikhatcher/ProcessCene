@@ -1,3 +1,5 @@
+package org.processcene;
+
 import processing.core.PImage;
 import processing.event.MouseEvent;
 

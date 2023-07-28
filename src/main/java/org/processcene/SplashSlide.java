@@ -1,5 +1,6 @@
+package org.processcene;
+
 import processing.core.PImage;
-import processing.core.PShape;
 
 public class SplashSlide extends BaseSlide {
   private final int background_color;

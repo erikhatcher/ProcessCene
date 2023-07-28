@@ -1,10 +1,15 @@
+package org.processcene.lucene;
+
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser;
 import org.apache.lucene.queryparser.simple.SimpleQueryParser;
 import org.apache.lucene.queryparser.surround.query.BasicQueryFactory;
 import org.apache.lucene.queryparser.surround.query.SrndQuery;
+import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.Query;
+import org.processcene.BaseSlide;
+import org.processcene.ProcessCene;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +42,8 @@ public class QueryParsingSlide extends BaseSlide {
     List<String> simple_queries = new ArrayList<>();
     simple_queries.add("\"phrase query\"~-1");
     simple_queries.add("foo bar baz");
+    simple_queries.add("(open paren no close");
+    simple_queries.add("some ran*&dom !~-* stuff");
     parsers.add("Simple");
     queries_by_parser.put("Simple", simple_queries);
 
@@ -101,7 +108,7 @@ public class QueryParsingSlide extends BaseSlide {
     if (!query_string.isEmpty()) {
       try {
         Query query = null;
-        // TODO: `if` statements here need to go.... abstract this to our own "query parser" abstraction like TextAnalyzer
+        // TODO: `if` statements here need to go.... abstract this to our own "query parser" abstraction like org.processcene.TextAnalyzer
         if (parser_name.equals("Classic")) {
           QueryParser parser = new QueryParser("title", new StandardAnalyzer());
           query = parser.parse(query_string);
@@ -116,7 +123,11 @@ public class QueryParsingSlide extends BaseSlide {
           weights.put("title", 5.0f);
           weights.put("category", 2.0f);
           SimpleQueryParser sqp = new SimpleQueryParser(new StandardAnalyzer(), weights);
+          sqp.setDefaultOperator(BooleanClause.Occur.MUST);
           query = sqp.parse(query_string);
+
+          System.out.println("\n\n"+query_string+":");
+          System.out.println(query.toString());
         }
         if (parser_name.equals("ComplexPhrase")) {
           ComplexPhraseQueryParser cpqp = new ComplexPhraseQueryParser("title", new StandardAnalyzer());

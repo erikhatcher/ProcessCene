@@ -1,8 +1,11 @@
+package org.processcene.solr;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.processcene.BaseSlide;
+import org.processcene.ProcessCene;
 import processing.core.PImage;
-import processing.event.MouseEvent;
 
 import java.net.URI;
 import java.net.http.HttpClient;

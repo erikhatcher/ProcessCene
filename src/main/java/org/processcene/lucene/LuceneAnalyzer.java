@@ -1,3 +1,5 @@
+package org.processcene.lucene;
+
 import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -9,6 +11,7 @@ import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilter;
 import org.apache.lucene.analysis.ngram.EdgeNGramTokenFilter;
 import org.apache.lucene.analysis.ngram.NGramTokenFilter;
+import org.apache.lucene.analysis.phonetic.DaitchMokotoffSoundexFilter;
 import org.apache.lucene.analysis.phonetic.PhoneticFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
@@ -19,6 +22,7 @@ import org.apache.lucene.analysis.tokenattributes.PositionLengthAttribute;
 import org.apache.lucene.analysis.tokenattributes.TermFrequencyAttribute;
 import org.apache.lucene.analysis.tokenattributes.TermToBytesRefAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
+import org.processcene.TextAnalyzer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,6 +73,15 @@ public class LuceneAnalyzer extends TextAnalyzer {
       }
     });
 
+    analyzer_names.add("dms");
+    analyzers.add(new Analyzer() {
+      @Override
+      protected TokenStreamComponents createComponents(String fieldName) {
+        Tokenizer tokenizer = new StandardTokenizer();
+        return new Analyzer.TokenStreamComponents(tokenizer, new DaitchMokotoffSoundexFilter(tokenizer, false));
+      }
+    });
+
     analyzer_names.add("Phonetic");
     analyzers.add(new Analyzer() {
       @Override
@@ -98,7 +111,7 @@ public class LuceneAnalyzer extends TextAnalyzer {
   }
 
   @Override
-  List<Map<String, Object>> analyzeString(String analyzer_name, String text) {
+  public List<Map<String, Object>> analyzeString(String analyzer_name, String text) {
     if (!analyzer_names.contains(analyzer_name)) {
       throw new RuntimeException("Unknown analyzer: " + analyzer_name);
     }
@@ -156,7 +169,7 @@ public class LuceneAnalyzer extends TextAnalyzer {
     return analyzers.get(analyzer_names.indexOf(name));
   }
   @Override
-  List<String> getAnalyzerNames() {
+  public List<String> getAnalyzerNames() {
     return analyzer_names;
   }
 

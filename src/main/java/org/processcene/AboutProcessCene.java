@@ -1,3 +1,5 @@
+package org.processcene;
+
 import processing.core.PConstants;
 import processing.core.PImage;
 
@@ -27,7 +29,7 @@ public class AboutProcessCene extends BaseSlide {
   public void draw(int step) {
     presentation.background(presentation.lavender);
 
-    String caption = "ProcessCene";
+    String caption = "org.processcene.ProcessCene";
     float caption_y = presentation.textAscent() + presentation.textDescent() + presentation.height/2;
     presentation.text(caption, (presentation.width - presentation.textWidth(caption))/2, caption_y);
 

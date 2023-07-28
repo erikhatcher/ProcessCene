@@ -1,3 +1,5 @@
+package org.processcene.atlas;
+
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -8,6 +10,8 @@ import com.mongodb.client.model.search.SearchOptions;
 import org.bson.BsonBoolean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.processcene.BaseSlide;
+import org.processcene.ProcessCene;
 
 import java.util.Arrays;
 import java.util.List;

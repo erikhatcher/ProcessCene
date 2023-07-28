@@ -28,5 +28,5 @@ test {
 }
 
 application {
-    mainClass = 'ProcessCene'
+    mainClass = 'org.processcene.ProcessCene'
 }

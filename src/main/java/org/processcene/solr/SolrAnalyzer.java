@@ -1,3 +1,6 @@
+package org.processcene.solr;
+
+import org.processcene.TextAnalyzer;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 
@@ -16,7 +19,7 @@ public class SolrAnalyzer extends TextAnalyzer {
                                          "text_en_splitting", "text_en_splitting_tight",
                                          "phonetic_en", "text_general_rev"};
   @Override
-  List<Map<String, Object>> analyzeString(String analyzer_name, String text) {
+  public List<Map<String, Object>> analyzeString(String analyzer_name, String text) {
     String field_type = analyzer_name;
 
     // NOTE: /analysis/field can take a comma-separated analysis.fieldtype value of multiple field types
@@ -60,14 +63,14 @@ public class SolrAnalyzer extends TextAnalyzer {
   }
 
   @Override
-  List<String> getAnalyzerNames() {
+  public List<String> getAnalyzerNames() {
     return Arrays.stream(field_types).toList();
   }
 }
 
 /*
-class SolrAnalyzer extends TextAnalyzer {
-  SolrAnalyzer(String t, String a) {
+class org.processcene.solr.SolrAnalyzer extends org.processcene.TextAnalyzer {
+  org.processcene.solr.SolrAnalyzer(String t, String a) {
     super(t,a);
   }
 

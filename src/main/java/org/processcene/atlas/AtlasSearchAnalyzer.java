@@ -1,3 +1,7 @@
+package org.processcene.atlas;
+
+import org.processcene.TextAnalyzer;
+
 import java.util.List;
 import java.util.Map;
 
@@ -16,12 +20,12 @@ public class AtlasSearchAnalyzer extends TextAnalyzer {
 //  println(analyzers);
 
   @Override
-  List<Map<String, Object>> analyzeString(String analyzer_name, String text) {
+  public List<Map<String, Object>> analyzeString(String analyzer_name, String text) {
     return null;
   }
 
   @Override
-  List<String> getAnalyzerNames() {
+  public List<String> getAnalyzerNames() {
     return null;
   }
 }

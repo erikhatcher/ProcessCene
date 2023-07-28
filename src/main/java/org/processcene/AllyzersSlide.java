@@ -1,15 +1,16 @@
+package org.processcene;
+
 import processing.core.PImage;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class AllyzersSlide extends BaseSlide {
   private final String text;
-//  private final TextAnalyzer[] text_analyzers = new TextAnalyzer[] {
-//      new LuceneAnalyzer(), new SolrAnalyzer()
+//  private final org.processcene.TextAnalyzer[] text_analyzers = new org.processcene.TextAnalyzer[] {
+//      new org.processcene.lucene.LuceneAnalyzer(), new org.processcene.solr.SolrAnalyzer()
 //  };
 //  private int text_analyzer_index = 0;
 

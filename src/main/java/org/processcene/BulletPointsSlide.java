@@ -1,3 +1,6 @@
+package org.processcene;
+
+import org.processcene.BaseSlide;
 import processing.core.PImage;
 
 public class BulletPointsSlide extends BaseSlide {

@@ -1,8 +1,10 @@
+package org.processcene;
+
 import java.util.List;
 import java.util.Map;
 
 public class AnalysisSlide extends BaseSlide {
-  // TODO: Consider making "TextAnalyzer base slide that has these like AllyzersSlide does
+  // TODO: Consider making "org.processcene.TextAnalyzer base slide that has these like org.processcene.AllyzersSlide does
   private final String text;
   private final TextAnalyzer text_analyzer;
 

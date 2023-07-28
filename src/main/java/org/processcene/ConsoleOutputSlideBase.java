@@ -1,4 +1,4 @@
-import processing.event.KeyEvent;
+package org.processcene;
 
 /**
  * This is a handy base class to dump text output quickly.

@@ -1,3 +1,7 @@
+package org.processcene;
+
+import org.processcene.BaseSlide;
+import org.processcene.ProcessCene;
 import processing.core.PShape;
 
 import java.util.HashMap;
@@ -9,7 +13,7 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sin;
 import static processing.core.PConstants.CLOSE;
 
-public class UberconfTitleSlide extends BaseSlide {
+public final class LoveLuceneSlide extends BaseSlide {
   private final PShape lucene_logo;
 
   private final int MIN_HEART_SIZE = 3;
@@ -19,7 +23,7 @@ public class UberconfTitleSlide extends BaseSlide {
 
   private final Map<Integer,PShape> hearts = new HashMap<>();
 
-  public UberconfTitleSlide(ProcessCene presentation) {
+  public LoveLuceneSlide(ProcessCene presentation) {
     super(null, presentation);
     setShowOnTOC(false);
 

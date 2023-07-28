@@ -1,3 +1,5 @@
+package org.processcene.lucene;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -13,6 +15,8 @@ import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.store.ByteBuffersDirectory;
+import org.processcene.BaseSlide;
+import org.processcene.ProcessCene;
 import processing.core.PImage;
 
 import java.io.IOException;
@@ -33,7 +37,7 @@ public class InvertedIndexSlide extends BaseSlide {
     docs.add("'Love of Lucene' @ Uberconf");
     docs.add("We *love* Lucene!");
 
-    // TODO: centralize this - reused on VectorSearchSlide
+    // TODO: centralize this - reused on org.processcene.lucene.VectorSearchSlide
     for (int i=0; i < 10; i++) {
       doc_images[i] = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
       doc_images[i].resize(30,30);

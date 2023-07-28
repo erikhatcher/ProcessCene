@@ -1,3 +1,5 @@
+package org.processcene.lucene;
+
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -15,6 +17,8 @@ import org.apache.lucene.search.KnnFloatVectorQuery;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.ByteBuffersDirectory;
+import org.processcene.BaseSlide;
+import org.processcene.ProcessCene;
 import processing.core.PImage;
 import processing.core.PVector;
 
