@@ -1,7 +1,6 @@
 package org.processcene.core;
 
 import org.apache.lucene.document.Document;
-import org.processcene.MongoTheme;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -11,9 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessCene extends PApplet {
-  private final List<Document> documents;
-  // has:
-  protected List<Slide> slides;
+  private final List<Document> documents = new ArrayList<>();
+  protected List<Slide> slides = new ArrayList<>();
 
   private boolean show_footer = true;
   private int current_slide_index = 0;
@@ -30,16 +28,14 @@ public class ProcessCene extends PApplet {
   public int lavender = Color.decode("#F9EBFF").getRGB();
 
 
-  public ProcessCene() {
-    slides = new ArrayList<>();
-    documents = new ArrayList<>();
-
-    // queries = new ArrayList<>();
-
-    // has a PApplet?  or gets passed one to draw into?
-
-    // has a Theme? (that specifies colors and ways to get images/shapes)
-  }
+//  public ProcessCene() {
+//
+//    // queries = new ArrayList<>();
+//
+//    // has a PApplet?  or gets passed one to draw into?
+//
+//    // has a Theme? (that specifies colors and ways to get images/shapes)
+//  }
 
   protected static void run(String name) {
     PApplet.main(new String[]{name});
@@ -63,8 +59,13 @@ public class ProcessCene extends PApplet {
     current_slide.setStep(0);
   }
 
-  public String getFilePathFromResources(String resource) {
-    return getClass().getResource("/" + resource).getPath();
+  protected void setTheme(Theme theme) {
+    this.theme = theme;
+  }
+
+
+  public static String getFilePathFromResources(String resource) {
+    return ProcessCene.class.getResource("/" + resource).getPath();
   }
 
   @Override
@@ -75,12 +76,14 @@ public class ProcessCene extends PApplet {
   @Override
   public void setup() {
     frameRate(10);
-    fill(theme.foreground);
 
-//    PImage toc_bullet_image = loadImage(getFilePathFromResources("Assets/normal/General_ACTION_Favorite_Inverted10x.png"));
-//    toc_bullet_image.resize(50, 0);
-//    TableOfContentsSlide toc_slide = new TableOfContentsSlide(slides, toc_bullet_image);
-//    slides.add(0, toc_slide);
+
+    theme.init(this);
+    slides.forEach(s -> {
+      s.init(this);
+    });
+
+    fill(theme.foreground);
 
 //    org.processcene.core.TableOfContentsSlide toc_slide = new org.processcene.core.TableOfContentsSlide(slides, toc_bullet_image, this);
 //    slides.add(1, toc_slide);
@@ -101,10 +104,6 @@ public class ProcessCene extends PApplet {
 //
 //      slides = updated_slides;
 //    }
-
-    slides.forEach(s -> {
-      s.init(this);
-    });
   }
 
   @Override
@@ -259,9 +258,5 @@ public class ProcessCene extends PApplet {
   public void mouseClicked(MouseEvent event) {
     Slide current_slide = slides.get(current_slide_index);
     current_slide.mouseClicked(event);
-  }
-
-  protected void setTheme(Theme theme) {
-    this.theme = theme;
   }
 }

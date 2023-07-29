@@ -27,28 +27,14 @@ public class SolrTaggerSlide extends BaseSlide {
   public SolrTaggerSlide(String title) {
     super(title);
 
-    texts.add("what drama and romance movies star keanu reeves?");
-    texts.add("tell me about harrison ford");
+    texts.add("\"what movies star harrison ford and carrie fisher\"");
+//    texts.add("what drama and romance movies star keanu reeves?");
+//    texts.add("tell me about harrison ford");
+
+    SolrTagger tagger = new SolrTagger();
 
     for (int i = 0; i < texts.size(); i++) {
-      HttpClient client = HttpClient.newHttpClient();
-      HttpRequest request = HttpRequest.newBuilder()
-          .uri(URI.create("http://localhost:8983/solr/tagger/tag" +
-              "?overlaps=NO_SUB&tagsLimit=5000" +
-              "&fl=*&wt=json&indent=on&echoParams=all"))
-          .header("Content-Type", "text/plain")
-          .POST(HttpRequest.BodyPublishers.ofString(texts.get(i)))
-          .build();
-      try {
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        String response_body = response.body();
-        // System.out.println("response_body = " + response_body);
-        tagger_responses.add((JSONObject) new JSONParser().parse(response_body));
-      } catch (Exception e) {
-        JSONObject o = new JSONObject();
-        o.put("error", e.toString());
-        tagger_responses.add(o);
-      }
+      tagger_responses.add(tagger.tag(texts.get(i)));
     }
   }
 

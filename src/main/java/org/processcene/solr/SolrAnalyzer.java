@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO: Set up env var to point to Solr URL
 public class SolrAnalyzer extends TextAnalyzer {
 
   private final String[] field_types = {"string", "text_ws", "text_general", "text_en",
