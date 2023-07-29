@@ -17,8 +17,8 @@ import org.apache.lucene.search.KnnFloatVectorQuery;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.ByteBuffersDirectory;
-import org.processcene.BaseSlide;
-import org.processcene.ProcessCene;
+import org.processcene.core.BaseSlide;
+import org.processcene.core.ProcessCene;
 import processing.core.PImage;
 import processing.core.PVector;
 
@@ -34,11 +34,11 @@ public class VectorSearchSlide extends BaseSlide {
   private final List<float[]> sample_vectors = new ArrayList<>();
   private final PImage[] doc_images = new PImage[10];  // icons for numbers 0 - 9
   private final PImage[] doc_images_inverted = new PImage[10];  // icons for numbers 0 - 9
-  private final PImage search_icon;
-  private final PImage lucene_logo;
+  private PImage search_icon;
+  private PImage lucene_logo;
 
-  public VectorSearchSlide(String title, ProcessCene presentation) {
-    super(title, presentation);
+  public VectorSearchSlide(String title) {
+    super(title);
 
     sample_vectors.add(new float[]{0.50f, 0.50f});     // 1
     sample_vectors.add(new float[]{0.27f, 0.32f});     // 2
@@ -49,25 +49,29 @@ public class VectorSearchSlide extends BaseSlide {
     sample_vectors.add(new float[]{-0.63f, -0.92f});   // 7
     sample_vectors.add(new float[]{0.53f, 0.12f});     // 8
     sample_vectors.add(new float[]{-0.23f, 0.74f});    // 9
+  }
 
+  @Override
+  public void init(ProcessCene p) {
+    super.init(p);
     for (int i = 0; i < 10; i++) {
-      doc_images[i] = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/" + i + "_10x.png"));
+      doc_images[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_10x.png"));
       doc_images[i].resize(30, 30);
-      doc_images_inverted[i] = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
+      doc_images_inverted[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
       doc_images_inverted[i].resize(30, 30);
     }
 
-    lucene_logo = presentation.loadImage(presentation.getFilePathFromResources("lucene_green_300.png"));
+    lucene_logo = p.loadImage(p.getFilePathFromResources("lucene_green_300.png"));
     lucene_logo.resize(300, 0);
 
-    search_icon = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/Technical_ATLAS_Search10x.png"));
+    search_icon = p.loadImage(p.getFilePathFromResources("Assets/normal/Technical_ATLAS_Search10x.png"));
     search_icon.resize(30, 30);
   }
 
   @Override
-  public void draw(int step) {
+  public void draw(ProcessCene p, int step) {
     if (lucene_logo != null) {
-      presentation.image(lucene_logo, 10, 10);
+      p.image(lucene_logo, 10, 10);
     }
 
 
@@ -85,10 +89,10 @@ public class VectorSearchSlide extends BaseSlide {
 
       writer.close();
 
-      presentation.translate(presentation.width / 2, presentation.height / 2);
-      presentation.line(-MAX_PIXELS, 0, MAX_PIXELS, 0);
-      presentation.line(0, -MAX_PIXELS, 0, MAX_PIXELS);
-      presentation.text((getCurrentVariation() == 1) ? "Euclidean" : "Cosine", -MAX_PIXELS, -MAX_PIXELS + presentation.textAscent());
+      p.translate(p.width / 2, p.height / 2);
+      p.line(-MAX_PIXELS, 0, MAX_PIXELS, 0);
+      p.line(0, -MAX_PIXELS, 0, MAX_PIXELS);
+      p.text((getCurrentVariation() == 1) ? "Euclidean" : "Cosine", -MAX_PIXELS, -MAX_PIXELS + p.textAscent());
 
       DirectoryReader r = DirectoryReader.open(index);
 
@@ -106,9 +110,9 @@ public class VectorSearchSlide extends BaseSlide {
             lucene_docid_to_sample_index[vectorValues.docID()] = id - 1;
 
             PVector pv = vector_for(v[0], v[1]);
-            presentation.line(0, 0, pv.x, pv.y);
-            presentation.circle(pv.x, pv.y, 2);
-            presentation.image(doc_images[id], pv.x, pv.y - presentation.textAscent() - presentation.textDescent());
+            p.line(0, 0, pv.x, pv.y);
+            p.circle(pv.x, pv.y, 2);
+            p.image(doc_images[id], pv.x, pv.y - p.textAscent() - p.textDescent());
           }
         }
       }
@@ -117,10 +121,10 @@ public class VectorSearchSlide extends BaseSlide {
         IndexSearcher searcher = new IndexSearcher(r);
         float[] v = new float[]{0.25f, 0.15f};
         PVector query_vector = vector_for(v[0], v[1]);
-        presentation.stroke(presentation.spring_green);
-        presentation.line(0, 0, query_vector.x, query_vector.y);
-        presentation.circle(query_vector.x, query_vector.y, 2);
-        presentation.image(search_icon, query_vector.x, query_vector.y - presentation.textAscent() - presentation.textDescent());
+        p.stroke(p.spring_green);
+        p.line(0, 0, query_vector.x, query_vector.y);
+        p.circle(query_vector.x, query_vector.y, 2);
+        p.image(search_icon, query_vector.x, query_vector.y - p.textAscent() - p.textDescent());
 
         if (step > 1) {
           TopDocs nearest_docs = searcher.search(new KnnFloatVectorQuery("vector", v, 2), 10);
@@ -128,21 +132,21 @@ public class VectorSearchSlide extends BaseSlide {
             int sample_index = lucene_docid_to_sample_index[scoreDoc.doc];
             v = sample_vectors.get(sample_index);
             PVector result_vector = vector_for(v[0], v[1]);
-            presentation.image(doc_images_inverted[sample_index + 1], result_vector.x, result_vector.y - presentation.textAscent() - presentation.textDescent());
+            p.image(doc_images_inverted[sample_index + 1], result_vector.x, result_vector.y - p.textAscent() - p.textDescent());
 
             if (step > 2) {
-              presentation.stroke(presentation.spring_green);
+              p.stroke(p.spring_green);
               if (getCurrentVariation() == 1) {
                 // Euclidean
-                presentation.line(result_vector.x, result_vector.y, query_vector.x, query_vector.y);
+                p.line(result_vector.x, result_vector.y, query_vector.x, query_vector.y);
               } else {
-                presentation.noFill();
+                p.noFill();
                 float h1 = query_vector.heading();
                 float h2 = result_vector.heading();
                 if (h1 < h2) {
-                  presentation.arc(0, 0, 100, 100, h1, h2);
+                  p.arc(0, 0, 100, 100, h1, h2);
                 } else {
-                  presentation.arc(0, 0, 200, 200, h2, h1);
+                  p.arc(0, 0, 200, 200, h2, h1);
                 }
               }
             }
@@ -155,7 +159,7 @@ public class VectorSearchSlide extends BaseSlide {
       throw new RuntimeException(e);
     }
 
-    super.draw(step);
+    super.draw(p, step);
   }
 
   private float map(float value) {

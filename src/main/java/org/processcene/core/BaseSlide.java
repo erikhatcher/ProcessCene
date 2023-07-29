@@ -1,11 +1,10 @@
-package org.processcene;
+package org.processcene.core;
 
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 abstract public class BaseSlide implements Slide {
   protected String title;
-  protected final ProcessCene presentation;
   protected boolean show_on_toc = true;
   private int current_step = 0;
 
@@ -14,9 +13,13 @@ abstract public class BaseSlide implements Slide {
    */
   private int current_variation = 1;
 
-  public BaseSlide(String title, ProcessCene presentation) {
+  public BaseSlide(String title) {
     this.title = title;
-    this.presentation = presentation;
+  }
+
+  @Override
+  public void init(ProcessCene p) {
+
   }
 
   @Override
@@ -33,9 +36,8 @@ abstract public class BaseSlide implements Slide {
   }
 
   @Override
-  public void draw(int step) {
-    presentation.windowTitle("Uberconf '23: Love of Lucene" + ((title != null) ? ": " + title : ""));
-    // TODO: maybe render presentation.getClass().getName() if title is null + " " + step + "/" + getNumberOfSteps())
+  public void draw(ProcessCene p, int step) {
+    p.windowTitle("ProcessCene" + ((title != null) ? ": " + title : ""));
   }
 
   @Override

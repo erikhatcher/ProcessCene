@@ -8,8 +8,8 @@ import org.apache.lucene.queryparser.surround.query.BasicQueryFactory;
 import org.apache.lucene.queryparser.surround.query.SrndQuery;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.Query;
-import org.processcene.BaseSlide;
-import org.processcene.ProcessCene;
+import org.processcene.core.BaseSlide;
+import org.processcene.core.ProcessCene;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +20,8 @@ public class QueryParsingSlide extends BaseSlide {
   private final List<String> parsers = new ArrayList<>();
   private final Map<String, List<String>> queries_by_parser = new HashMap<>();
 
-  public QueryParsingSlide(String title, ProcessCene presentation) {
-    super(title, presentation);
+  public QueryParsingSlide(String title) {
+    super(title);
 
     List<String> classic_queries = new ArrayList<>();
     classic_queries.add("foo");
@@ -59,19 +59,19 @@ public class QueryParsingSlide extends BaseSlide {
   }
 
   @Override
-  public void draw(int step) {
+  public void draw(ProcessCene p, int step) {
     String description = getDescription(step);
     String output = getOutput(step);
 
     float x = 50;
-    float y = presentation.textAscent() + presentation.textDescent();
-    presentation.text(description, x, y);
-    y += presentation.textAscent() + presentation.textDescent() + 100;
+    float y = p.textAscent() + p.textDescent();
+    p.text(description, x, y);
+    y += p.textAscent() + p.textDescent() + 100;
 
-    presentation.text(output, x, y);
-    y += presentation.textAscent() + presentation.textDescent();
+    p.text(output, x, y);
+    y += p.textAscent() + p.textDescent();
 
-    super.draw(step);
+    super.draw(p, step);
   }
 
   private String getQueryString(String parser_name, int query_index) {

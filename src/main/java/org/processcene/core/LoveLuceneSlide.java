@@ -1,4 +1,4 @@
-package org.processcene;
+package org.processcene.core;
 
 import processing.core.PShape;
 
@@ -12,7 +12,7 @@ import static java.lang.Math.sin;
 import static processing.core.PConstants.CLOSE;
 
 public final class LoveLuceneSlide extends BaseSlide {
-  private final PShape lucene_logo;
+  private PShape lucene_logo;
 
   private final int MIN_HEART_SIZE = 3;
   private final int MAX_HEART_SIZE = 20;
@@ -21,17 +21,22 @@ public final class LoveLuceneSlide extends BaseSlide {
 
   private final Map<Integer, PShape> hearts = new HashMap<>();
 
-  public LoveLuceneSlide(ProcessCene presentation) {
-    super(null, presentation);
+  public LoveLuceneSlide() {
+    super(null);
     setShowOnTOC(false);
+  }
 
-    lucene_logo = presentation.loadShape(presentation.getFilePathFromResources("lucene_logo_retro.svg"));
+  @Override
+  public void init(ProcessCene p) {
+    super.init(p);
+
+    lucene_logo = p.loadShape(p.getFilePathFromResources("lucene_logo_retro.svg"));
 
     for (int size = MIN_HEART_SIZE; size <= MAX_HEART_SIZE; size++) {
-      PShape heart = presentation.createShape();
+      PShape heart = p.createShape();
       heart.beginShape();
-      heart.fill(presentation.lavender);
-      heart.stroke(presentation.spring_green);
+      heart.fill(p.lavender);
+      heart.stroke(p.spring_green);
       heart.strokeWeight(5);
       for (float t = 0; t <= 2 * PI; t += .10) {
         float x = (float) (-16 * size * pow(sin(t), 3));
@@ -44,8 +49,9 @@ public final class LoveLuceneSlide extends BaseSlide {
     }
   }
 
+
   @Override
-  public void draw(int step) {
+  public void draw(ProcessCene p, int step) {
     if (heart_growing) {
       current_heart_size++;
       if (current_heart_size >= MAX_HEART_SIZE) heart_growing = false;
@@ -54,15 +60,14 @@ public final class LoveLuceneSlide extends BaseSlide {
       if (current_heart_size <= MIN_HEART_SIZE) heart_growing = true;
     }
 
-    presentation.translate(presentation.width / 2, presentation.height / 2);
-    presentation.shape(hearts.get(current_heart_size), 0, 0);
+    p.translate(p.width / 2, p.height / 2);
+    p.shape(hearts.get(current_heart_size), 0, 0);
 
     if (lucene_logo != null) {
-      // TODO: scale logo as the heart grows and shrinks
-      //lucene_logo.scale(heart_growing ? 1.1f : 0.9f);
-      presentation.shape(lucene_logo, -1 * lucene_logo.width / 2, 0 - lucene_logo.height);
+      p.shape(lucene_logo, -1 * lucene_logo.width / 2, 0 - lucene_logo.height);
     }
 
-    super.draw(step);
+    super.draw(p, step);
   }
+
 }

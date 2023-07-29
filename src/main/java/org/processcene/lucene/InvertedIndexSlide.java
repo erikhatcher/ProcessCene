@@ -15,8 +15,8 @@ import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.store.ByteBuffersDirectory;
-import org.processcene.BaseSlide;
-import org.processcene.ProcessCene;
+import org.processcene.core.BaseSlide;
+import org.processcene.core.ProcessCene;
 import processing.core.PImage;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class InvertedIndexSlide extends BaseSlide {
   private final PImage step_0_image;
 
   public InvertedIndexSlide(String title, ProcessCene presentation) {
-    super(title, presentation);
+    super(title);
 
     docs.add("What is Lucene?");
     docs.add("'Love of Lucene' @ Uberconf");
@@ -48,9 +48,9 @@ public class InvertedIndexSlide extends BaseSlide {
   }
 
   @Override
-  public void draw(int step) {
+  public void draw(ProcessCene p, int step) {
     if (step == 0) {
-      presentation.image(step_0_image, (presentation.width - step_0_image.width) / 2, (presentation.height - step_0_image.height) / 2);
+      p.image(step_0_image, (p.width - step_0_image.width) / 2, (p.height - step_0_image.height) / 2);
     }
 
     //presentation.textFont(presentation.loadFont(presentation.getFilePathFromResources("SourceCodeProRoman-Medium-24.vlw")));
@@ -73,18 +73,18 @@ public class InvertedIndexSlide extends BaseSlide {
     }
 
     float x = 20;
-    float y = presentation.textAscent() + presentation.textDescent() + 10;
+    float y = p.textAscent() + p.textDescent() + 10;
 
     for (int i = 0; i < step; i++) {
       PImage doc_image = doc_images[i + 1];
-      presentation.image(doc_image, x, y - presentation.textAscent() - presentation.textDescent());
-      presentation.text(docs.get(i), x + doc_image.width, y);
+      p.image(doc_image, x, y - p.textAscent() - p.textDescent());
+      p.text(docs.get(i), x + doc_image.width, y);
       y += 40;
     }
 
     x = 200;
     y = 180;
-    float top_of_postings_y = y - presentation.textAscent();
+    float top_of_postings_y = y - p.textAscent();
     /*
           Other index stats: avg field length?
 
@@ -96,49 +96,49 @@ public class InvertedIndexSlide extends BaseSlide {
       IndexReader reader = DirectoryReader.open(index);
       Terms terms = MultiTerms.getTerms(reader, "title");
 
-      float df_x = x + presentation.textWidth("XXXXXXXXXXXXX");
-      float posting_list_x = df_x + presentation.textWidth("XXX");
+      float df_x = x + p.textWidth("XXXXXXXXXXXXX");
+      float posting_list_x = df_x + p.textWidth("XXX");
 
       if (terms != null) {
-        presentation.text("Term", x, y);
-        presentation.text("df", df_x, y);
+        p.text("Term", x, y);
+        p.text("df", df_x, y);
         String postings_list_header = "Postings List";
-        presentation.text(postings_list_header, posting_list_x, y);
+        p.text(postings_list_header, posting_list_x, y);
 
         // draw line under posting list header row
-        presentation.line(x, y + presentation.textDescent(), posting_list_x + presentation.textWidth(postings_list_header), y + presentation.textDescent());
+        p.line(x, y + p.textDescent(), posting_list_x + p.textWidth(postings_list_header), y + p.textDescent());
 
-        y += presentation.textAscent() + presentation.textDescent() + 15;
+        y += p.textAscent() + p.textDescent() + 15;
 
         TermsEnum terms_enum = terms.iterator();
         while (terms_enum.next() != null) {
           int df = terms_enum.docFreq();
           String term_value = terms_enum.term().utf8ToString();
 
-          presentation.text(term_value, x, y);
-          presentation.text(df, df_x, y);
+          p.text(term_value, x, y);
+          p.text(df, df_x, y);
 
           PostingsEnum postings = terms_enum.postings(null);
           while (postings.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {
             int id = Integer.parseInt(reader.storedFields().document(postings.docID()).get("id"));
             PImage doc_image = doc_images[id];
-            presentation.image(doc_image, posting_list_x + doc_image.width * (id - 1), y - presentation.textAscent() - presentation.textDescent());
+            p.image(doc_image, posting_list_x + doc_image.width * (id - 1), y - p.textAscent() - p.textDescent());
           }
           // horizontal line under posting
-          presentation.line(x, y + presentation.textDescent(), posting_list_x + presentation.textWidth(postings_list_header), y + presentation.textDescent());
+          p.line(x, y + p.textDescent(), posting_list_x + p.textWidth(postings_list_header), y + p.textDescent());
 
-          y += presentation.textAscent() + presentation.textDescent() + 15;
+          y += p.textAscent() + p.textDescent() + 15;
         }
 
         // draw lines for the columns
-        presentation.line(df_x - 5, top_of_postings_y, df_x - 5, y - presentation.textAscent() - presentation.textDescent());
-        presentation.line(posting_list_x - 5, top_of_postings_y, posting_list_x - 5, y - presentation.textAscent() - presentation.textDescent());
+        p.line(df_x - 5, top_of_postings_y, df_x - 5, y - p.textAscent() - p.textDescent());
+        p.line(posting_list_x - 5, top_of_postings_y, posting_list_x - 5, y - p.textAscent() - p.textDescent());
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
 
-    super.draw(step);
+    super.draw(p, step);
   }
 
   @Override

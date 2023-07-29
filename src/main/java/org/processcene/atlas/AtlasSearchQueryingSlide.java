@@ -10,8 +10,8 @@ import com.mongodb.client.model.search.SearchOptions;
 import org.bson.BsonBoolean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.processcene.BaseSlide;
-import org.processcene.ProcessCene;
+import org.processcene.core.BaseSlide;
+import org.processcene.core.ProcessCene;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,13 +27,13 @@ import static com.mongodb.client.model.Projections.metaSearchScore;
 import static com.mongodb.client.model.search.SearchPath.fieldPath;
 
 public class AtlasSearchQueryingSlide extends BaseSlide {
-  public AtlasSearchQueryingSlide(String title, ProcessCene presentation) {
-    super(title, presentation);
+  public AtlasSearchQueryingSlide(String title) {
+    super(title);
   }
 
   @Override
-  public void draw(int step) {
-    presentation.background(presentation.mist);
+  public void draw(ProcessCene p, int step) {
+    p.background(p.mist);
 
     // Replace the placeholder with your MongoDB deployment's connection string
     String uri = System.getenv("ATLAS_URI");
@@ -91,7 +91,7 @@ public class AtlasSearchQueryingSlide extends BaseSlide {
       output.append("Error: " + e.toString());
     }
 
-    presentation.text(output.toString(), 0, presentation.textAscent() + presentation.textDescent());
-    super.draw(step);
+    p.text(output.toString(), 0, p.textAscent() + p.textDescent());
+    super.draw(p, step);
   }
 }

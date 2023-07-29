@@ -1,10 +1,10 @@
-package org.processcene;
+package org.processcene.core;
 
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 public interface Slide {
-  void draw(int step);
+  void init(ProcessCene p);
 
   void keyTyped(KeyEvent event);
 
@@ -17,6 +17,8 @@ public interface Slide {
   int getCurrentVariation();
 
   int getNumberOfVariations();
+
+  void draw(ProcessCene p, int step);
 
   int getNumberOfSteps();
 

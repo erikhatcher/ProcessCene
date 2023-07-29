@@ -1,4 +1,4 @@
-package org.processcene;
+package org.processcene.core;
 
 import processing.core.PImage;
 import processing.event.MouseEvent;
@@ -11,16 +11,16 @@ public class TableOfContentsSlide extends BaseSlide {
 
   PImage bullet_image;
 
-  public TableOfContentsSlide(List<Slide> slides, PImage bullet_image, ProcessCene presentation) {
-    super("Table of Contents", presentation);
+  public TableOfContentsSlide(List<Slide> slides, PImage bullet_image) {
+    super("Table of Contents");
 
     this.slides = slides;
     this.bullet_image = bullet_image;
     setShowOnTOC(false);
   }
 
-  public TableOfContentsSlide(List<Slide> slides, PImage bullet_image, int current_slide_index, ProcessCene presentation) {
-    this(slides, bullet_image, presentation);
+  public TableOfContentsSlide(List<Slide> slides, PImage bullet_image, int current_slide_index) {
+    this(slides, bullet_image);
     this.current_slide_index = current_slide_index;
     title = ((current_slide_index > -1) ? slides.get(current_slide_index).getTitle() : "Table Of Contents: ");
   }
@@ -33,7 +33,7 @@ public class TableOfContentsSlide extends BaseSlide {
   }
 
   @Override
-  public void draw(int step) {
+  public void draw(ProcessCene p, int step) {
     int x = 50;
     int y = 50;
 
@@ -43,22 +43,25 @@ public class TableOfContentsSlide extends BaseSlide {
       if (slide.getShowOnTOC()) {
         String title = slide.getTitle();
         if (title != null) {
-          presentation.image(bullet_image, x, y);
+          p.image(bullet_image, x, y);
 
-          int fill = presentation.black;
+          int fill = p.theme.foreground;
           if (current_slide_index != -1) {
             if (i < current_slide_index) {
-              fill = presentation.spring_green;
+              fill = p.spring_green;
             } else {
-              fill = presentation.evergreen;
+              fill = p.evergreen;
             }
           }
-          presentation.fill(fill);
-          presentation.text(title, x + bullet_image.width, y + bullet_image.height - presentation.textAscent());
+          p.fill(fill);
+          p.text(title, x + bullet_image.width, y + bullet_image.height - p.textAscent());
 
           if (current_slide_index == i) {
-            presentation.fill(presentation.spring_green, 100);
-            presentation.rect(x + bullet_image.width - 5, y - 5 + bullet_image.height - 2 * presentation.textAscent(), presentation.textWidth(title) + 10, presentation.textAscent() + presentation.textDescent() + 5, 10);
+            p.fill(p.spring_green, 100);
+            p.rect(x + bullet_image.width - 5,
+                y - 5 + bullet_image.height - 2 * p.textAscent(),
+                p.textWidth(title) + 10,
+                p.textAscent() + p.textDescent() + 5, 10);
           }
 
           y = y + bullet_image.height + 10;
@@ -66,6 +69,6 @@ public class TableOfContentsSlide extends BaseSlide {
       }
     }
 
-    super.draw(step);
+    super.draw(p, step);
   }
 }
