@@ -28,7 +28,7 @@ public class AboutProcessCene extends BaseSlide {
 
   @Override
   public void draw(ProcessCene p, int step) {
-    p.background(p.lavender);
+    p.background(p.theme.background);
 
     String caption = "ProcessCene";
     float caption_y = p.textAscent() + p.textDescent() + p.height / 2;

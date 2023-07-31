@@ -1,32 +1,19 @@
 package org.processcene.core;
 
-import org.apache.lucene.document.Document;
+import org.processcene.DocumentAvatar;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessCene extends PApplet {
-  private final List<Document> documents = new ArrayList<>();
+  public List<DocumentAvatar> documents = new ArrayList<>();
   protected List<Slide> slides = new ArrayList<>();
-
   private boolean show_footer = true;
   private int current_slide_index = 0;
   public Theme theme;
-
-  // TODO: Colors need to be migrated to Theme
-  // Primary Colors
-  public int spring_green = Color.decode("#00ED64").getRGB();
-  public int forest_green = Color.decode("#00684A").getRGB();
-  public int evergreen = Color.decode("#023430").getRGB();
-
-  // Secondary Colors
-  public int mist = Color.decode("#E3FCF7").getRGB();
-  public int lavender = Color.decode("#F9EBFF").getRGB();
-
 
 //  public ProcessCene() {
 //
@@ -80,7 +67,10 @@ public class ProcessCene extends PApplet {
 
     theme.init(this);
     slides.forEach(s -> {
+      long start = System.currentTimeMillis();
       s.init(this);
+      long end = System.currentTimeMillis();
+      System.out.println(s.getTitle() + " initialized: " + (end - start) + "ms");
     });
 
     fill(theme.foreground);

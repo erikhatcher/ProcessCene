@@ -48,16 +48,16 @@ public class TableOfContentsSlide extends BaseSlide {
           int fill = p.theme.foreground;
           if (current_slide_index != -1) {
             if (i < current_slide_index) {
-              fill = p.spring_green;
+              fill = p.theme.color_by_name("spring_green");
             } else {
-              fill = p.evergreen;
+              fill = p.theme.color_by_name("evergreen");
             }
           }
           p.fill(fill);
           p.text(title, x + bullet_image.width, y + bullet_image.height - p.textAscent());
 
           if (current_slide_index == i) {
-            p.fill(p.spring_green, 100);
+            p.fill(p.theme.color_by_name("spring_green"), 100);
             p.rect(x + bullet_image.width - 5,
                 y - 5 + bullet_image.height - 2 * p.textAscent(),
                 p.textWidth(title) + 10,

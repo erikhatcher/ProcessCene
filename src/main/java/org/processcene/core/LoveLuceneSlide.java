@@ -2,6 +2,7 @@ package org.processcene.core;
 
 import processing.core.PShape;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,8 +36,8 @@ public final class LoveLuceneSlide extends BaseSlide {
     for (int size = MIN_HEART_SIZE; size <= MAX_HEART_SIZE; size++) {
       PShape heart = p.createShape();
       heart.beginShape();
-      heart.fill(p.lavender);
-      heart.stroke(p.spring_green);
+      heart.fill(Color.decode("#F9EBFF").getRGB());  // TODO:
+      heart.stroke(Color.decode("#00ED64").getRGB());
       heart.strokeWeight(5);
       for (float t = 0; t <= 2 * PI; t += .10) {
         float x = (float) (-16 * size * pow(sin(t), 3));

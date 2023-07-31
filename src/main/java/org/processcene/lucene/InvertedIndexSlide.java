@@ -15,56 +15,50 @@ import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.store.ByteBuffersDirectory;
+import org.processcene.DocumentAvatar;
 import org.processcene.core.BaseSlide;
 import org.processcene.core.ProcessCene;
-import processing.core.PImage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class InvertedIndexSlide extends BaseSlide {
-  final List<String> docs = new ArrayList<>();
 
   final LuceneAnalyzer text_analyzer = new LuceneAnalyzer();
-  private final PImage[] doc_images = new PImage[10];
-  private final PImage step_0_image;
+  private List<DocumentAvatar> documents;
 
-  public InvertedIndexSlide(String title, ProcessCene presentation) {
+  public InvertedIndexSlide(String title) {
     super(title);
+  }
 
-    docs.add("What is Lucene?");
-    docs.add("'Love of Lucene' @ Uberconf");
-    docs.add("We *love* Lucene!");
+  @Override
+  public void init(ProcessCene p) {
+    super.init(p);
 
-    // TODO: centralize this - reused on org.processcene.lucene.VectorSearchSlide
-    for (int i = 0; i < 10; i++) {
-      doc_images[i] = presentation.loadImage(presentation.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
-      doc_images[i].resize(30, 30);
-    }
-
-    step_0_image = presentation.loadImage(presentation.getFilePathFromResources("mongodb-assets/SearchTerminal/Technical_SOFTWARE_SearchTerminal_Spot_BS_ForestGreen.png"));
-    step_0_image.resize(0, 700);
+    documents = p.documents;
   }
 
   @Override
   public void draw(ProcessCene p, int step) {
     if (step == 0) {
-      p.image(step_0_image, (p.width - step_0_image.width) / 2, (p.height - step_0_image.height) / 2);
+      p.text("0", p.width/2, p.height/2);
     }
 
-    //presentation.textFont(presentation.loadFont(presentation.getFilePathFromResources("SourceCodeProRoman-Medium-24.vlw")));
-
     ByteBuffersDirectory index = new ByteBuffersDirectory();
+
     // TODO: Make analyzer name cycle
     Analyzer analyzer = text_analyzer.getAnalyzer("Standard");
     try {
       IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(analyzer));
 
       for (int i = 0; i < step; i++) {
+        DocumentAvatar d = documents.get(i);
+
         Document doc = new Document();
-        doc.add(new StringField("id", "" + (i + 1), Field.Store.YES));
-        doc.add(new TextField("title", docs.get(i), Field.Store.YES));
+        doc.add(new StringField("id", ""+d.id, Field.Store.YES));
+        doc.add(new StringField("type", d.type, Field.Store.YES));
+        doc.add(new TextField("title", d.title, Field.Store.YES));
+        // TODO: Add all other fields
         writer.addDocument(doc);
       }
       writer.close();
@@ -76,9 +70,9 @@ public class InvertedIndexSlide extends BaseSlide {
     float y = p.textAscent() + p.textDescent() + 10;
 
     for (int i = 0; i < step; i++) {
-      PImage doc_image = doc_images[i + 1];
-      p.image(doc_image, x, y - p.textAscent() - p.textDescent());
-      p.text(docs.get(i), x + doc_image.width, y);
+      DocumentAvatar d = documents.get(i);
+      d.draw(p, x,y);
+      p.text(d.title, x, y);
       y += 40;
     }
 
@@ -121,8 +115,8 @@ public class InvertedIndexSlide extends BaseSlide {
           PostingsEnum postings = terms_enum.postings(null);
           while (postings.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {
             int id = Integer.parseInt(reader.storedFields().document(postings.docID()).get("id"));
-            PImage doc_image = doc_images[id];
-            p.image(doc_image, posting_list_x + doc_image.width * (id - 1), y - p.textAscent() - p.textDescent());
+
+            documents.get(id-1).draw(p, posting_list_x + 30 * (id - 1), y - p.textAscent() - p.textDescent());
           }
           // horizontal line under posting
           p.line(x, y + p.textDescent(), posting_list_x + p.textWidth(postings_list_header), y + p.textDescent());
@@ -143,6 +137,6 @@ public class InvertedIndexSlide extends BaseSlide {
 
   @Override
   public int getNumberOfSteps() {
-    return docs.size();
+    return documents.size();
   }
 }

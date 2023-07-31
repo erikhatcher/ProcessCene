@@ -30,7 +30,7 @@ public class SimilaritySlide extends BaseSlide {
   @Override
   public void init(ProcessCene p) {
     super.init(p);
-    System.out.printf("Screen size:", p.width, p.height);
+    System.out.println("Screen size: " + p.width + "x" + p.height);
 
     center.print(p, "Center");
     bottom_middle.print(p, "bm");
@@ -217,7 +217,7 @@ public class SimilaritySlide extends BaseSlide {
     }
 
     private void print(ProcessCene p, String prefix) {
-      System.out.printf(("".equals(prefix) ? "" : (prefix + ":")), x, y, " => ", map_x(p), map_y(p));
+      System.out.println(("".equals(prefix) ? "" : (prefix + ": ")) + x + "," + y +  " => " + map_x(p) +"," + map_y(p));
     }
   }
 

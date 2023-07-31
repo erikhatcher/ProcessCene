@@ -90,7 +90,7 @@ public class AllyzersSlide extends BaseSlide {
         float tx = x + x_offset; // + ((step == getNumberOfSteps()) ? ThreadLocalRandom.current().nextInt(1, 3 + 1) : 0);
         float ty = y + 20 + y_offset; // + ((step == getNumberOfSteps()) ? ThreadLocalRandom.current().nextInt(1, 3 + 1) : 0);
 
-        p.fill(p.mist);
+        p.fill(p.theme.color_by_name("mist"));
         p.rect(tx - 5, ty - th, tw + 10, th + 5, 7);
 
         p.fill(p.theme.foreground);

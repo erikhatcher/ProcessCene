@@ -46,11 +46,11 @@ public class AnalysisSlide extends BaseSlide {
       float before_width = p.textWidth(before);
       float token_width = p.textWidth(text.substring(start_offset, end_offset));
 
-      p.fill(p.spring_green, 150);
+      p.fill(p.theme.color_by_name("spring_green"), 150);
       p.rect(text_x + before_width, text_y - p.textAscent() - p.textDescent(),
           token_width, p.textAscent() + p.textDescent() + 5);
 
-      p.fill(p.forest_green);
+      p.fill(p.theme.color_by_name("forest_green"));
       float term_info_x = p.width / 2;
       float term_info_y = text_y + 3 * (p.textAscent());
       p.text(term, term_info_x, term_info_y);

@@ -121,7 +121,7 @@ public class VectorSearchSlide extends BaseSlide {
         IndexSearcher searcher = new IndexSearcher(r);
         float[] v = new float[]{0.25f, 0.15f};
         PVector query_vector = vector_for(v[0], v[1]);
-        p.stroke(p.spring_green);
+        p.stroke(p.theme.color_by_name("spring_green"));
         p.line(0, 0, query_vector.x, query_vector.y);
         p.circle(query_vector.x, query_vector.y, 2);
         p.image(search_icon, query_vector.x, query_vector.y - p.textAscent() - p.textDescent());
@@ -135,7 +135,7 @@ public class VectorSearchSlide extends BaseSlide {
             p.image(doc_images_inverted[sample_index + 1], result_vector.x, result_vector.y - p.textAscent() - p.textDescent());
 
             if (step > 2) {
-              p.stroke(p.spring_green);
+              p.stroke(p.theme.color_by_name("spring_green"));
               if (getCurrentVariation() == 1) {
                 // Euclidean
                 p.line(result_vector.x, result_vector.y, query_vector.x, query_vector.y);
