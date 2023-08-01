@@ -24,6 +24,14 @@ public class Theme {
     // TODO: use a more generic bullet graphic, but for now the heart is good!
     bullet_image = p.loadImage(ProcessCene.getFilePathFromResources("Assets/normal/General_ACTION_Favorite_Inverted10x.png"));
     bullet_image.resize(50, 0);
+
+    // Copy the MDB theme for now, until we // TODO: generate a number in a graphic for these images
+    for (int i = 0; i < 10; i++) {
+      doc_images[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_10x.png"));
+      doc_images[i].resize(30, 30);
+      doc_images_inverted[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
+      doc_images_inverted[i].resize(30, 30);
+    }
   }
 
   public int color_by_name(String name) {
