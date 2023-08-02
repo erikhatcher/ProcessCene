@@ -20,7 +20,7 @@ If you have an Atlas Search collection set up and accessible to the sample movie
 data, setting `ATLAS_URI` to your Atlas cluster will allow the slides that depend 
 on that endpoint to work, rather than showing a connection error.
 
-Set this before `run`ing:
+Set this before `run`ning:
 
     export ATLAS_URI="mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority"
 
