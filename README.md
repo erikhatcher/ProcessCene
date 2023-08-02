@@ -34,7 +34,7 @@ each slide, each variation within each slide, and each step within each variatio
 `Analysis` slide has a variation for each analyzer, and within each analyzer are steps for each term emitted
 from that analyzer.
 
-Here are the useful key-bindings to navigate the dynamic org.processcene.OldProcessCene presentation:
+Here are the useful key-bindings to navigate the dynamic ProcessCene presentation:
 
 | Key        | Action                                                       |
 |------------|--------------------------------------------------------------|
