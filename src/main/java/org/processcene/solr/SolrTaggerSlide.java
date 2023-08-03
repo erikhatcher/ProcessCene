@@ -2,15 +2,10 @@ package org.processcene.solr;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.processcene.core.BaseSlide;
 import org.processcene.core.ProcessCene;
 import processing.core.PImage;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +22,7 @@ public class SolrTaggerSlide extends BaseSlide {
   public SolrTaggerSlide(String title) {
     super(title);
 
-    texts.add("\"what movies star harrison ford and carrie fisher\"");
+    texts.add("what drama movies star keanu reeves");
 //    texts.add("what drama and romance movies star keanu reeves?");
 //    texts.add("tell me about harrison ford");
 
@@ -95,10 +90,10 @@ public class SolrTaggerSlide extends BaseSlide {
           String id = (String) ids.get(j);
           JSONObject doc = entities.get(id);
           String type = (String) doc.get("type");
-          int tag_color = p.spring_green;
-          if ("person".equals(type)) tag_color = p.mist;
-          if ("event".equals(type)) tag_color = p.evergreen;
-          if ("city".equals(type)) tag_color = p.lavender;
+          int tag_color = p.theme.color_by_name("spring_green");
+          if ("genre".equals(type)) tag_color = p.theme.color_by_name("mist");
+          if ("cast".equals(type)) tag_color = p.theme.color_by_name("evergreen");
+          if ("city".equals(type)) tag_color = p.theme.color_by_name("lavender");
           p.fill(tag_color, 100);
           p.rect(x + before_width, y - p.textAscent(), tag_width, p.textAscent() + p.textDescent());
           p.fill(p.theme.foreground);

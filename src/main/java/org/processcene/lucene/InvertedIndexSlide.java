@@ -20,22 +20,27 @@ import org.processcene.core.BaseSlide;
 import org.processcene.core.ProcessCene;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InvertedIndexSlide extends BaseSlide {
 
   final LuceneAnalyzer text_analyzer = new LuceneAnalyzer();
-  private List<DocumentAvatar> documents;
+  private List<DocumentAvatar> documents = new ArrayList<>();
 
-  public InvertedIndexSlide(String title) {
+  public InvertedIndexSlide(String title, List<DocumentAvatar> docs) {
     super(title);
+    documents = docs;
   }
+
 
   @Override
   public void init(ProcessCene p) {
     super.init(p);
 
-    documents = p.documents;
+//    documents = p.documents;
   }
 
   @Override
@@ -46,7 +51,7 @@ public class InvertedIndexSlide extends BaseSlide {
 
     ByteBuffersDirectory index = new ByteBuffersDirectory();
 
-    // TODO: Make analyzer name cycle
+    // TODO: Make analyzer name variations
     Analyzer analyzer = text_analyzer.getAnalyzer("Standard");
     try {
       IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(analyzer));
@@ -76,8 +81,8 @@ public class InvertedIndexSlide extends BaseSlide {
       y += 40;
     }
 
-    x = 200;
-    y = 180;
+    x = 500;
+    y = 50;
     float top_of_postings_y = y - p.textAscent();
     /*
           Other index stats: avg field length?

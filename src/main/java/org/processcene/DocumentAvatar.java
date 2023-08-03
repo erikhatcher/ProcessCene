@@ -58,6 +58,6 @@ public class DocumentAvatar {
     PImage doc_image = on ? p.theme.doc_images_inverted[id] : p.theme.doc_images[id];
     p.image(doc_image, x, y);
 
-//    p.text(title, x, y);
+    p.text(title, x, y);
   }
 }

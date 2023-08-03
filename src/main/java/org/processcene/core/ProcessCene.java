@@ -1,6 +1,5 @@
 package org.processcene.core;
 
-import org.processcene.DocumentAvatar;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -9,20 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessCene extends PApplet {
-  public List<DocumentAvatar> documents = new ArrayList<>();
+  public static int MAX_DOCS = 9;
   protected List<Slide> slides = new ArrayList<>();
   private boolean show_footer = true;
   private int current_slide_index = 0;
   public Theme theme;
-
-//  public ProcessCene() {
-//
-//    // queries = new ArrayList<>();
-//
-//    // has a PApplet?  or gets passed one to draw into?
-//
-//    // has a Theme? (that specifies colors and ways to get images/shapes)
-//  }
 
   protected static void run(String name) {
     PApplet.main(new String[]{name});
@@ -50,7 +40,6 @@ public class ProcessCene extends PApplet {
     this.theme = theme;
   }
 
-
   public static String getFilePathFromResources(String resource) {
     return ProcessCene.class.getResource("/" + resource).getPath();
   }
@@ -63,7 +52,6 @@ public class ProcessCene extends PApplet {
   @Override
   public void setup() {
     frameRate(10);
-
 
     theme.init(this);
     slides.forEach(s -> {
