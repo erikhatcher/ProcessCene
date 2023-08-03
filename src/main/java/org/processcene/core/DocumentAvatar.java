@@ -1,6 +1,5 @@
-package org.processcene;
+package org.processcene.core;
 
-import org.processcene.core.ProcessCene;
 import processing.core.PImage;
 
 import java.util.Map;

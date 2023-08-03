@@ -1,6 +1,8 @@
 package org.processcene;
 
 import org.processcene.core.AboutProcessCene;
+import org.processcene.core.DocumentAvatar;
+import org.processcene.core.DocumentsSlide;
 import org.processcene.core.LoveLuceneSlide;
 import org.processcene.core.LuceneAdapter;
 import org.processcene.core.ProcessCene;

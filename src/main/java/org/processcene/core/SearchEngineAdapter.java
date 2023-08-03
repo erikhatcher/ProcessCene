@@ -1,7 +1,5 @@
 package org.processcene.core;
 
-import org.processcene.DocumentAvatar;
-
 import java.util.List;
 
 public interface SearchEngineAdapter {
