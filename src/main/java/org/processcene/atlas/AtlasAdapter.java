@@ -1,5 +1,6 @@
 package org.processcene.atlas;
 
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -7,7 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.search.SearchOperator;
 import com.mongodb.client.model.search.SearchOptions;
-import com.mongodb.client.model.search.SearchPath;
+import org.bson.BsonArray;
 import org.bson.BsonBoolean;
 import org.bson.BsonDocument;
 import org.bson.Document;
@@ -20,12 +21,15 @@ import org.processcene.core.SearchEngineAdapter;
 import org.processcene.core.SearchRequest;
 import org.processcene.core.SearchResponse;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.mongodb.client.model.Aggregates.limit;
 import static com.mongodb.client.model.Aggregates.project;
 import static com.mongodb.client.model.Projections.fields;
 import static com.mongodb.client.model.Projections.include;
@@ -33,102 +37,100 @@ import static com.mongodb.client.model.Projections.meta;
 import static com.mongodb.client.model.Projections.metaSearchScore;
 
 public class AtlasAdapter implements SearchEngineAdapter {
-  private final MongoDatabase database;
+  public final MongoDatabase database;
   private final MongoClient client;
-  private final MongoCollection<Document> collection;
-  private final List<SearchRequest> queries = new ArrayList<>();
-  private final SearchOperator subset_filter;
-  private final List<Document> raw_documents;
+  public final MongoCollection<Document> collection;
+  private final Map<ObjectId,Integer> doc_map = new HashMap<>();
+  public SearchOperator subset_filter = null;
+  private List<Document> documents = new ArrayList<>();
 
-  public static List<Bson> doc_selector() {
-    Bson match = Aggregates.match(new Document("cast", "Keanu Reeves"));
-    Bson sort = Aggregates.sort(new Document("imdb.rating", -1));
-    return Arrays.asList(match,sort);
-  }
-
-  public AtlasAdapter(String db, String coll) {
+  public AtlasAdapter(String db, String coll, List<Bson> doc_selector) {
     String uri = System.getenv("ATLAS_URI");
     this.client = MongoClients.create(uri);
     this.database = this.client.getDatabase(db);
     this.collection = this.database.getCollection(coll);
 
-    System.out.println("database: " + database.getName());
-    System.out.println("collection = " + collection.getNamespace().getCollectionName());
-    System.out.println("collection.countDocuments() = " + collection.countDocuments());
-
-    List<Bson> doc_selector = doc_selector();
+    List<Bson> ds = doc_selector;
+    if (ds == null) {
+      ds = Arrays.asList(new Document("$match", new Document()));
+    }
 
     List<Document> docs = new ArrayList<>();
     try {
-      docs = collection.aggregate(doc_selector).into(new ArrayList<>());
-      System.out.println(collection.aggregate(doc_selector).explain());  // TODO: capture and report?
+      long start = System.currentTimeMillis();
+      docs = collection.aggregate(ds).into(new ArrayList<>());
+      long end = System.currentTimeMillis();
+      System.out.println("AtlasAdapter aggregate.into array: " + (end - start) + "ms");
+
+      //System.out.println(collection.aggregate(ds).explain());  // TODO: capture and report?
     } catch (Exception e) {
       // TODO: handle better?
       System.err.println(e.getMessage());
+
+      throw e;
     }
 
-    System.out.println("doc_selector = " + doc_selector);
-    System.out.println("docs.size() = " + docs.size());
+    // The first `ProcessCene.MAX_DOCS` are all we keep, unless we're after ALL of them
+    documents = (doc_selector == null) ?
+        docs :
+        docs.subList(0, (docs.size() > ProcessCene.MAX_DOCS) ? ProcessCene.MAX_DOCS : docs.size());
 
-    // The first `ProcessCene.MAX_DOCS` are all we keep
-    raw_documents = docs.subList(0, (docs.size() > ProcessCene.MAX_DOCS) ? ProcessCene.MAX_DOCS : docs.size());
+    long start = System.currentTimeMillis();
+    List<ObjectId> obj_ids = new ArrayList<>();
+    for (int i = 0; i < documents.size(); i++) {
+      Document doc = documents.get(i);
+      int index = i+1; // cross reference for each doc to know where in the list it is
+      doc.put("index", index);
+
+      ObjectId obj_id = documents.get(i).getObjectId("_id");
+      obj_ids.add(obj_id);
+      doc_map.put(obj_id, index); // cross-ref to know where an _id is in the full list
+    }
+    long end = System.currentTimeMillis();
+    System.out.println("AtlasAdapter: building obj_id cross-ref: " + (end - start) + "ms");
 
     // Build a selector for this subset of documents, so all searches are filtered by it
-    List<ObjectId> obj_ids = new ArrayList<>();
-    for (Document doc : raw_documents) {
-      obj_ids.add(doc.getObjectId("_id"));
+    if (doc_selector != null) {
+      //      "in": {
+      //        "path": "_id",
+      //            "value": [ObjectId("5ca4bbcea2dd94ee58162a72"), ObjectId("5ca4bbcea2dd94ee58162a91")]
+      //      }
+      subset_filter = SearchOperator.of(new Document("in", new Document("path", "_id").append("value", obj_ids)));
+//    System.out.println("subset_filter = " + subset_filter);
     }
+  }
 
-    //      "in": {
-    //        "path": "_id",
-    //            "value": [ObjectId("5ca4bbcea2dd94ee58162a72"), ObjectId("5ca4bbcea2dd94ee58162a91")]
-    //      }
-    subset_filter = SearchOperator.of(new Document("in", new Document("path", "_id").append("value", obj_ids)));
-    System.out.println("subset_filter = " + subset_filter);
-
-    queries.add(new AtlasSearchRequest(
-        SearchOperator.of(
-            new Document("queryString",
-                new Document("defaultPath", "title").append("query", "genres:Drama^2.0 OR genres:Romance^5.0")))
-    ));
-
-    queries.add(new AtlasSearchRequest(
-        SearchOperator.of(
-            new Document("queryString",
-                new Document("defaultPath", "title.en").append("query", "river")))
-    ));
-
-    queries.add(new AtlasSearchRequest(
-        SearchOperator.of(
-            new Document("queryString",
-                new Document("defaultPath", "title").append("query", "bill OR prince^5.0")))
-    ));
-
-    queries.add(new AtlasSearchRequest(
-        SearchOperator.of(
-            new Document("queryString",
-                new Document("defaultPath", "title").append("query", "(open paren no close")))
-    ));
-
-    queries.add(new AtlasSearchRequest(
-        SearchOperator.compound()
-            .should(Arrays.asList(
-                SearchOperator.text(SearchPath.fieldPath("genres"), "Romance"),
-                SearchOperator.text(SearchPath.fieldPath("genres"), "Drama")
-            ))
-    ));
+  public AtlasAdapter(String database, String collection) {
+    this(database,collection,null);
   }
 
   @Override
   public SearchResponse search(SearchRequest request) {
     AtlasSearchRequest asr = (AtlasSearchRequest) request;
 
-    Bson search_stage = Aggregates.search(
-        SearchOperator.compound()
-            .filter(Arrays.asList(subset_filter))
-            .must(Arrays.asList(asr.search_operator)),
-        SearchOptions.searchOptions().option("scoreDetails", BsonBoolean.TRUE)
-    );
+    Bson search_stage;
+//      "tracking": {
+//        "searchTerms": "<term-to-search>"
+//      }
+    SearchOptions opts = SearchOptions.searchOptions()
+        .option("scoreDetails", BsonBoolean.TRUE)
+        .option("tracking", new Document("searchTerms", asr.query_string));
+
+    if (subset_filter != null) {
+      search_stage = Aggregates.search(
+          SearchOperator.compound()
+              .filter(Arrays.asList(subset_filter))
+              .must(Arrays.asList(asr.search_operator)),
+          opts
+     );
+    } else {
+      search_stage = Aggregates.search(asr.search_operator, opts);
+
+      System.out.println("AtlasAdapter search_stage: " + search_stage.toBsonDocument().toJson());
+    }
+
+    // TODO: Note/doc this - the aggregation call to bring, say, 14k docs into a List takes many seconds
+    Bson limit_stage = limit(10);
 
     Bson project_stage =  project(fields(  // Include _id
         include("title", "cast", "genres"),
@@ -136,56 +138,99 @@ public class AtlasAdapter implements SearchEngineAdapter {
         meta("scoreDetails", "searchScoreDetails")
     ));
 
-    List<Bson> atlas_docs = new ArrayList<>();
+    List<Bson> search_results = new ArrayList<>();
     SearchResponse response = new SearchResponse();
     try {
-      atlas_docs = collection.aggregate(Arrays.asList(search_stage,project_stage)).into(new ArrayList<>());
+
+
+      long start = System.currentTimeMillis();
+      AggregateIterable<Document> aggregate = collection.aggregate(Arrays.asList(search_stage, project_stage, limit_stage));
+      for (Document document : aggregate) {
+        search_results.add(document);
+      }
+      long end = System.currentTimeMillis();
+      long query_time = end - start;
+      response.query_time = query_time;
+      System.out.println("AtlasAdapter: search aggregate: " + query_time + "ms");
+
+      Document explain = collection.aggregate(Arrays.asList(search_stage, project_stage)).explain();
+      List<Document> explain_stages = (List<Document>) explain.get("stages");
+      response.explain = ((Document)explain_stages.get(0).get("$_internalSearchMongotRemote")).get("explain").toString();
     } catch (Exception e) {
       response.error = e.getMessage();
     }
 
-    for (Bson doc : atlas_docs) {
-      BsonDocument atlas_doc = doc.toBsonDocument();
+    for (int i = 0; i < search_results.size(); i++) {
+      Bson hit = search_results.get(i);
+      BsonDocument atlas_doc = hit.toBsonDocument();
+      ObjectId obj_id = atlas_doc.getObjectId("_id").getValue();
 
       ResponseDocument rd = new ResponseDocument();
-      ObjectId obj_id = atlas_doc.getObjectId("_id").getValue();
+
+      int index = doc_map.get(obj_id);
+      Document document = documents.get(index-1);
+      rd.id = index;  //
+
       rd.fields.put("_id", obj_id);
-      rd.fields.put("title", atlas_doc.getString("title").getValue());
+      rd.fields.put("title", document.getString("title"));
       float score = (float) atlas_doc.getDouble("score").getValue();
       if (score > response.max_score) response.max_score = score;
       rd.score = score;
-
-      for (int i = 0; i < raw_documents.size(); i++) {
-        Document raw_document = raw_documents.get(i);
-        if (raw_document.get("_id").equals(obj_id)) {
-          rd.id = (i+1);  // 1-based
-        }
-      }
+      rd.explain = prettyScoreDetails(0, atlas_doc.getDocument("scoreDetails"));
+      rd.fields.put("score_details", atlas_doc.get("scoreDetails"));
 
       response.documents.add(rd);
     }
 
+//    response.print();
 
+    response.parsed_query = "TBD: pull what explain() provides";
     return response;
   }
 
-  @Override
-  public List<SearchRequest> getQueries() {
-    return queries;
+  private String prettyScoreDetails(int indentLevel, BsonDocument scoreDetails) {
+    String spaces = " ".repeat(indentLevel);
+
+    StringBuilder output = new StringBuilder();
+
+    output.append(spaces + scoreDetails.getDouble("value").doubleValue() + ", " +
+        scoreDetails.getString("description").getValue() + "\n");
+    BsonArray details = scoreDetails.getArray("details");
+    for (org.bson.BsonValue detail : details) {
+      output.append(prettyScoreDetails(indentLevel + 2, (BsonDocument) detail));
+    }
+
+    return output.toString();
   }
+
+
+//  @Override
+//  public List<SearchRequest> getQueries() {
+//    return queries;
+//  }
 
   @Override
   public List<DocumentAvatar> getDocuments() {
     List<DocumentAvatar> docs = new ArrayList<>();
-    for (int i = 0; i < raw_documents.size(); i++) {
-      Document raw_document = raw_documents.get(i);
+
+    int index = 1;
+    for (Document raw_document : documents) {
+      //      System.out.println("raw_document = " + raw_document.toJson());
+
       Map<String, Object> d = new HashMap<>();
 
-      d.put("id", (i+1));
+      d.put("id", index);
       d.put("title", raw_document.getString("title"));
       d.put("type", "movie");
 
-      docs.add(new DocumentAvatar(d, 0, 0));
+      for (String f : raw_document.keySet()) {
+        d.put(f,raw_document.get(f));
+      }
+
+
+      docs.add(new DocumentAvatar(d));
+
+      index++;
     }
 
     return docs;
