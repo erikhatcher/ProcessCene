@@ -13,4 +13,9 @@ public class LuceneSearchRequest implements SearchRequest {
   public String toString() {
     return query.toString();
   }
+
+  @Override
+  public String getLabel() {
+    return null;
+  }
 }
