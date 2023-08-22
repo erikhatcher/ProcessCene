@@ -10,16 +10,14 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.ByteBuffersDirectory;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class LuceneAdapter implements SearchEngineAdapter {
@@ -39,10 +37,26 @@ public class LuceneAdapter implements SearchEngineAdapter {
         DocumentAvatar d = documents.get(i);
 
         Document doc = new Document();
-        doc.add(new StringField("id", ""+d.id, Field.Store.YES));
+        doc.add(new StringField("id", "" + d.id, Field.Store.YES));
         doc.add(new StringField("type", d.type, Field.Store.YES));
         doc.add(new TextField("title", d.title, Field.Store.YES));
-        // TODO: Add all other fields
+
+        for (String f : d.document.keySet()) {
+          if (!Arrays.asList("index", "title", "_id", "type", "id").contains(f)) {
+            Object o = d.document.get(f);
+            if (o instanceof Iterable) {
+              Iterable list = (Iterable) o;
+              for (Object item : list) {
+                doc.add(new TextField(f, item.toString(), Field.Store.YES));
+              }
+            } else {
+              doc.add(new TextField(f, o.toString(), Field.Store.YES));
+            }
+          }
+        }
+
+        // index, title
+
         writer.addDocument(doc);
       }
       writer.close();
@@ -78,16 +92,16 @@ public class LuceneAdapter implements SearchEngineAdapter {
       response.error = e.getMessage();
     }
 
-
+    response.parsed_query = q.toString();
     return response;
   }
 
-  @Override
-  public List<SearchRequest> getQueries() {
-    List<SearchRequest> queries = new ArrayList<>();
-    queries.add(new LuceneSearchRequest(new TermQuery(new Term("title", "foo"))));
-    return queries;
-  }
+//  @Override
+//  public List<SearchRequest> getQueries() {
+//    List<SearchRequest> queries = new ArrayList<>();
+//    queries.add(new LuceneSearchRequest(new TermQuery(new Term("title", "foo"))));
+//    return queries;
+//  }
 
   @Override
   public List<DocumentAvatar> getDocuments() {
