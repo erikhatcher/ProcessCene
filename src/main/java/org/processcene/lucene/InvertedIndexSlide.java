@@ -20,19 +20,24 @@ import org.processcene.core.DocumentAvatar;
 import org.processcene.core.ProcessCene;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class InvertedIndexSlide extends BaseSlide {
 
   final LuceneAnalyzer text_analyzer = new LuceneAnalyzer();
-  private List<DocumentAvatar> documents = new ArrayList<>();
+  private List<DocumentAvatar> documents;
+  private String analyzer_name = "Standard";
 
   public InvertedIndexSlide(String title, List<DocumentAvatar> docs) {
     super(title);
     documents = docs;
   }
 
+  public InvertedIndexSlide(String title, List<DocumentAvatar> docs, String analyzer_name) {
+    this(title, docs);
+
+    this.analyzer_name = analyzer_name;
+  }
 
   @Override
   public void init(ProcessCene p) {
@@ -44,13 +49,13 @@ public class InvertedIndexSlide extends BaseSlide {
   @Override
   public void draw(ProcessCene p, int step) {
     if (step == 0) {
-      p.text("0", p.width/2, p.height/2);
+      p.text("Inverted Index Demonstration", p.width / 2, p.height / 2);
     }
 
     ByteBuffersDirectory index = new ByteBuffersDirectory();
 
     // TODO: Make analyzer name variations
-    Analyzer analyzer = text_analyzer.getAnalyzer("Standard");
+    Analyzer analyzer = text_analyzer.getAnalyzer(analyzer_name);
     try {
       IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(analyzer));
 
@@ -58,7 +63,7 @@ public class InvertedIndexSlide extends BaseSlide {
         DocumentAvatar d = documents.get(i);
 
         Document doc = new Document();
-        doc.add(new StringField("id", ""+d.id, Field.Store.YES));
+        doc.add(new StringField("id", "" + d.id, Field.Store.YES));
         doc.add(new StringField("type", d.type, Field.Store.YES));
         doc.add(new TextField("title", d.title, Field.Store.YES));
         // TODO: Add all other fields
@@ -74,9 +79,9 @@ public class InvertedIndexSlide extends BaseSlide {
 
     for (int i = 0; i < step; i++) {
       DocumentAvatar d = documents.get(i);
-      d.draw(p, x,y);
+      d.draw(p, x, y);
       p.text(d.title, x, y);
-      y += 40;
+      y += 70;
     }
 
     x = 500;
@@ -119,7 +124,7 @@ public class InvertedIndexSlide extends BaseSlide {
           while (postings.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {
             int id = Integer.parseInt(reader.storedFields().document(postings.docID()).get("id"));
 
-            documents.get(id-1).draw(p, posting_list_x + 30 * (id - 1), y - p.textAscent() - p.textDescent());
+            documents.get(id - 1).draw(p, posting_list_x + 30 * (id - 1), y - p.textAscent() - p.textDescent());
           }
           // horizontal line under posting
           p.line(x, y + p.textDescent(), posting_list_x + p.textWidth(postings_list_header), y + p.textDescent());
