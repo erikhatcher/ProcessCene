@@ -15,18 +15,15 @@ import java.util.Map;
  * See https://solr.apache.org/guide/8_7/the-tagger-handler.html
  */
 public class SolrTaggerSlide extends BaseSlide {
+  private final List<String> texts;
   private PImage solr_logo;
-  private List<String> texts = new ArrayList<>();
   private List<JSONObject> tagger_responses = new ArrayList<>();
 
-  public SolrTaggerSlide(String title) {
+  public SolrTaggerSlide(String title, String collection, List<String> texts) {
     super(title);
+    this.texts = texts;
 
-    texts.add("what drama movies star keanu reeves");
-//    texts.add("what drama and romance movies star keanu reeves?");
-//    texts.add("tell me about harrison ford");
-
-    SolrTagger tagger = new SolrTagger();
+    SolrTagger tagger = new SolrTagger(collection);
 
     for (int i = 0; i < texts.size(); i++) {
       tagger_responses.add(tagger.tag(texts.get(i)));
@@ -94,7 +91,7 @@ public class SolrTaggerSlide extends BaseSlide {
           if ("genre".equals(type)) tag_color = p.theme.color_by_name("mist");
           if ("cast".equals(type)) tag_color = p.theme.color_by_name("evergreen");
           if ("city".equals(type)) tag_color = p.theme.color_by_name("lavender");
-          p.fill(tag_color, 100);
+          p.fill(tag_color, 10);
           p.rect(x + before_width, y - p.textAscent(), tag_width, p.textAscent() + p.textDescent());
           p.fill(p.theme.foreground);
           p.text(id, x + before_width, y + (j + 1) * (p.textAscent() + p.textDescent()));
@@ -103,7 +100,7 @@ public class SolrTaggerSlide extends BaseSlide {
             int tag_x = 30 + j * 300;
             int tag_y = 350;
             p.text(id, tag_x, tag_y + (p.textAscent() + p.textDescent()));
-            p.text((String) doc.get("type"), tag_x, tag_y + 2 * (p.textAscent() + p.textDescent()));
+            if (type != null) p.text(type, tag_x, tag_y + 2 * (p.textAscent() + p.textDescent()));
             p.text(((JSONArray) doc.get("name")).toString(), tag_x, tag_y + 3 * (p.textAscent() + p.textDescent()));
 
             List<String> field_names = doc.keySet().stream().toList();

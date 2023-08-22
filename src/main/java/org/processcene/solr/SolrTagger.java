@@ -10,11 +10,19 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class SolrTagger implements Tagger {
+  private final String tagger_collection;
+
+  public SolrTagger(String collection) {
+    super();
+
+    tagger_collection = collection;
+  }
+
   @Override
   public JSONObject tag(String input) {
     HttpClient client = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create("http://localhost:8983/solr/tagger/tag" +
+        .uri(URI.create("http://localhost:8983/solr/" + tagger_collection + "/tag" +
             "?overlaps=NO_SUB&tagsLimit=5000" +
             "&fl=*&wt=json&indent=on&echoParams=all"))
         .header("Content-Type", "text/plain")
