@@ -1,14 +1,23 @@
 package org.processcene.core;
 
+import com.mongodb.client.model.search.SearchOperator;
+import org.bson.Document;
+import org.processcene.atlas.AtlasSearchRequest;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProcessCene extends PApplet {
   public static int MAX_DOCS = 9;
+  public String window_title_prefix = "ProcessCene";
   protected List<Slide> slides = new ArrayList<>();
   private boolean show_footer = true;
   private int current_slide_index = 0;
@@ -16,6 +25,39 @@ public class ProcessCene extends PApplet {
 
   protected static void run(String name) {
     PApplet.main(new String[]{name});
+  }
+
+  protected static Map<String, List<SearchRequest>> load_search_request_sets(String resource_path) {
+//    {
+//      "<query set description>": [
+//      {
+//        "<query description>, eg: `text` over * (aka current Search Tester)": {
+//            "text": { ... }
+//        }
+//      } ... ]}
+    String json_string = null;
+    try {
+      json_string = Files.readString(Path.of(ProcessCene.getFilePathFromResources(resource_path)));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    Document d = Document.parse(json_string);
+
+    Map<String, List<SearchRequest>> search_request_sets = new HashMap<>();
+    for (String set_name : d.keySet()) {
+      List<Document> query_set = (List<Document>) d.get(set_name);
+      List<SearchRequest> search_requests = new ArrayList<>();
+      for (Document query_spec : query_set) {
+        // for now assume one and only one key, which is the label/name of the query operator specified in the value document
+        String query_label = (String) query_spec.keySet().toArray()[0];
+        System.out.println("query_label = " + query_label);
+        Document query_operator = (Document) query_spec.get(query_label);
+        search_requests.add(new AtlasSearchRequest(query_label, set_name, SearchOperator.of(query_operator)));
+      }
+
+      search_request_sets.put(set_name, search_requests);
+    }
+    return search_request_sets;
   }
 
   /**
@@ -51,14 +93,15 @@ public class ProcessCene extends PApplet {
 
   @Override
   public void setup() {
-    frameRate(10);
+    frameRate(20);
 
     theme.init(this);
     slides.forEach(s -> {
+      System.out.println(" ===> " + s.getTitle() + " initializing...  ");
       long start = System.currentTimeMillis();
       s.init(this);
       long end = System.currentTimeMillis();
-      System.out.println(s.getTitle() + " initialized: " + (end - start) + "ms");
+      System.out.println(" ===> " + s.getTitle() + " initialized: " + (end - start) + "ms");
     });
 
     fill(theme.foreground);

@@ -37,7 +37,7 @@ abstract public class BaseSlide implements Slide {
 
   @Override
   public void draw(ProcessCene p, int step) {
-    p.windowTitle("ProcessCene" + ((title != null) ? ": " + title : ""));
+    p.windowTitle(p.window_title_prefix + ((title != null) ? ": " + title : ""));
   }
 
   @Override
