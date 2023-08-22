@@ -2,6 +2,7 @@ package org.processcene.core;
 
 import processing.core.PImage;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,10 +16,13 @@ public class Theme {
 
   public PImage bullet_image = null;
 
-  public PImage[] doc_images = new PImage[10];  // icons for numbers 0 - 9
-  public PImage[] doc_images_inverted = new PImage[10];  // icons for numbers 0 - 9
+  public PImage[] number_images = new PImage[10];  // icons for numbers 0 - 9
+  public PImage[] number_images_inverted = new PImage[10];  // icons for numbers 0 - 9
+  public int error_color = Color.decode("#FF0000").getRGB();
 
   protected Map<String, Integer> color_map = new HashMap<>();
+  public PImage doc_img;
+  public PImage doc_img_inverted;
 
   public void init(ProcessCene p) {
     // TODO: use a more generic bullet graphic, but for now the heart is good!
@@ -27,11 +31,17 @@ public class Theme {
 
     // Copy the MDB theme for now, until we // TODO: generate a number in a graphic for these images
     for (int i = 0; i < 10; i++) {
-      doc_images[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_10x.png"));
-      doc_images[i].resize(30, 30);
-      doc_images_inverted[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
-      doc_images_inverted[i].resize(30, 30);
+      number_images[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_10x.png"));
+      number_images[i].resize(30, 30);
+      number_images_inverted[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
+      number_images_inverted[i].resize(30, 30);
     }
+
+    doc_img = p.loadImage(ProcessCene.getFilePathFromResources("Assets/normal/General_ACTION_Read_10x.png"));
+    doc_img.resize(30, 30);
+
+    doc_img_inverted = p.loadImage(ProcessCene.getFilePathFromResources("Assets/normal/General_ACTION_Read_inverse_10x.png"));
+    doc_img_inverted.resize(30, 30);
   }
 
   public int color_by_name(String name) {
