@@ -28,10 +28,10 @@ public class MongoTheme extends Theme {
     footer_logo.resize(0, 30);
 
     for (int i = 0; i < 10; i++) {
-      doc_images[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_10x.png"));
-      doc_images[i].resize(30, 30);
-      doc_images_inverted[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
-      doc_images_inverted[i].resize(30, 30);
+      number_images[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_10x.png"));
+      number_images[i].resize(30, 30);
+      number_images_inverted[i] = p.loadImage(p.getFilePathFromResources("Assets/normal/" + i + "_Inverted10x.png"));
+      number_images_inverted[i].resize(30, 30);
     }
 
     p.textFont(p.loadFont(ProcessCene.getFilePathFromResources("LexendDeca-Light-24.vlw")));
@@ -41,7 +41,6 @@ public class MongoTheme extends Theme {
 //    mdb_logo.resize(0,300);
 
 
-//    PImage atlas_search_logo = loadImage(getFilePathFromResources("mongodb-assets/SearchDocument/Technical_ACTION_SearchDocument_Spot_BS_ForestGreen.png"));
 //    atlas_search_logo.resize(300, 0);
 //    PImage atlas_big_picture = loadImage(getFilePathFromResources("atlas_big_picture.png"));
 //    atlas_big_picture.resize(0, 600);
