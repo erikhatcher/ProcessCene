@@ -21,8 +21,6 @@ import org.processcene.core.SearchEngineAdapter;
 import org.processcene.core.SearchRequest;
 import org.processcene.core.SearchResponse;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,7 +38,7 @@ public class AtlasAdapter implements SearchEngineAdapter {
   public final MongoDatabase database;
   private final MongoClient client;
   public final MongoCollection<Document> collection;
-  private final Map<ObjectId,Integer> doc_map = new HashMap<>();
+  private final Map<ObjectId, Integer> doc_map = new HashMap<>();
   public SearchOperator subset_filter = null;
   private List<Document> documents = new ArrayList<>();
 
@@ -79,7 +77,7 @@ public class AtlasAdapter implements SearchEngineAdapter {
     List<ObjectId> obj_ids = new ArrayList<>();
     for (int i = 0; i < documents.size(); i++) {
       Document doc = documents.get(i);
-      int index = i+1; // cross reference for each doc to know where in the list it is
+      int index = i + 1; // cross reference for each doc to know where in the list it is
       doc.put("index", index);
 
       ObjectId obj_id = documents.get(i).getObjectId("_id");
@@ -101,7 +99,7 @@ public class AtlasAdapter implements SearchEngineAdapter {
   }
 
   public AtlasAdapter(String database, String collection) {
-    this(database,collection,null);
+    this(database, collection, null);
   }
 
   @Override
@@ -122,7 +120,7 @@ public class AtlasAdapter implements SearchEngineAdapter {
               .filter(Arrays.asList(subset_filter))
               .must(Arrays.asList(asr.search_operator)),
           opts
-     );
+      );
     } else {
       search_stage = Aggregates.search(asr.search_operator, opts);
 
@@ -132,7 +130,7 @@ public class AtlasAdapter implements SearchEngineAdapter {
     // TODO: Note/doc this - the aggregation call to bring, say, 14k docs into a List takes many seconds
     Bson limit_stage = limit(10);
 
-    Bson project_stage =  project(fields(  // Include _id
+    Bson project_stage = project(fields(  // Include _id
         include("title", "cast", "genres"),
         metaSearchScore("score"),
         meta("scoreDetails", "searchScoreDetails")
@@ -155,7 +153,7 @@ public class AtlasAdapter implements SearchEngineAdapter {
 
       Document explain = collection.aggregate(Arrays.asList(search_stage, project_stage)).explain();
       List<Document> explain_stages = (List<Document>) explain.get("stages");
-      response.explain = ((Document)explain_stages.get(0).get("$_internalSearchMongotRemote")).get("explain").toString();
+      response.explain = ((Document) explain_stages.get(0).get("$_internalSearchMongotRemote")).get("explain").toString();
     } catch (Exception e) {
       response.error = e.getMessage();
     }
@@ -168,7 +166,7 @@ public class AtlasAdapter implements SearchEngineAdapter {
       ResponseDocument rd = new ResponseDocument();
 
       int index = doc_map.get(obj_id);
-      Document document = documents.get(index-1);
+      Document document = documents.get(index - 1);
       rd.id = index;  //
 
       rd.fields.put("_id", obj_id);
@@ -224,7 +222,7 @@ public class AtlasAdapter implements SearchEngineAdapter {
       d.put("type", "movie");
 
       for (String f : raw_document.keySet()) {
-        d.put(f,raw_document.get(f));
+        d.put(f, raw_document.get(f));
       }
 
 
