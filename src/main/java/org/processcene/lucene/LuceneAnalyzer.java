@@ -1,6 +1,5 @@
 package org.processcene.lucene;
 
-import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
@@ -11,8 +10,7 @@ import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilter;
 import org.apache.lucene.analysis.ngram.EdgeNGramTokenFilter;
 import org.apache.lucene.analysis.ngram.NGramTokenFilter;
-import org.apache.lucene.analysis.phonetic.DaitchMokotoffSoundexFilter;
-import org.apache.lucene.analysis.phonetic.PhoneticFilter;
+import org.apache.lucene.analysis.shingle.ShingleFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
@@ -73,23 +71,23 @@ public class LuceneAnalyzer extends TextAnalyzer {
       }
     });
 
-    analyzer_names.add("dms");
-    analyzers.add(new Analyzer() {
-      @Override
-      protected TokenStreamComponents createComponents(String fieldName) {
-        Tokenizer tokenizer = new StandardTokenizer();
-        return new Analyzer.TokenStreamComponents(tokenizer, new DaitchMokotoffSoundexFilter(tokenizer, false));
-      }
-    });
+//    analyzer_names.add("dms");
+//    analyzers.add(new Analyzer() {
+//      @Override
+//      protected TokenStreamComponents createComponents(String fieldName) {
+//        Tokenizer tokenizer = new StandardTokenizer();
+//        return new Analyzer.TokenStreamComponents(tokenizer, new DaitchMokotoffSoundexFilter(tokenizer, false));
+//      }
+//    });
 
-    analyzer_names.add("Phonetic");
-    analyzers.add(new Analyzer() {
-      @Override
-      protected TokenStreamComponents createComponents(String fieldName) {
-        Tokenizer tokenizer = new StandardTokenizer();
-        return new Analyzer.TokenStreamComponents(tokenizer, new PhoneticFilter(tokenizer, new DoubleMetaphone(), false));
-      }
-    });
+//    analyzer_names.add("Phonetic");
+//    analyzers.add(new Analyzer() {
+//      @Override
+//      protected TokenStreamComponents createComponents(String fieldName) {
+//        Tokenizer tokenizer = new StandardTokenizer();
+//        return new Analyzer.TokenStreamComponents(tokenizer, new PhoneticFilter(tokenizer, new DoubleMetaphone(), false));
+//      }
+//    });
 
     analyzer_names.add("StandardEdgeNGram");
     analyzers.add(new Analyzer() {
@@ -99,6 +97,24 @@ public class LuceneAnalyzer extends TextAnalyzer {
         return new Analyzer.TokenStreamComponents(tokenizer, new EdgeNGramTokenFilter(tokenizer, 2, 15, true));
       }
     });
+
+    analyzer_names.add("StandardWithShingles");
+    analyzers.add(new Analyzer() {
+      @Override
+      protected TokenStreamComponents createComponents(String s) {
+        Tokenizer tokenizer = new StandardTokenizer();
+        return new Analyzer.TokenStreamComponents(tokenizer, new ShingleFilter(tokenizer, 2, 3));
+      }
+    });
+
+//    analyzer_names.add("WhitespacePlusRegex");
+//    analyzers.add(new Analyzer() {
+//      @Override
+//      protected TokenStreamComponents createComponents(String s) {
+//        Tokenizer tokenizer = new WhitespaceTokenizer();
+//        return new Analyzer.TokenStreamComponents(tokenizer, new PatternReplaceFilter(tokenizer, Pattern.compile("^(?!\\$)\\w+"),"",true));
+//      }
+//    });
 
     analyzer_names.add("StandardNGram");
     analyzers.add(new Analyzer() {
