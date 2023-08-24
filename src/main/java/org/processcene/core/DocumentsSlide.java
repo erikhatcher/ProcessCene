@@ -23,7 +23,7 @@ public class DocumentsSlide extends BaseSlide {
 
   @Override
   public int getNumberOfSteps() {
-    return 1 + engine.getQueries().size(); //documents.size();
+    return 1; // + engine.getQueries().size(); //documents.size();
   }
 
   @Override
@@ -42,10 +42,10 @@ public class DocumentsSlide extends BaseSlide {
         int query_index = step - 2;
         reset_em();
 
-        SearchRequest request = engine.getQueries().get(query_index);
+        SearchRequest request = null; // engine.getQueries().get(query_index);
         SearchResponse response = engine.search(request);
 
-        p.text(request.toString(), 30,30);
+        p.text(request.toString(), 30, 30);
         if (response.error != null) {
           p.text(response.error, 30, 60);
         }
@@ -91,7 +91,7 @@ public class DocumentsSlide extends BaseSlide {
       DocumentAvatar d = documents.get(i);
 
       // compute final location
-      int doc_x = (int) PApplet.map(i, 0, documents.size()-1, 50, p.width - 50);
+      int doc_x = (int) PApplet.map(i, 0, documents.size() - 1, 50, p.width - 50);
       int doc_y = 600;
 
       // take a step that way
@@ -111,7 +111,7 @@ public class DocumentsSlide extends BaseSlide {
         p.rect(d.x, d.y - h, 30, h);
 
         p.fill(p.theme.foreground);
-        p.text(d.score,d.x,d.y - h);
+        p.text(d.score, d.x, d.y - h);
       }
 
     }
@@ -129,8 +129,8 @@ public class DocumentsSlide extends BaseSlide {
       DocumentAvatar d = documents.get(i);
 
       double radians = Math.toRadians(degrees_per_doc + p.frameCount % 360);
-      d.x = (int) (p.width/2 + r * Math.cos(radians * (i+1)));
-      d.y = (int) (p.height/2 + r * Math.sin(radians * (i+1)));
+      d.x = (int) (p.width / 2 + r * Math.cos(radians * (i + 1)));
+      d.y = (int) (p.height / 2 + r * Math.sin(radians * (i + 1)));
 
 //      if (p.frameCount % d.id == 0) d.on = !d.on;
 //      d.jiggle();
