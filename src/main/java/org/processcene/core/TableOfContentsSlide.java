@@ -3,6 +3,7 @@ package org.processcene.core;
 import processing.core.PImage;
 import processing.event.MouseEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TableOfContentsSlide extends BaseSlide {
@@ -14,7 +15,7 @@ public class TableOfContentsSlide extends BaseSlide {
   public TableOfContentsSlide(List<Slide> slides, PImage bullet_image) {
     super("Table of Contents");
 
-    this.slides = slides;
+    this.slides = new ArrayList<>(slides);
     this.bullet_image = bullet_image;
     setShowOnTOC(false);
   }

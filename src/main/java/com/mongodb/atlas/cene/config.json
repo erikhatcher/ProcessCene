@@ -1,0 +1,82 @@
+{
+  "mappings": {
+    "dynamic": true,
+    "fields": {
+      "cast": [
+        {
+          "type": "stringFacet"
+        },
+        {
+          "multi": {
+            "shingles": {
+              "analyzer": "standard.shingles",
+              "type": "string"
+            }
+          },
+          "type": "string"
+        }
+      ],
+      "genres": [
+        {
+          "type": "stringFacet"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "plot": {
+        "analyzer": "lucene.english",
+        "multi": {
+          "shingles": {
+            "analyzer": "standard.shingles",
+            "type": "string"
+          }
+        },
+        "type": "string"
+      },
+      "title": {
+        "multi": {
+          "english": {
+            "analyzer": "lucene.english",
+            "type": "string"
+          },
+          "shingles": {
+            "analyzer": "standard.shingles",
+            "type": "string"
+          }
+        },
+        "type": "string"
+      },
+      "year": [
+        {
+          "type": "numberFacet"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "stringFacet"
+        }
+      ]
+    }
+  },
+  "analyzers": [
+    {
+      "charFilters": [],
+      "name": "standard.shingles",
+      "tokenFilters": [
+        {
+          "type": "lowercase"
+        },
+        {
+          "maxShingleSize": 3,
+          "minShingleSize": 2,
+          "type": "shingle"
+        }
+      ],
+      "tokenizer": {
+        "type": "standard"
+      }
+    }
+  ]
+}

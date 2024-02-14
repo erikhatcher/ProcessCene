@@ -1,0 +1,80 @@
+{
+  "queries": [
+    {
+      "text": {
+        "path": {
+          "wildcard": "*"
+        },
+        "query": "gone with the wind"
+      }
+    },
+    {
+      "text": {
+        "path": {
+          "wildcard": "*"
+        },
+        "query": "purple rain"
+      }
+    },
+    {
+      "phrase": {
+        "path": {
+          "wildcard": "*"
+        },
+        "query": "purple rain"
+      }
+    },
+    {
+      "text": {
+        "path": "title",
+        "query": "purple rain"
+      }
+    },
+    {
+      "text": {
+        "path": [
+          "title",
+          "cast",
+          "fullplot"
+        ],
+        "query": "purple rain"
+      }
+    },
+    {
+      "queryString": {
+        "defaultPath": "title",
+        "query": "purple rain"
+      }
+    },
+    {
+      "text": {
+        "path": {
+          "wildcard": "*"
+        },
+        "query": "the purple rain"
+      }
+    },
+    {
+      "text": {
+        "path": "title",
+        "query": "the purple rain"
+      }
+    },
+    {
+      "text": {
+        "path": [
+          "title",
+          "cast",
+          "fullplot"
+        ],
+        "query": "the purple rain"
+      }
+    },
+    {
+      "queryString": {
+        "defaultPath": "title",
+        "query": "the purple rain"
+      }
+    }
+  ]
+}

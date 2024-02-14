@@ -1,0 +1,36 @@
+{
+  "red monk": [
+    {
+      "`text` over * (aka current Search Tester)": {
+        "text": {
+          "path": {
+            "wildcard": "*"
+          },
+          "query": "red monk"
+        }
+      }
+    },
+    {
+      "`text` over title": {
+        "text": {
+          "path": [
+            "title"
+          ],
+          "query": "red monk"
+        }
+      }
+    },
+    {
+      "`phrase` over title,cast,plot": {
+        "phrase": {
+          "path": [
+            "title",
+            "cast",
+            "plot"
+          ],
+          "query": "red monk"
+        }
+      }
+    }
+  ]
+}

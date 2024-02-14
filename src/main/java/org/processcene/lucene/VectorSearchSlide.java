@@ -31,24 +31,16 @@ import static org.apache.lucene.search.DocIdSetIterator.NO_MORE_DOCS;
 
 public class VectorSearchSlide extends BaseSlide {
   private static int MAX_PIXELS = 400;
-  private final List<float[]> sample_vectors = new ArrayList<>();
+  private final List<float[]> sample_vectors;
   private final PImage[] doc_images = new PImage[10];  // icons for numbers 0 - 9
   private final PImage[] doc_images_inverted = new PImage[10];  // icons for numbers 0 - 9
   private PImage search_icon;
   private PImage lucene_logo;
 
-  public VectorSearchSlide(String title) {
+  public VectorSearchSlide(String title, List<float[]> vectors) {
     super(title);
 
-    sample_vectors.add(new float[]{0.50f, 0.50f});     // 1
-    sample_vectors.add(new float[]{0.27f, 0.32f});     // 2
-    sample_vectors.add(new float[]{0.13f, -0.69f});    // 3
-    sample_vectors.add(new float[]{0.42f, 0.72f});     // 4
-    sample_vectors.add(new float[]{-0.25f, -0.65f});   // 5
-    sample_vectors.add(new float[]{0.19f, 0.32f});     // 6
-    sample_vectors.add(new float[]{-0.63f, -0.92f});   // 7
-    sample_vectors.add(new float[]{0.53f, 0.12f});     // 8
-    sample_vectors.add(new float[]{-0.23f, 0.74f});    // 9
+    sample_vectors = vectors;
   }
 
   @Override

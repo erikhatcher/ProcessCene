@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ProcessCene extends PApplet {
-  public static int MAX_DOCS = 9;
+  public static int MAX_DOCS = 99;
   public String window_title_prefix = "ProcessCene";
   protected List<Slide> slides = new ArrayList<>();
-  private boolean show_footer = true;
+  public boolean show_footer = true;
   private int current_slide_index = 0;
   public Theme theme;
 

@@ -17,42 +17,42 @@ import java.util.List;
 import static com.mongodb.client.model.search.SearchPath.fieldPath;
 
 public class AtlasSearchOnSolrTagger extends ConsoleOutputSlideBase {
+  private final AtlasAdapter atlas;
   List<String> descriptions = new ArrayList<>();
   List<String> outputs = new ArrayList<>();
   private List<DocumentAvatar> documents;
 
-  public AtlasSearchOnSolrTagger(String title) {
+  public AtlasSearchOnSolrTagger(String title, AtlasAdapter engine) {
     super(title);
+
+    atlas = engine;
   }
 
   @Override
   public void init(ProcessCene p) {
     super.init(p);
 
-    AtlasAdapter atlas = new AtlasAdapter("sample_mflix","movies");
+    String utterance = "drama movies starring keanu reeves";
 
-    String utterance = "what drama movies star keanu reeves";
-
-    Tagger tagger = new SolrTagger();  // TODO: replace with $searchMeta: { "tagger": ... }
+    Tagger tagger = new SolrTagger("tagger");  // TODO: replace with $searchMeta: { "tagger": ... }
     StringBuilder output = new StringBuilder();
-    output.append("Tagging: " + utterance + "\n");
     JSONObject tags = tagger.tag(utterance);
 
     // TODO: pull tag handling JSON specifics out of here
 
-    output.append("\ntags = " + tags.toJSONString()  + "\n");
+    output.append("\nTagger Response:\n" + tags.toJSONString() + "\n\n");
 
     // {"tagsCount":1,"response":{"docs":[{"_version_":1772684818371313709,"name":["Keanu Reeves"],"id":"cast-Keanu Reeves","type":"cast"}]
 
     String error_message = (String) tags.get("error");
     if (error_message != null) {
-      output.append("\nTagging ERROR: " + error_message  + "\n");
+      output.append("\nTagging ERROR: " + error_message + "\n");
     } else {
       JSONArray tagged_documents = (JSONArray) ((JSONObject) tags.get("response")).get("docs");
 
       // Ignore position offsets of tagged text, simply apply the tagged entities that we know about to
       // an Atlas $search
-      
+
       List<SearchOperator> tagged_clauses = new ArrayList<>();
 
       for (int i = 0; i < tagged_documents.size(); i++) {
@@ -79,18 +79,27 @@ public class AtlasSearchOnSolrTagger extends ConsoleOutputSlideBase {
                   .append("path", fieldPath("genres")));
           tagged_clauses.add(SearchOperator.of(pq));
         }
-        
+
+        if ("title".equals(type)) {
+          output.append("TITLE: " + value + "\n");
+
+          Document pq = new Document("phrase", // TODO: This needs to be a TermQuery
+              new Document("query", value)
+                  .append("path", fieldPath("title")));
+          tagged_clauses.add(SearchOperator.of(pq));
+        }
+
         // TODO: remove the tagged text (using the offsets) from the query, and _should_ it in below
       }
 
-      SearchResponse response = atlas.search(new AtlasSearchRequest(SearchOperator.compound().must(tagged_clauses)));
+      output.append("Tags => Operator:\n" + tagged_clauses + "\n\n");
+
+      SearchResponse response = atlas.search(new AtlasSearchRequest("Tagged", utterance, SearchOperator.compound().must(tagged_clauses)));
 
       // Print out each returned result
-      //aggregation_spec.forEach(doc -> System.out.println(formatJSON(doc)));
       response.documents.forEach(d -> {
         output.append(d.fields.get("title") + "\n");
-//        output.append("  Cast: " + ((BsonArray)doc.get("cast")).getValues() + "\n");
-//        output.append("  Genres: " + ((BsonArray)doc.get("genres")).getValues() + "\n");
+//        output.append("  Fields:\n" + d.fields + "\n");
         output.append("  Score:" + d.score + "\n");
 //        printScoreDetails(2, doc.toBsonDocument().getDocument("scoreDetails"));
         output.append("\n");

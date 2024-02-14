@@ -77,7 +77,7 @@ public class AtlasAdapter implements SearchEngineAdapter {
     List<ObjectId> obj_ids = new ArrayList<>();
     for (int i = 0; i < documents.size(); i++) {
       Document doc = documents.get(i);
-      int index = i + 1; // cross reference for each doc to know where in the list it is
+      int index = i + 1; // cross-reference for each doc to know where in the list it is
       doc.put("index", index);
 
       ObjectId obj_id = documents.get(i).getObjectId("_id");

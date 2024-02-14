@@ -19,7 +19,7 @@ public class Demo extends ProcessCene {
   private List<DocumentAvatar> documents = new ArrayList<>();
 
   private DocumentAvatar doc(int i, String title) {
-    Map<String,Object> doc = new HashMap<>();
+    Map<String, Object> doc = new HashMap<>();
     doc.put("id", i);
     doc.put("title", title);
     doc.put("type", "doc");

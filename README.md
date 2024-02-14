@@ -1,6 +1,22 @@
 # ProcessCene
 
-Inspired by [Story of Search](https://storyofsearch.com/) and impressive Processing work that my colleague John Page does at MongoDB.
+ProcessCene = Lucene + Processing
+
+ProcessCene is a search-engine savvy interactive presentation tool.
+
+ProcessCene adapts to several search engines and generically presents top
+documents from search results, abstracting requests and responses. In addition,
+adapted search engine has unique capabilities and presentation as detailed here:
+
+Adapts to:
+ * Lucene:
+   * Inverted index introspection
+   * KNN vector search
+   * Query parsing
+ * Solr: 
+   * Solr Tagger
+ * Atlas Search:
+   * Facets
 
 ## Launching ProcessCene
 

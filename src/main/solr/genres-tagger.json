@@ -1,0 +1,127 @@
+[
+  {
+    "id": "genre-Action",
+    "type": "genre",
+    "name": "Action"
+  },
+  {
+    "id": "genre-Adventure",
+    "type": "genre",
+    "name": "Adventure"
+  },
+  {
+    "id": "genre-Animation",
+    "type": "genre",
+    "name": "Animation"
+  },
+  {
+    "id": "genre-Biography",
+    "type": "genre",
+    "name": "Biography"
+  },
+  {
+    "id": "genre-Comedy",
+    "type": "genre",
+    "name": "Comedy"
+  },
+  {
+    "id": "genre-Crime",
+    "type": "genre",
+    "name": "Crime"
+  },
+  {
+    "id": "genre-Documentary",
+    "type": "genre",
+    "name": "Documentary"
+  },
+  {
+    "id": "genre-Drama",
+    "type": "genre",
+    "name": "Drama"
+  },
+  {
+    "id": "genre-Family",
+    "type": "genre",
+    "name": "Family"
+  },
+  {
+    "id": "genre-Fantasy",
+    "type": "genre",
+    "name": "Fantasy"
+  },
+  {
+    "id": "genre-Film-Noir",
+    "type": "genre",
+    "name": "Film-Noir"
+  },
+  {
+    "id": "genre-History",
+    "type": "genre",
+    "name": "History"
+  },
+  {
+    "id": "genre-Horror",
+    "type": "genre",
+    "name": "Horror"
+  },
+  {
+    "id": "genre-Music",
+    "type": "genre",
+    "name": "Music"
+  },
+  {
+    "id": "genre-Musical",
+    "type": "genre",
+    "name": "Musical"
+  },
+  {
+    "id": "genre-Mystery",
+    "type": "genre",
+    "name": "Mystery"
+  },
+  {
+    "id": "genre-News",
+    "type": "genre",
+    "name": "News"
+  },
+  {
+    "id": "genre-Romance",
+    "type": "genre",
+    "name": "Romance"
+  },
+  {
+    "id": "genre-Sci-Fi",
+    "type": "genre",
+    "name": "Sci-Fi"
+  },
+  {
+    "id": "genre-Short",
+    "type": "genre",
+    "name": "Short"
+  },
+  {
+    "id": "genre-Sport",
+    "type": "genre",
+    "name": "Sport"
+  },
+  {
+    "id": "genre-Talk-Show",
+    "type": "genre",
+    "name": "Talk-Show"
+  },
+  {
+    "id": "genre-Thriller",
+    "type": "genre",
+    "name": "Thriller"
+  },
+  {
+    "id": "genre-War",
+    "type": "genre",
+    "name": "War"
+  },
+  {
+    "id": "genre-Western",
+    "type": "genre",
+    "name": "Western"
+  }
+]

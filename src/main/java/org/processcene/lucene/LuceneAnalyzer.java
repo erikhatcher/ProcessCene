@@ -4,12 +4,15 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
+import org.apache.lucene.analysis.core.KeywordTokenizer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceTokenizer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilter;
 import org.apache.lucene.analysis.ngram.EdgeNGramTokenFilter;
 import org.apache.lucene.analysis.ngram.NGramTokenFilter;
+import org.apache.lucene.analysis.pattern.PatternReplaceFilter;
 import org.apache.lucene.analysis.shingle.ShingleFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
@@ -26,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilter.GENERATE_NUMBER_PARTS;
 import static org.apache.lucene.analysis.miscellaneous.WordDelimiterGraphFilter.GENERATE_WORD_PARTS;
@@ -42,17 +46,17 @@ public class LuceneAnalyzer extends TextAnalyzer {
     analyzer_names.add("Standard");
     analyzers.add(new StandardAnalyzer());
 
-    analyzer_names.add("Whitespace");
-    analyzers.add(new WhitespaceAnalyzer());
-
     analyzer_names.add("Simple");
     analyzers.add(new SimpleAnalyzer());
 
-    analyzer_names.add("Keyword");
-    analyzers.add(new KeywordAnalyzer());
+    analyzer_names.add("Whitespace");
+    analyzers.add(new WhitespaceAnalyzer());
 
     analyzer_names.add("English");
     analyzers.add(new EnglishAnalyzer());
+
+    analyzer_names.add("Keyword");
+    analyzers.add(new KeywordAnalyzer());
 
 //    analyzer_names.add("CJK");
 //    analyzers.add(new CJKAnalyzer());
@@ -60,16 +64,16 @@ public class LuceneAnalyzer extends TextAnalyzer {
 //    analyzer_names.add("UAX29URLEmail");
 //    analyzers.add(new UAX29URLEmailAnalyzer());
 
-    analyzer_names.add("WordDelimiter");
-    analyzers.add(new Analyzer() {
-      @Override
-      protected TokenStreamComponents createComponents(String s) {
-        Tokenizer tokenizer = new StandardTokenizer();
-        int flags =
-            GENERATE_WORD_PARTS | GENERATE_NUMBER_PARTS | SPLIT_ON_CASE_CHANGE | SPLIT_ON_NUMERICS;
-        return new Analyzer.TokenStreamComponents(tokenizer, new WordDelimiterGraphFilter(tokenizer, flags, null));
-      }
-    });
+//    analyzer_names.add("WordDelimiter");
+//    analyzers.add(new Analyzer() {
+//      @Override
+//      protected TokenStreamComponents createComponents(String s) {
+//        Tokenizer tokenizer = new StandardTokenizer();
+//        int flags =
+//            GENERATE_WORD_PARTS | GENERATE_NUMBER_PARTS | SPLIT_ON_CASE_CHANGE | SPLIT_ON_NUMERICS;
+//        return new Analyzer.TokenStreamComponents(tokenizer, new WordDelimiterGraphFilter(tokenizer, flags, null));
+//      }
+//    });
 
 //    analyzer_names.add("dms");
 //    analyzers.add(new Analyzer() {
@@ -89,33 +93,33 @@ public class LuceneAnalyzer extends TextAnalyzer {
 //      }
 //    });
 
-    analyzer_names.add("StandardEdgeNGram");
-    analyzers.add(new Analyzer() {
-      @Override
-      protected TokenStreamComponents createComponents(String s) {
-        Tokenizer tokenizer = new StandardTokenizer();
-        return new Analyzer.TokenStreamComponents(tokenizer, new EdgeNGramTokenFilter(tokenizer, 2, 15, true));
-      }
-    });
-
-    analyzer_names.add("StandardWithShingles");
-    analyzers.add(new Analyzer() {
-      @Override
-      protected TokenStreamComponents createComponents(String s) {
-        Tokenizer tokenizer = new StandardTokenizer();
-        return new Analyzer.TokenStreamComponents(tokenizer, new ShingleFilter(tokenizer, 2, 3));
-      }
-    });
-
-//    analyzer_names.add("WhitespacePlusRegex");
+//    analyzer_names.add("StandardEdgeNGram");
 //    analyzers.add(new Analyzer() {
 //      @Override
 //      protected TokenStreamComponents createComponents(String s) {
-//        Tokenizer tokenizer = new WhitespaceTokenizer();
-//        return new Analyzer.TokenStreamComponents(tokenizer, new PatternReplaceFilter(tokenizer, Pattern.compile("^(?!\\$)\\w+"),"",true));
+//        Tokenizer tokenizer = new StandardTokenizer();
+//        return new Analyzer.TokenStreamComponents(tokenizer, new EdgeNGramTokenFilter(tokenizer, 2, 15, true));
 //      }
 //    });
 
+//    analyzer_names.add("StandardWithShingles");
+//    analyzers.add(new Analyzer() {
+//      @Override
+//      protected TokenStreamComponents createComponents(String s) {
+//        Tokenizer tokenizer = new StandardTokenizer();
+//        return new Analyzer.TokenStreamComponents(tokenizer, new ShingleFilter(tokenizer, 2, 3));
+//      }
+//    });
+//
+//    analyzer_names.add("WhitespaceIsolator");
+//    analyzers.add(new Analyzer() {
+//      @Override
+//      protected TokenStreamComponents createComponents(String s) {
+//        Tokenizer tokenizer = new KeywordTokenizer();
+//        return new Analyzer.TokenStreamComponents(tokenizer, new PatternReplaceFilter(tokenizer, Pattern.compile("^.*(\\W).*$"),"WHITESPACE_TOKEN",true));
+//      }
+//    });
+//
     analyzer_names.add("StandardNGram");
     analyzers.add(new Analyzer() {
       @Override

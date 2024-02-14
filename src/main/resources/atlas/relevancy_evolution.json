@@ -1,0 +1,880 @@
+{
+  "purple rain": [
+    {
+      "`text` over * (aka current Search Tester)": {
+        "text": {
+          "path": {
+            "wildcard": "*"
+          },
+          "query": "purple rain"
+        }
+      }
+    },
+    {
+      "`phrase` over *": {
+        "phrase": {
+          "path": {
+            "wildcard": "*"
+          },
+          "query": "purple rain"
+        }
+      }
+    },
+    {
+      "`text` on title": {
+        "text": {
+          "path": "title",
+          "query": "purple rain"
+        }
+      }
+    },
+    {
+      "`text` across title, cast, plot": {
+        "text": {
+          "path": [
+            "title",
+            "cast",
+            "plot"
+          ],
+          "query": "purple rain"
+        }
+      }
+    },
+    {
+      "`text` on title^3.0 cast^2.0 plot^1.0": {
+        "compound": {
+          "should": [
+            {
+              "text": {
+                "query": "purple rain",
+                "path": "title",
+                "score": {
+                  "boost": {
+                    "value": 3.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "purple rain",
+                "path": "cast",
+                "score": {
+                  "boost": {
+                    "value": 2.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "purple rain",
+                "path": "plot",
+                "score": {
+                  "boost": {
+                    "value": 1.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "`text` on title^3.0 cast^2.0 plot^1.0 + `phrase`^11 on title,cast,plot": {
+        "compound": {
+          "should": [
+            {
+              "text": {
+                "query": "purple rain",
+                "path": "title",
+                "score": {
+                  "boost": {
+                    "value": 3.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "purple rain",
+                "path": "cast",
+                "score": {
+                  "boost": {
+                    "value": 2.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "purple rain",
+                "path": "plot",
+                "score": {
+                  "boost": {
+                    "value": 1.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "purple rain",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 11.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "the purple rain": [
+    {
+      "`text` over * (aka current Search Tester)": {
+        "text": {
+          "path": {
+            "wildcard": "*"
+          },
+          "query": "the purple rain"
+        }
+      }
+    },
+    {
+      "`phrase` over *": {
+        "phrase": {
+          "path": {
+            "wildcard": "*"
+          },
+          "query": "the purple rain"
+        }
+      }
+    },
+    {
+      "`text` on title": {
+        "text": {
+          "path": "title",
+          "query": "the purple rain"
+        }
+      }
+    },
+    {
+      "`text` across title, cast, plot": {
+        "text": {
+          "path": [
+            "title",
+            "cast",
+            "plot"
+          ],
+          "query": "the purple rain"
+        }
+      }
+    },
+    {
+      "`text` on title^3.0 cast^2.0 plot^1.0": {
+        "compound": {
+          "should": [
+            {
+              "text": {
+                "query": "the purple rain",
+                "path": "title",
+                "score": {
+                  "boost": {
+                    "value": 3.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "the purple rain",
+                "path": "cast",
+                "score": {
+                  "boost": {
+                    "value": 2.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "the purple rain",
+                "path": "plot",
+                "score": {
+                  "boost": {
+                    "value": 1.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "`text` on title^3.0 cast^2.0 plot^1.0 + `phrase`^11.0 on title,cast,plot": {
+        "compound": {
+          "should": [
+            {
+              "text": {
+                "query": "the purple rain",
+                "path": "title",
+                "score": {
+                  "boost": {
+                    "value": 3.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "the purple rain",
+                "path": "cast",
+                "score": {
+                  "boost": {
+                    "value": 2.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "the purple rain",
+                "path": "plot",
+                "score": {
+                  "boost": {
+                    "value": 1.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "the purple rain",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 11.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "`text` on title^3.0 cast^2.0 plot^1.0 + `phrase`^11.0 on title,cast,plot + `phrase`-bi-shingles^4.0 on title,cast,plot": {
+        "compound": {
+          "should": [
+            {
+              "text": {
+                "query": "the purple rain",
+                "path": "title",
+                "score": {
+                  "boost": {
+                    "value": 3.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "the purple rain",
+                "path": "cast",
+                "score": {
+                  "boost": {
+                    "value": 2.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "the purple rain",
+                "path": "plot",
+                "score": {
+                  "boost": {
+                    "value": 1.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "the purple rain",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 11.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "the purple",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 4.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "purple rain",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 4.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "queryString: title:(the purple rain)^3.0 cast:(the purple rain)^2.0 plot:(the purple rain)^1.0 title:\"the purple rain\"^11.0 cast:\"the purple rain\"^11.0 plot:\"the purple rain\"^11.0 title:\"the purple\"^4.0 cast:\"the purple\"^4.0 plot:\"the purple\"^4.0 title:\"purple rain\"^4.0 cast:\"purple rain\"^4.0 plot:\"purple rain\"^4.0": {
+        "queryString": {
+          "query": "title:(the purple rain)^3.0 cast:(the purple rain)^2.0 plot:(the purple rain)^1.0 title:\"the purple rain\"^11.0 cast:\"the purple rain\"^11.0 plot:\"the purple rain\"^11.0 title:\"the purple\"^4.0 cast:\"the purple\"^4.0 plot:\"the purple\"^4.0 title:\"purple rain\"^4.0 cast:\"purple rain\"^4.0 plot:\"purple rain\"^4.0",
+          "defaultPath": "plot"
+        }
+      }
+    }
+  ],
+  "falling down": [
+    {
+      "`text` over * (aka current Search Tester)": {
+        "text": {
+          "path": {
+            "wildcard": "*"
+          },
+          "query": "falling down"
+        }
+      }
+    },
+    {
+      "`phrase` over *": {
+        "phrase": {
+          "path": {
+            "wildcard": "*"
+          },
+          "query": "falling down"
+        }
+      }
+    },
+    {
+      "`text` on title": {
+        "text": {
+          "path": "title",
+          "query": "falling down"
+        }
+      }
+    },
+    {
+      "`text` across title, cast, plot": {
+        "text": {
+          "path": [
+            "title",
+            "cast",
+            "plot"
+          ],
+          "query": "falling down"
+        }
+      }
+    },
+    {
+      "`text` on title^3.0 cast^2.0 plot^1.0": {
+        "compound": {
+          "should": [
+            {
+              "text": {
+                "query": "falling down",
+                "path": "title",
+                "score": {
+                  "boost": {
+                    "value": 3.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "falling down",
+                "path": "cast",
+                "score": {
+                  "boost": {
+                    "value": 2.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "falling down",
+                "path": "plot",
+                "score": {
+                  "boost": {
+                    "value": 1.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "`text` on title^3.0 cast^2.0 plot^1.0 + `phrase`^11.0 on title,cast,plot": {
+        "compound": {
+          "should": [
+            {
+              "text": {
+                "query": "falling down",
+                "path": "title",
+                "score": {
+                  "boost": {
+                    "value": 3.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "falling down",
+                "path": "cast",
+                "score": {
+                  "boost": {
+                    "value": 2.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "falling down",
+                "path": "plot",
+                "score": {
+                  "boost": {
+                    "value": 1.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "falling down",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 11.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "michael douglas falling down": [
+    {
+      "`text` on title^3.0 cast^2.0 plot^1.0 + `phrase`^11.0 on title,cast,plot": {
+        "compound": {
+          "should": [
+            {
+              "text": {
+                "query": "michael douglas falling down",
+                "path": "title",
+                "score": {
+                  "boost": {
+                    "value": 3.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "michael douglas falling down",
+                "path": "cast",
+                "score": {
+                  "boost": {
+                    "value": 2.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "michael douglas falling down",
+                "path": "plot",
+                "score": {
+                  "boost": {
+                    "value": 1.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "michael douglas falling down",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 11.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "`text` on title^3.0 cast^2.0 plot^1.0 + `phrase`^11.0 on title,cast,plot + bi-`phrase`-shingles^4.0 on title,cast,plot": {
+        "compound": {
+          "should": [
+            {
+              "text": {
+                "query": "michael douglas falling down",
+                "path": "title",
+                "score": {
+                  "boost": {
+                    "value": 3.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "michael douglas falling down",
+                "path": "cast",
+                "score": {
+                  "boost": {
+                    "value": 2.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "michael douglas falling down",
+                "path": "plot",
+                "score": {
+                  "boost": {
+                    "value": 1.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "michael douglas falling down",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 11.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "michael douglas",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 4.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "douglas falling",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 4.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "falling down",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 4.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "samuel l jackson": [
+    {
+      "`text` on title^3.0 cast^2.0 plot^1.0 + `phrase`^11.0 on title,cast,plot": {
+        "compound": {
+          "should": [
+            {
+              "text": {
+                "query": "samuel l jackson",
+                "path": "title",
+                "score": {
+                  "boost": {
+                    "value": 3.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "samuel l jackson",
+                "path": "cast",
+                "score": {
+                  "boost": {
+                    "value": 2.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "samuel l jackson",
+                "path": "plot",
+                "score": {
+                  "boost": {
+                    "value": 1.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "samuel l jackson",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 11.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "`text` on title^3.0 cast^2.0 plot^1.0 + `phrase`^11.0 on title,cast,plot + bi-`phrase`-shingles^4.0 on title,cast,plot": {
+        "compound": {
+          "should": [
+            {
+              "text": {
+                "query": "samuel l jackson",
+                "path": "title",
+                "score": {
+                  "boost": {
+                    "value": 3.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "samuel l jackson",
+                "path": "cast",
+                "score": {
+                  "boost": {
+                    "value": 2.0
+                  }
+                }
+              }
+            },
+            {
+              "text": {
+                "query": "samuel l jackson",
+                "path": "plot",
+                "score": {
+                  "boost": {
+                    "value": 1.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "samuel l jackson",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 11.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "samuel l",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 4.0
+                  }
+                }
+              }
+            },
+            {
+              "phrase": {
+                "query": "l jackson",
+                "path": [
+                  "title",
+                  "phrase",
+                  "cast"
+                ],
+                "score": {
+                  "boost": {
+                    "value": 4.0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "super man (? custom analyzer: keyword (or ideally standard+shingler)+whitespace remover": [
+  ],
+  "no time for sargents": [
+    {
+      "`text` over * (aka current Search Tester)": {
+        "text": {
+          "path": {
+            "wildcard": "*"
+          },
+          "query": "no time for sargents"
+        }
+      }
+    },
+    {
+      "fuzzy-`text` over * (D'OH!)": {
+        "text": {
+          "path": {
+            "wildcard": "*"
+          },
+          "fuzzy": {},
+          "query": "no time for sargents"
+        }
+      }
+    },
+    {
+      "fuzzy-`text` over title,cast,plot (SLOW)": {
+        "text": {
+          "path": [
+            "title",
+            "cast",
+            "plot"
+          ],
+          "fuzzy": {},
+          "query": "no time for sargents"
+        }
+      }
+    },
+    {
+      "title less misspelled": {
+        "text": {
+          "path": [
+            "title",
+            "cast",
+            "plot"
+          ],
+          "fuzzy": {},
+          "query": "no time for sargeants"
+        }
+      }
+    },
+    {
+      "title not misspelled (is this movie even in our sample data?)": {
+        "text": {
+          "path": [
+            "title",
+            "cast",
+            "plot"
+          ],
+          "fuzzy": {},
+          "query": "no time for sergeants"
+        }
+      }
+    }
+  ]
+}

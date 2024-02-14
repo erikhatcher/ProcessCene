@@ -1,0 +1,45 @@
+{
+  "examples": [
+    {
+      "queryString": {
+        "defaultPath": "title",
+        "query": "the purple rain"
+      }
+    },
+    {
+      "queryString": {
+        "query": "the purple rain",
+        "classic": {
+          "defaultPath": "title"
+        }
+      }
+    },
+    {
+      "queryString": {
+        "query": "the purple rain",
+        "simple": {
+          "fieldWeights": {
+            "title": 5.0,
+            "cast": 2.0,
+            "fullplot": 1.0
+          }
+        }
+      }
+    },
+    {
+      "queryString": {
+        "query": "\"the purple rain\"",
+        "simple": {
+          "fieldWeights": {
+            "title": 5.0,
+            "body": 1.0
+          },
+          "options": {
+            "phraseOperator": false
+          }
+        }
+      }
+    }
+  ]
+}
+

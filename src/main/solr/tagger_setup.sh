@@ -42,4 +42,9 @@ curl -X POST -H 'Content-type:application/json' http://localhost:8983/solr/tagge
   }
 }'
 
-$SOLR_HOME/bin/post -c tagger tagger_sample.json 
+$SOLR_HOME/bin/post -c tagger cast-tagger.json
+$SOLR_HOME/bin/post -c tagger genres-tagger.json
+$SOLR_HOME/bin/post -c tagger titles-tagger.json
+
+#id,type,name,metadata_whatever_s
+#special-star,special,Star,tagged ya!

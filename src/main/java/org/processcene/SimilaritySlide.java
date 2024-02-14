@@ -53,8 +53,7 @@ public class SimilaritySlide extends BaseSlide {
     Function<Float, Float> bm25_tf_5 = tf -> BM25.factory(0.1f, 0.2f, 50.0f, 75.0f).f(tf);
     Function<Float, Float> bm25_tf_6 = tf -> BM25.factory(0.00001f, 0.00001f, 50.0f, 75.0f).f(tf);
 
-    functions = List.of(classic_tf, bm25_tf_default, bm25_tf_1, bm25_tf_2,
-        bm25_tf_3, bm25_tf_4, bm25_tf_5, bm25_tf_6);
+    functions = List.of(classic_tf, bm25_tf_default);
   }
 
   private float function_classic_idf(long doc_freq, long doc_count) {
