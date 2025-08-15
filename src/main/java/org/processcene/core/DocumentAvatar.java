@@ -73,7 +73,7 @@ public class DocumentAvatar {
     }
     p.image(doc_image, x, y);
 
-//    p.text(title, x, y);
+    p.text(title, x, y);
   }
 
   public void draw_as_doc(ProcessCene p) {

@@ -1,5 +1,6 @@
 package org.processcene;
 
+import org.processcene.atlas.MongoTheme;
 import org.processcene.core.AboutProcessCene;
 import org.processcene.core.DocumentAvatar;
 import org.processcene.core.DocumentsSlide;
@@ -8,6 +9,7 @@ import org.processcene.core.LuceneAdapter;
 import org.processcene.core.ProcessCene;
 import org.processcene.core.Theme;
 import org.processcene.lucene.InvertedIndexSlide;
+import org.processcene.lucene.LuceneAnalyzer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,12 +35,14 @@ public class Demo extends ProcessCene {
     documents.add(doc(2, "Everyone was kung foo fighting"));
     documents.add(doc(3, "Foo get about it"));
 
-    setTheme(new Theme());
+    setTheme(new MongoTheme());
 
     add(new LoveLuceneSlide());
     add(new AboutProcessCene("About"));
     add(new InvertedIndexSlide("Inverted Index", documents));
     add(new DocumentsSlide("Documents", new LuceneAdapter(documents)));
+
+    add(new AllyzersSlide("Analysis", new LuceneAnalyzer(), "Here is a text string"));
   }
 
   public static void main(String[] args) {
